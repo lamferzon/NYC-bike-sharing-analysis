@@ -1,7 +1,7 @@
 %% *Part 1: data processing*
 
 %  Preliminary data processing regarding bike sharing and meteorological parameters 
-%  in New York during 2020, starting from January 1th to December 31th.
+%  in New York City during 2020, starting from January 1th to December 31th.
 
 clc
 clearvars
@@ -122,9 +122,20 @@ holidays = convertTo([datetime(2020, 1, 1) datetime(2020, 1, 20) ...
     datetime(2020, 11, 26) datetime(2020, 12, 25)], "datenum");
 non_working_days = ismember(calendar, [sundays holidays]);
 
+% Lockdown dates due to COVID-19 pandemic in New York City:
+% - March 22, 2020: NYS on Pause Program begins, all non-essential workers
+%   must stay home;
+% - May 15, 2020: Governor Cuomo allows drive-in theaters, landscaping, and
+%   low-risk recreational activities to reopen.
+
+lockdown = convertTo(datetime(2020, 3, 22),...
+    "datenum"):1:convertTo(datetime(2020, 5, 15), "datenum");
+lockdown_days = ismember(calendar, lockdown);
+
 clearvars -except counters_table duration_table age_table male_table...
     female_table unknown_table subscriber_table customer_table Bike_data...
-    calendar num_stations id_stations lat_stations lon_stations non_working_days
+    calendar num_stations id_stations lat_stations lon_stations non_working_days...
+    lockdown_days
 
 % Data formatting and export
 
@@ -154,12 +165,13 @@ bike_sharing_data.unit_of_measure{7} = 'dimensionless';
 bike_sharing_data.unit_of_measure{8} = 'dimensionless';
 bike_sharing_data.date_time = calendar;
 bike_sharing_data.non_working_days = non_working_days;
+bike_sharing_data.lockdown_days = lockdown_days;
 bike_sharing_data.temporal_granularity  = 'day';
 bike_sharing_data.measure_type = 'observed';
 bike_sharing_data.data_type = 'point';
 bike_sharing_data.data_source = 'https://www.kaggle.com/datasets/vineethakkinapalli/citibike-bike-sharingnewyork-cityjan-to-apr-2021';
 bike_sharing_data.num_stations = num_stations;
-bike_sharing_data.location  = 'New York';
+bike_sharing_data.location  = 'New York City';
 bike_sharing_data.id = id_stations;
 bike_sharing_data.lat = lat_stations;
 bike_sharing_data.lon = lon_stations;
@@ -173,7 +185,7 @@ bike_sharing_data.processing_machine = 'PCWIN64';
 save("C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\Bike_sharing_data.mat",...
     "bike_sharing_data");
 
-clearvars -except bike_sharing_data non_working_days
+clearvars -except bike_sharing_data non_working_days lockdown_days
 
 %% Meteorological data
 
@@ -214,11 +226,12 @@ meteo_data.unit_of_measure{8} = 'km';
 meteo_data.unit_of_measure{9} = 'dimensionless';
 meteo_data.date_time = calendar;
 meteo_data.non_working_days = non_working_days;
+meteo_data.lockdown_days = lockdown_days;
 meteo_data.temporal_granularity  = 'day';
 meteo_data.measure_type = 'observed';
 meteo_data.data_type = 'global';
 meteo_data.data_source = 'https://www.visualcrossing.com/weather/weather-data-services/New%20York/us/last15days#';
-meteo_data.location  = 'New York';
+meteo_data.location  = 'New York City';
 meteo_data.processing_authors{1} = 'Alessandro Chaar';
 meteo_data.processing_authors{2} = 'Lorenzo Leoni';
 meteo_data.processing_authors{3} = 'Nicola Zambelli';
