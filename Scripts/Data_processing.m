@@ -242,3 +242,28 @@ save("C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High D
     "meteo_data");
 
 clearvars -except bike_sharing_data meteo_data
+
+%% README.md cover creation
+
+avg_service_usage = mean(bike_sharing_data.data{1}, 1);
+calendar = datetime(bike_sharing_data.date_time, "ConvertFrom", "datenum");
+start_ld = datetime(2020, 3, 22);
+end_ld = datetime(2020, 5, 15);
+
+figure
+plot(calendar, avg_service_usage)
+title(['\textbf{Average number of daily bicycle picks-up at stations '...
+    'vs daily rainfall}'], 'Interpreter', 'latex')
+v = [81 0; 135 0; 135 60; 81 60];
+f = [1 2 3 4];
+patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
+    'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
+ax = gca;
+ax.XAxis.TickLabelInterpreter = 'latex';
+xlabel("Time", 'Interpreter', 'latex')
+ay = gca;
+ay.YAxis.TickLabelInterpreter = 'latex';
+ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex');
+yyaxis right
+plot(calendar, meteo_data.data{4})
+ylabel('Rainfall [mm]', 'Interpreter', 'latex');
