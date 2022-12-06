@@ -263,7 +263,9 @@ ax.XAxis.TickLabelInterpreter = 'latex';
 xlabel("Time", 'Interpreter', 'latex')
 ay = gca;
 ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex');
+ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex')
+text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
+    'Interpreter', 'latex', 'Color', 'red')
 yyaxis right
 plot(calendar, meteo_data.data{4})
-ylabel('Rainfall [mm]', 'Interpreter', 'latex');
+ylabel('Rainfall [mm]', 'Interpreter', 'latex')
