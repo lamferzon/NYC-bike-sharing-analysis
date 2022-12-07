@@ -191,7 +191,7 @@ clearvars -except bike_sharing_data non_working_days lockdown_days
 
 %  Information extraction
 
-meteo_path = "C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\NY_meteo_data.csv";
+meteo_path = "C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\NYC_meteo_daily_data.csv";
 Meteo_DS = readtable(meteo_path);
 calendar = convertTo(datetime(2020, 1, (1:366)), "datenum");
 
