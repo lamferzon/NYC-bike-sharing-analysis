@@ -1,4 +1,5 @@
-%% *Part 1: data processing*
+
+% *Part 1: data processing*
 
 %  Preliminary data processing regarding bike sharing and meteorological parameters 
 %  in New York City during 2020, starting from January 1th to December 31th.
@@ -7,23 +8,25 @@ clc
 clearvars
 warning off
 
-%% Bike sharing data
+%% Bike sharing data (expected execution time: ~ 1 hour) 
 
 %  Information extraction
-
+tic;
+disp("Start processing of bike sharing data")
+disp(" ")
 bike_path = "C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\Bike sharing";
 months = ["January" "February" "March" "April" "May" "June" "July" "August"...
     "September" "October" "November" "December"];
 
 DS = readtable(bike_path + "\" + months(1, 1) + "2020.csv");
-daily_calendar = datetime(2020, 1, (1:366));
 id_stations = sort(unique(DS.startStationId));
+daily_calendar = datetime(2020, 1, (1:366));
 hourly_calendar = repmat(datetime('now'), 24, 366);
 for i=1:366
     hourly_calendar(:, i) = datetime(2020, 1, i, (0:23), 0, 0);
 end
 hourly_calendar = hourly_calendar(:)';
-
+ 
 daily_counters_table = array2table(NaN(length(id_stations), length(daily_calendar)+1));
 daily_counters_table.Properties.VariableNames = ["idStation" string(daily_calendar)];
 daily_counters_table.idStation = id_stations;
@@ -80,28 +83,88 @@ hourly_customer_table = array2table(NaN(length(id_stations), length(hourly_calen
 hourly_customer_table.Properties.VariableNames = ["idStation" string(hourly_calendar)];
 hourly_customer_table.idStation = id_stations;
 
+% hourly data extraction
+
+disp("Start hourly data extraction")
+disp(" ")
 day_counter = 1;
+hour_counter = 1;
 for i=1:length(months)
-    disp(months(1, i) + " done.")
+    disp(months(1, i) + " start")
     Bike_data = readtable(bike_path + "\" + months(1, i) + "2020.csv");
     for k=1:sum(month(daily_calendar, 'name') == months(1, i))
+        disp(" Day: " + k + "/" + i)
+        for h=0:23
+            disp("  Hour: " + h)
+            for j=1:length(id_stations)
+                selector = Bike_data.startStationId == id_stations(j, 1)...
+                & Bike_data.starttime.Day == k & Bike_data.starttime.Hour == h;
+                temp = Bike_data(selector, :);
+                % counting of the hourly number of picks-up per station
+                count = size(temp, 1);
+                hourly_counters_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {count};
+                 % calculation of the hourly average users' age per station
+                avg_age = mean(2020*ones(size(temp, 1), 1) - temp{:, "birthYear"});
+                hourly_age_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {avg_age};
+                % calculation of the hourly average trip duration per station
+                avg_duration = mean(temp{:, "tripduration"});
+                hourly_duration_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {avg_duration};
+                % counting of the male/female/unknown hourly users per station
+                male_count = size(temp(temp.gender==1, :), 1);
+                hourly_male_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {male_count};
+                female_count = size(temp(temp.gender==2, :), 1);
+                hourly_female_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {female_count};
+                unknown_count = size(temp(temp.gender==0, :), 1);
+                hourly_unknown_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {unknown_count};
+                % counting of the subscriber/customer hourly users per station
+                subscriber_count = size(temp(temp.usertype=="Subscriber", :), 1);
+                hourly_subscriber_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {subscriber_count};
+                customer_count = size(temp(temp.usertype=="Customer", :), 1);
+                hourly_customer_table(hourly_counters_table.idStation==id_stations(j, 1),...
+                    hour_counter + 1) = {customer_count};
+            end
+            hour_counter = hour_counter + 1;
+        end
+        day_counter = day_counter + 1;
+    end
+    disp(months(1, i) + " done.")
+    disp(" ")
+end
+
+% daily data extraction
+
+disp("Start daily data extraction")
+disp(" ")
+day_counter = 1;
+for i=1:length(months)
+    disp(months(1, i) + " start")
+    Bike_data = readtable(bike_path + "\" + months(1, i) + "2020.csv");
+    for k=1:sum(month(daily_calendar, 'name') == months(1, i))
+        disp(" Day: " + k + "/" + i)
         for j=1:length(id_stations)
             selector = Bike_data.startStationId == id_stations(j, 1)...
                 & Bike_data.starttime.Day == k;
             temp = Bike_data(selector, :);
-            % counting of the number of starts per station
+            % counting of the daily number of picks-up per station
             count = size(temp, 1);
             daily_counters_table(daily_counters_table.idStation==id_stations(j, 1),...
                 day_counter + 1) = {count};
-            % calculation of the average users' age per station
+            % calculation of the daily average users' age per station
             avg_age = mean(2020*ones(size(temp, 1), 1) - temp{:, "birthYear"});
             daily_age_table(daily_counters_table.idStation==id_stations(j, 1),...
                 day_counter + 1) = {avg_age};
-            % calculation of the average trip duration per station
+            % calculation of the daily average trip duration per station
             avg_duration = mean(temp{:, "tripduration"});
             daily_duration_table(daily_counters_table.idStation==id_stations(j, 1),...
                 day_counter + 1) = {avg_duration};
-            % counting of the male/female/unknown users per station
+            % counting of the male/female/unknown daily users per station
             male_count = size(temp(temp.gender==1, :), 1);
             daily_male_table(daily_counters_table.idStation==id_stations(j, 1),...
                 day_counter + 1) = {male_count};
@@ -111,7 +174,7 @@ for i=1:length(months)
             unknown_count = size(temp(temp.gender==0, :), 1);
             daily_unknown_table(daily_counters_table.idStation==id_stations(j, 1),...
                 day_counter + 1) = {unknown_count};
-            % counting of the subscriber/customer users per station
+            % counting of the subscriber/customer daily users per station
             subscriber_count = size(temp(temp.usertype=="Subscriber", :), 1);
             daily_subscriber_table(daily_counters_table.idStation==id_stations(j, 1),...
                 day_counter + 1) = {subscriber_count};
@@ -121,7 +184,10 @@ for i=1:length(months)
         end
         day_counter = day_counter + 1;
     end
+    disp(months(1, i) + " done.")
+    disp(" ")
 end
+
 num_stations = length(id_stations);
 lat_stations = zeros(num_stations, 1);
 lon_stations = zeros(num_stations, 1);
@@ -173,6 +239,14 @@ bike_sharing_data.daily_data{5} = daily_female_table{:,2:end};
 bike_sharing_data.daily_data{6} = daily_unknown_table{:,2:end};
 bike_sharing_data.daily_data{7} = daily_subscriber_table{:,2:end};
 bike_sharing_data.daily_data{8} = daily_customer_table{:,2:end};
+bike_sharing_data.hourly_data{1} = hourly_counters_table{:,2:end};
+bike_sharing_data.hourly_data{2} = hourly_duration_table{:,2:end};
+bike_sharing_data.hourly_data{3} = hourly_age_table{:,2:end};
+bike_sharing_data.hourly_data{4} = hourly_male_table{:,2:end};
+bike_sharing_data.hourly_data{5} = hourly_female_table{:,2:end};
+bike_sharing_data.hourly_data{6} = hourly_unknown_table{:,2:end};
+bike_sharing_data.hourly_data{7} = hourly_subscriber_table{:,2:end};
+bike_sharing_data.hourly_data{8} = hourly_customer_table{:,2:end};
 bike_sharing_data.var_names{1} = 'access counters';
 bike_sharing_data.var_names{2} = 'avg trip duration';
 bike_sharing_data.var_names{3} = 'avg clients age';
@@ -213,17 +287,25 @@ bike_sharing_data.processing_machine = 'PCWIN64';
 save("C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\Bike_sharing_data.mat",...
     "bike_sharing_data");
 
-clearvars -except bike_sharing_data non_working_days lockdown_days
+clearvars -except bike_sharing_data
+disp("Processing of bike sharing data done.")
+toc;
 
 %% Meteorological data
 
 %  Information extraction
+
+tic;
+disp(" ")
+disp("Start processing of meteorological data")
+disp(" ")
 
 daily_meteo_path = "C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\NYC_meteo_daily_data.csv";
 hourly_meteo_path = "C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\NYC_meteo_hourly_data.csv";
 Daily_meteo_DS = readtable(daily_meteo_path);
 Hourly_meteo_DS = readtable(hourly_meteo_path);
 Hourly_meteo_DS = Hourly_meteo_DS(1:(24*366), :);
+
 daily_calendar = convertTo(datetime(2020, 1, (1:366)), "datenum");
 hourly_calendar = repmat(datetime('now'), 24, 366);
 for i=1:366
@@ -242,6 +324,15 @@ meteo_data.daily_data{6} = Daily_meteo_DS{:, "windspeed"}';
 meteo_data.daily_data{7} = Daily_meteo_DS{:, "cloudcover"}';
 meteo_data.daily_data{8} = Daily_meteo_DS{:, "visibility"}';
 meteo_data.daily_data{9} = Daily_meteo_DS{:, "uvindex"}';
+meteo_data.hourly_data{1} = Hourly_meteo_DS{:, "temp"}';
+meteo_data.hourly_data{2} = Hourly_meteo_DS{:, "feelslike"}';
+meteo_data.hourly_data{3} = Hourly_meteo_DS{:, "humidity"}';
+meteo_data.hourly_data{4} = Hourly_meteo_DS{:, "precip"}';
+meteo_data.hourly_data{5} = Hourly_meteo_DS{:, "snow"}';
+meteo_data.hourly_data{6} = Hourly_meteo_DS{:, "windspeed"}';
+meteo_data.hourly_data{7} = Hourly_meteo_DS{:, "cloudcover"}';
+meteo_data.hourly_data{8} = Hourly_meteo_DS{:, "visibility"}';
+meteo_data.hourly_data{9} = Hourly_meteo_DS{:, "uvindex"}';
 meteo_data.var_names{1} = 'avg temperature';
 meteo_data.var_names{2} = 'avg feels like temperature';
 meteo_data.var_names{3} = 'humidity';
@@ -262,8 +353,6 @@ meteo_data.unit_of_measure{8} = 'km';
 meteo_data.unit_of_measure{9} = 'dimensionless';
 meteo_data.daily_calendar = daily_calendar;
 meteo_data.hourly_calendar = hourly_calendar;
-meteo_data.non_working_days = non_working_days;
-meteo_data.lockdown_days = lockdown_days;
 meteo_data.temporal_granularity{1}  = 'day';
 meteo_data.temporal_granularity{2}  = 'hour';
 meteo_data.measure_type = 'observed';
@@ -276,10 +365,12 @@ meteo_data.processing_authors{3} = 'Nicola Zambelli';
 meteo_data.processing_date = convertTo(datetime(2022, 12, 5), "datenum");
 meteo_data.processing_machine = 'PCWIN64';
 
-save("C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\Meteo_data.mat",...
-    "meteo_data");
+% save("C:\Users\loren\OneDrive - unibg.it\University\S4HDD (Statistics for High Dimensional Data)\Project\Data\Meteo_data.mat",...
+%     "meteo_data");
 
 clearvars -except bike_sharing_data meteo_data
+disp("Processing of meteorological data done.")
+toc;
 
 %% README.md cover creation
 
