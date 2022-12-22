@@ -4,8 +4,42 @@ clc
 clearvars
 warning off
 
-load('C:\Users\nicol\OneDrive\Documenti\NY-bike-sharing-anaysis\Data\Processed Data\Bike_sharing_data.mat')
-load('C:\Users\nicol\OneDrive\Documenti\NY-bike-sharing-anaysis\Data\Processed Data\Meteo_data.mat')
+%load DATA
+%cd("C:\Users\nicol\OneDrive\Documenti\NY-bike-sharing-anaysis\Scripts")
+
+load('..\Data\Processed Data\Bike_sharing_data.mat')
+load('..\Data\Processed Data\Meteo_data.mat')
+Transport_ST=readtable('../Data/Jersey _City_train_stations.csv');
+
+%% Stations Analysis
+
+lat_b=bike_sharing_data.lat(1:51);
+lon_b=bike_sharing_data.lon(1:51);
+lat_t=Transport_ST.Lat;
+lon_t=Transport_ST.Lon;
+%compute nearest train station for each BS station
+dist=ones(length(lat_b),1);
+dist_i=ones(length(lat_t),1);
+for i=1:length(lat_b) %for each bike station
+    for j=1:length(lat_t) %for each train station
+        dist_i(j)= distance('gc',lat_b(i),lon_b(i),lat_t(j),lon_t(j)); %deg
+        dist_i(j)=deg2km(dist_i(j));  %deg->km
+    end
+    dist(i)=min(dist_i);
+end
+Dist_tbl=table(lat_b,lon_b,dist);
+save("..\Data\Processed Data\Nearest_TS_Distance.mat","Dist_tbl")
+s=geoscatter(Dist_tbl,"lat_b","lon_b","filled");
+s.ColorVariable="dist";
+s.SizeData=100;
+c = colorbar;
+c.Label.String = "Nearest subway/train station distance [km]";
+c.FontSize=18;
+hold on
+t=geoscatter(Transport_ST,"Lat","Lon","filled","Marker","square","MarkerFaceColor","k");
+t.SizeData=100;
+legend("Bike Sharing Stations","Subway/train station","FontSize",14)
+title(['\textbf{Bike Sharing and subway/train stations}'], 'Interpreter', 'latex',"FontSize",24)
 
 %% README.md cover creation
 avg_service_usage = mean(bike_sharing_data.daily_data{1}, 1);
@@ -32,17 +66,6 @@ text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation', 
 yyaxis right
 plot(daily_calendar, meteo_data.daily_data{4})
 ylabel('Rainfall [mm]', 'Interpreter', 'latex')
-%% stations location
-
-lat = [min(bike_sharing_data.lat)-0.01 max(bike_sharing_data.lat)+0.01];
-lon = [min(bike_sharing_data.lon)-0.01 max(bike_sharing_data.lon)+0.01];
-
-uif = uifigure;
-g = geoglobe(uif);
-geoplot3(g,lat,lon,[])
-
-geoplot3(g,bike_sharing_data.lat(1:51),bike_sharing_data.lon(1:51),500,"o", ...
-    'HeightReference','terrain','Color','b','LineWidth',4)
 %% Avg number of daily bicycle picks-up at stations vs Avg Daily Temperature
 figure
 plot(daily_calendar, avg_service_usage)
@@ -95,7 +118,7 @@ c=1;
 for i=1:1:360
     if i==holiday(c)
         c=c+1;
-         vi = [i-1 0; i+1 0; i+1 60; i-1 60];
+        vi = [i-1 0; i+1 0; i+1 60; i-1 60];
         patch('Faces', f, 'Vertices', vi, 'EdgeColor', 'none',...
             'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
     end
@@ -103,3 +126,17 @@ end
 title(['\textbf{Average number of daily bicycle picks-up at stations '...
     'in Weekends/Holidays Time }'], 'Interpreter', 'latex')
 legend("Avg number of daily bicycle picks-up ","Weekends/Holidays Time")
+
+%% Modello di Regressione lineare su variabili meteo
+X=[ meteo_data.daily_data{1};meteo_data.daily_data{2};meteo_data.daily_data{3}
+    meteo_data.daily_data{4};meteo_data.daily_data{5};meteo_data.daily_data{6}
+    meteo_data.daily_data{7};meteo_data.daily_data{8};meteo_data.daily_data{9}]';
+lm_model=fitlm(X,avg_service_usage');
+lm_model
+%rimozione covariate che non soddisfano il test
+X=[ meteo_data.daily_data{2};
+    meteo_data.daily_data{6};meteo_data.daily_data{7}]';
+lm_model=fitlm(X,avg_service_usage',"linear");
+plot(daily_calendar,lm_model.Fitted)
+hold on
+plot(daily_calendar,avg_service_usage)
