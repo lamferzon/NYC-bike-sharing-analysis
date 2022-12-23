@@ -14,11 +14,11 @@ warning off
 tic;
 disp("Start processing of bike sharing data")
 disp(" ")
-bike_path = "C:\Users\nicol\OneDrive\Documenti\NY-bike-sharing-anaysis\Data\Bike sharing";
+bike_path = "..\Bike sharing\";
 months = ["January" "February" "March" "April" "May" "June" "July" "August"...
     "September" "October" "November" "December"];
 
-DS = readtable(bike_path + "\" + months(1, 1) + "2020.csv");
+DS = readtable(bike_path + months(1, 1) + "2020.csv");
 id_stations = sort(unique(DS.startStationId));
 daily_calendar = datetime(2020, 1, (1:366));
 hourly_calendar = repmat(datetime('now'), 24, 366);
@@ -91,7 +91,7 @@ day_counter = 1;
 hour_counter = 1;
 for i=1:length(months)
     disp(months(1, i) + " start")
-    Bike_data = readtable(bike_path + "\" + months(1, i) + "2020.csv");
+    Bike_data = readtable(bike_path + months(1, i) + "2020.csv");
     for k=1:sum(month(daily_calendar, 'name') == months(1, i))
         disp(" Day: " + k + "/" + i)
         for h=0:23
@@ -145,7 +145,7 @@ disp(" ")
 day_counter = 1;
 for i=1:length(months)
     disp(months(1, i) + " start")
-    Bike_data = readtable(bike_path + "\" + months(1, i) + "2020.csv");
+    Bike_data = readtable(bike_path + months(1, i) + "2020.csv");
     for k=1:sum(month(daily_calendar, 'name') == months(1, i))
         disp(" Day: " + k + "/" + i)
         for j=1:length(id_stations)
@@ -283,14 +283,14 @@ bike_sharing_data.processing_authors{2} = 'Lorenzo Leoni';
 bike_sharing_data.processing_authors{3} = 'Nicola Zambelli';
 bike_sharing_data.processing_date = convertTo(datetime(2022, 12, 4), "datenum");
 bike_sharing_data.processing_machine = 'PCWIN64';
-%% 
 
-save("C:/Users/nicol/OneDrive/Desktop/Bike_sharing_data.mat",...
-    "bike_sharing_data");
-
-clearvars -except bike_sharing_data
 disp("Processing of bike sharing data done.")
 toc;
+
+%% 
+
+save("../Processed Data/", "bike_sharing_data");
+clearvars -except bike_sharing_data
 
 %% Meteorological data
 
@@ -300,9 +300,8 @@ tic;
 disp(" ")
 disp("Start processing of meteorological data")
 disp(" ")
-
-daily_meteo_path = "C:\Users\nicol\OneDrive\Documenti\NY-bike-sharing-anaysis\Data\NYC_meteo_daily_data.csv";
-hourly_meteo_path = "C:\Users\nicol\OneDrive\Documenti\NY-bike-sharing-anaysis\Data\NYC_meteo_hourly_data.csv";
+daily_meteo_path = "..\NYC_meteo_daily_data.csv";
+hourly_meteo_path = "..\NYC_meteo_hourly_data.csv";
 Daily_meteo_DS = readtable(daily_meteo_path);
 Hourly_meteo_DS = readtable(hourly_meteo_path);
 Hourly_meteo_DS = Hourly_meteo_DS(1:(24*366), :);
@@ -366,12 +365,13 @@ meteo_data.processing_authors{3} = 'Nicola Zambelli';
 meteo_data.processing_date = convertTo(datetime(2022, 12, 5), "datenum");
 meteo_data.processing_machine = 'PCWIN64';
 
-save("C:/Users/nicol/OneDrive/Desktop/Meteo_data.mat",... 
-    "meteo_data");
-
-clearvars -except bike_sharing_data meteo_data
 disp("Processing of meteorological data done.")
 toc;
+
+%%
+
+save("../Processed Data/", "meteo_data");
+clearvars -except bike_sharing_data meteo_data
 
 %% README.md cover creation
 
