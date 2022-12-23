@@ -8,7 +8,7 @@ clc
 clearvars
 warning off
 
-%% Bike sharing data (expected execution time: ~ 1 hour) 
+%% Bike sharing data (expected execution time: ~ 45 minutes) 
 
 %  Information extraction
 tic;
@@ -211,7 +211,7 @@ end
 % - Friday, December 25 – Christmas Day
 
 daily_calendar = convertTo(daily_calendar, "datenum");
-hourly_calendar = convertTo(hourly_calendar, "datenum");
+% hourly_calendar = convertTo(hourly_calendar, "datenum");
 
 sundays = convertTo(datetime(2020, 1, 5), "datenum"):7:convertTo(datetime(2020, 12, 27), "datenum");
 holidays = convertTo([datetime(2020, 1, 1) datetime(2020, 1, 20) ...
@@ -265,7 +265,7 @@ disp(" ")
 disp("Start processing of train stations data")
 disp(" ")
 
-train_stations_path = "..\Data\Sources\Train stations\Jersey _City_train_stations.csv";
+train_stations_path = "..\Data\Sources\Train stations\Jersey_City_train_stations_data.csv";
 train_stations_table = readtable(train_stations_path);
 lat_b = lat_stations;
 lon_b = lon_stations;
@@ -286,6 +286,11 @@ disp("Processing of meteorological data done.")
 toc;
 
 %% Daily data formatting for DCM and HDGM
+
+tic;
+disp(" ")
+disp("Start formatting of daily data")
+disp(" ")
 
 daily_data.bs_data{1} = daily_counters_table{:,2:end};
 daily_data.bs_data{2} = daily_duration_table{:,2:end};
@@ -364,10 +369,84 @@ daily_data.processing_machine = 'PCWIN64';
 
 save("..\Data\Processed Data\Daily_data.mat", "daily_data")
 
+disp("Formatting of daily data done.")
+toc;
+
+%% Hourly data formatting for f-HDGM
+
+tic;
+disp(" ")
+disp("Start formatting of hourly data")
+disp(" ")
+
+var_names = {'Station_ID', 'Y_name', 'Y', 'X_h_hour', 'X_beta_const',...
+    'X_beta_avg_feels_like_T', 'X_beta_rainfall', 'X_beta_snowfall',...
+    'X_beta_windspeed', 'X_beta_cloud_cover', 'X_beta_ts_distance',...
+    'X_beta_holidays', 'X_beta_lockdown', 'Y_coordinates', 'X_coordinates',...
+    'Time'};
+var_units = {'', '', 'bikes', 'h', 'cons', '﻿^{\circ}C', 'mm', 'cm', 'km/h',...
+    '\%', 'deg', '', '', 'deg', 'deg', 'd'};
+hourly_data = array2table(zeros(366*num_stations, length(var_names)));
+hourly_data.Properties.VariableNames = var_names;
+hourly_data.Properties.VariableUnits = var_units;
+hourly_data.Station_ID = repmat(id_stations, 366, 1);
+hourly_data.Y_name = repmat("pickups", 366*num_stations, 1);
+hourly_data.Y_coordinates = repmat(lat_stations, 366, 1);
+hourly_data.X_coordinates = repmat(lon_stations, 366, 1);
+
+hourly_data.Y = num2cell(hourly_data.Y);
+hourly_data.X_h_hour = num2cell(hourly_data.Y);
+hourly_data.X_beta_const = num2cell(hourly_data.X_beta_const);
+hourly_data.X_beta_avg_feels_like_T = num2cell(hourly_data.X_beta_avg_feels_like_T);
+hourly_data.X_beta_rainfall = num2cell(hourly_data.X_beta_rainfall);
+hourly_data.X_beta_snowfall = num2cell(hourly_data.X_beta_snowfall);
+hourly_data.X_beta_windspeed = num2cell(hourly_data.X_beta_windspeed);
+hourly_data.X_beta_cloud_cover = num2cell(hourly_data.X_beta_cloud_cover);
+hourly_data.X_beta_ts_distance = num2cell(hourly_data.X_beta_ts_distance);
+hourly_data.X_beta_holidays = num2cell(hourly_data.X_beta_holidays);
+hourly_data.X_beta_lockdown = num2cell(hourly_data.X_beta_lockdown);
+hourly_data.Time = datetime(hourly_data.Time, 'ConvertFrom', 'datenum');
+
+count = 1;
+start = 2;
+for i = 1:366
+    disp("Day: " + i)
+    stop = start + 23;
+    for j = 1:num_stations
+        hourly_data.Y(count) = {hourly_counters_table{j,start:stop}};
+        hourly_data.X_h_hour(count) = {0:1:23};
+        hourly_data.X_beta_const(count) = {ones(1, 24)};
+        hourly_data.X_beta_avg_feels_like_T(count) = {Hourly_meteo_DS{(start-1):(stop-1), "feelslike"}'};
+        hourly_data.X_beta_rainfall(count) = {Hourly_meteo_DS{(start-1):(stop-1), "precip"}'};
+        hourly_data.X_beta_snowfall(count) = {Hourly_meteo_DS{(start-1):(stop-1), "snow"}'};
+        hourly_data.X_beta_windspeed(count) = {Hourly_meteo_DS{(start-1):(stop-1), "windspeed"}'};
+        hourly_data.X_beta_cloud_cover(count) = {Hourly_meteo_DS{(start-1):(stop-1), "cloudcover"}'};
+        hourly_data.X_beta_ts_distance(count) = {repmat(dist(j, 1), 1, 24)};
+        if lockdown_days(1, i)
+            hourly_data.X_beta_lockdown(count) = {ones(1, 24)};
+        else
+            hourly_data.X_beta_lockdown(count) = {zeros(1, 24)};
+        end
+        if non_working_days(1, i)
+            hourly_data.X_beta_holidays(count) = {ones(1, 24)};
+        else
+            hourly_data.X_beta_holidays(count) = {zeros(1, 24)};
+        end
+        hourly_data.Time(count) = datetime(2020, 1, i);
+        count = count + 1;
+    end
+    start = stop + 1;
+end
+
+save("..\Data\Processed Data\Hourly_data.mat", "hourly_data")
+
+disp("Formatting of daily data done.")
+toc;
+
 %% README.md cover creation
 
-avg_service_usage = mean(bike_sharing_data.daily_data{1}, 1);
-daily_calendar = datetime(bike_sharing_data.daily_calendar, "ConvertFrom", "datenum");
+avg_service_usage = mean(daily_data.bs_data{1}, 1);
+daily_calendar = daily_data.datetime_calendar;
 start_ld = datetime(2020, 3, 22);
 end_ld = datetime(2020, 5, 15);
 
@@ -388,5 +467,6 @@ ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex')
 text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
     'Interpreter', 'latex', 'Color', 'red')
 yyaxis right
-plot(daily_calendar, meteo_data.daily_data{4})
+rainfall = daily_data.meteo_data{4};
+plot(daily_calendar, rainfall(1,:))
 ylabel('Rainfall [mm]', 'Interpreter', 'latex')
