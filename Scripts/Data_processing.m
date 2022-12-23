@@ -14,7 +14,8 @@ warning off
 tic;
 disp("Start processing of bike sharing data")
 disp(" ")
-bike_path = "..\Bike sharing\";
+
+bike_path = "..\Data\Sources\Bike sharing\";
 months = ["January" "February" "March" "April" "May" "June" "July" "August"...
     "September" "October" "November" "December"];
 
@@ -229,68 +230,8 @@ lockdown = convertTo(datetime(2020, 3, 22),...
     "datenum"):1:convertTo(datetime(2020, 5, 15), "datenum");
 lockdown_days = ismember(daily_calendar, lockdown);
 
-% Data formatting and export
-
-bike_sharing_data.daily_data{1} = daily_counters_table{:,2:end};
-bike_sharing_data.daily_data{2} = daily_duration_table{:,2:end};
-bike_sharing_data.daily_data{3} = daily_age_table{:,2:end};
-bike_sharing_data.daily_data{4} = daily_male_table{:,2:end};
-bike_sharing_data.daily_data{5} = daily_female_table{:,2:end};
-bike_sharing_data.daily_data{6} = daily_unknown_table{:,2:end};
-bike_sharing_data.daily_data{7} = daily_subscriber_table{:,2:end};
-bike_sharing_data.daily_data{8} = daily_customer_table{:,2:end};
-bike_sharing_data.hourly_data{1} = hourly_counters_table{:,2:end};
-bike_sharing_data.hourly_data{2} = hourly_duration_table{:,2:end};
-bike_sharing_data.hourly_data{3} = hourly_age_table{:,2:end};
-bike_sharing_data.hourly_data{4} = hourly_male_table{:,2:end};
-bike_sharing_data.hourly_data{5} = hourly_female_table{:,2:end};
-bike_sharing_data.hourly_data{6} = hourly_unknown_table{:,2:end};
-bike_sharing_data.hourly_data{7} = hourly_subscriber_table{:,2:end};
-bike_sharing_data.hourly_data{8} = hourly_customer_table{:,2:end};
-bike_sharing_data.var_names{1} = 'access counters';
-bike_sharing_data.var_names{2} = 'avg trip duration';
-bike_sharing_data.var_names{3} = 'avg clients age';
-bike_sharing_data.var_names{4} = 'male counters';
-bike_sharing_data.var_names{5} = 'female counters';
-bike_sharing_data.var_names{6} = 'unknown gender counters';
-bike_sharing_data.var_names{7} = 'subscribers counters';
-bike_sharing_data.var_names{8} = 'customers counters';
-bike_sharing_data.unit_of_measure{1} = 'dimensionless';
-bike_sharing_data.unit_of_measure{2} = 's';
-bike_sharing_data.unit_of_measure{3} = 'years';
-bike_sharing_data.unit_of_measure{4} = 'dimensionless';
-bike_sharing_data.unit_of_measure{5} = 'dimensionless';
-bike_sharing_data.unit_of_measure{6} = 'dimensionless';
-bike_sharing_data.unit_of_measure{7} = 'dimensionless';
-bike_sharing_data.unit_of_measure{8} = 'dimensionless';
-bike_sharing_data.daily_calendar = daily_calendar;
-bike_sharing_data.hourly_calendar = hourly_calendar;
-bike_sharing_data.non_working_days = non_working_days;
-bike_sharing_data.lockdown_days = lockdown_days;
-bike_sharing_data.temporal_granularity{1}  = 'day';
-bike_sharing_data.temporal_granularity{2}  = 'hour';
-bike_sharing_data.measure_type = 'observed';
-bike_sharing_data.data_type = 'point';
-bike_sharing_data.data_source = 'https://www.kaggle.com/datasets/vineethakkinapalli/citibike-bike-sharingnewyork-cityjan-to-apr-2021';
-bike_sharing_data.num_stations = num_stations;
-bike_sharing_data.location  = 'New York City';
-bike_sharing_data.id = id_stations;
-bike_sharing_data.lat = lat_stations;
-bike_sharing_data.lon = lon_stations;
-bike_sharing_data.coordinate_unit = 'degree';
-bike_sharing_data.processing_authors{1} = 'Alessandro Chaar';
-bike_sharing_data.processing_authors{2} = 'Lorenzo Leoni';
-bike_sharing_data.processing_authors{3} = 'Nicola Zambelli';
-bike_sharing_data.processing_date = convertTo(datetime(2022, 12, 4), "datenum");
-bike_sharing_data.processing_machine = 'PCWIN64';
-
 disp("Processing of bike sharing data done.")
 toc;
-
-%% 
-
-save("../Processed Data/", "bike_sharing_data");
-clearvars -except bike_sharing_data
 
 %% Meteorological data
 
@@ -300,8 +241,9 @@ tic;
 disp(" ")
 disp("Start processing of meteorological data")
 disp(" ")
-daily_meteo_path = "..\NYC_meteo_daily_data.csv";
-hourly_meteo_path = "..\NYC_meteo_hourly_data.csv";
+
+daily_meteo_path = "..\Data\Sources\Meteo\NYC_meteo_daily_data.csv";
+hourly_meteo_path = "..\Data\Sources\Meteo\NYC_meteo_hourly_data.csv";
 Daily_meteo_DS = readtable(daily_meteo_path);
 Hourly_meteo_DS = readtable(hourly_meteo_path);
 Hourly_meteo_DS = Hourly_meteo_DS(1:(24*366), :);
@@ -313,65 +255,114 @@ for i=1:366
 end
 hourly_calendar = convertTo(hourly_calendar(:)', "datenum");
 
-% Data formatting and export
+disp("Processing of meteorological data done.")
+toc;
 
-meteo_data.daily_data{1} = Daily_meteo_DS{:, "temp"}';
-meteo_data.daily_data{2} = Daily_meteo_DS{:, "feelslike"}';
-meteo_data.daily_data{3} = Daily_meteo_DS{:, "humidity"}';
-meteo_data.daily_data{4} = Daily_meteo_DS{:, "precip"}';
-meteo_data.daily_data{5} = Daily_meteo_DS{:, "snow"}';
-meteo_data.daily_data{6} = Daily_meteo_DS{:, "windspeed"}';
-meteo_data.daily_data{7} = Daily_meteo_DS{:, "cloudcover"}';
-meteo_data.daily_data{8} = Daily_meteo_DS{:, "visibility"}';
-meteo_data.daily_data{9} = Daily_meteo_DS{:, "uvindex"}';
-meteo_data.hourly_data{1} = Hourly_meteo_DS{:, "temp"}';
-meteo_data.hourly_data{2} = Hourly_meteo_DS{:, "feelslike"}';
-meteo_data.hourly_data{3} = Hourly_meteo_DS{:, "humidity"}';
-meteo_data.hourly_data{4} = Hourly_meteo_DS{:, "precip"}';
-meteo_data.hourly_data{5} = Hourly_meteo_DS{:, "snow"}';
-meteo_data.hourly_data{6} = Hourly_meteo_DS{:, "windspeed"}';
-meteo_data.hourly_data{7} = Hourly_meteo_DS{:, "cloudcover"}';
-meteo_data.hourly_data{8} = Hourly_meteo_DS{:, "visibility"}';
-meteo_data.hourly_data{9} = Hourly_meteo_DS{:, "uvindex"}';
-meteo_data.var_names{1} = 'avg temperature';
-meteo_data.var_names{2} = 'avg feels like temperature';
-meteo_data.var_names{3} = 'humidity';
-meteo_data.var_names{4} = 'rainfall';
-meteo_data.var_names{5} = 'snowfall';
-meteo_data.var_names{6} = 'windspeed';
-meteo_data.var_names{7} = 'cloud cover';
-meteo_data.var_names{8} = 'visibility';
-meteo_data.var_names{9} = 'UV index';
-meteo_data.unit_of_measure{1} = '°C';
-meteo_data.unit_of_measure{2} = '°C';
-meteo_data.unit_of_measure{3} = '%';
-meteo_data.unit_of_measure{4} = 'mm';
-meteo_data.unit_of_measure{5} = 'cm';
-meteo_data.unit_of_measure{6} = 'km/h';
-meteo_data.unit_of_measure{7} = '%';
-meteo_data.unit_of_measure{8} = 'km';
-meteo_data.unit_of_measure{9} = 'dimensionless';
-meteo_data.daily_calendar = daily_calendar;
-meteo_data.hourly_calendar = hourly_calendar;
-meteo_data.temporal_granularity{1}  = 'day';
-meteo_data.temporal_granularity{2}  = 'hour';
-meteo_data.measure_type = 'observed';
-meteo_data.data_type = 'global';
-meteo_data.data_source = 'https://www.visualcrossing.com/weather/weather-data-services/New%20York/us/last15days#';
-meteo_data.location  = 'New York City';
-meteo_data.processing_authors{1} = 'Alessandro Chaar';
-meteo_data.processing_authors{2} = 'Lorenzo Leoni';
-meteo_data.processing_authors{3} = 'Nicola Zambelli';
-meteo_data.processing_date = convertTo(datetime(2022, 12, 5), "datenum");
-meteo_data.processing_machine = 'PCWIN64';
+%% Train stations data
+
+tic;
+disp(" ")
+disp("Start processing of train stations data")
+disp(" ")
+
+train_stations_path = "..\Data\Sources\Train stations\Jersey _City_train_stations.csv";
+train_stations_table = readtable(train_stations_path);
+lat_b = lat_stations;
+lon_b = lon_stations;
+lat_t = train_stations_table.Lat;
+lon_t = train_stations_table.Lon;
+dist = ones(length(lat_b), 1);
+dist_i = ones(length(lat_t), 1);
+
+for i = 1:length(lat_b) 
+    for j = 1:length(lat_t)
+        dist_i(j) = distance('gc', lat_b(i), lon_b(i), lat_t(j), lon_t(j)); 
+        dist_i(j) = deg2km(dist_i(j));
+    end
+    dist(i)=min(dist_i);
+end
 
 disp("Processing of meteorological data done.")
 toc;
 
-%%
+%% Daily data formatting for DCM and HDGM
 
-save("../Processed Data/", "meteo_data");
-clearvars -except bike_sharing_data meteo_data
+daily_data.bs_data{1} = daily_counters_table{:,2:end};
+daily_data.bs_data{2} = daily_duration_table{:,2:end};
+daily_data.bs_data{3} = daily_age_table{:,2:end};
+daily_data.bs_data{4} = daily_male_table{:,2:end};
+daily_data.bs_data{5} = daily_female_table{:,2:end};
+daily_data.bs_data{6} = daily_unknown_table{:,2:end};
+daily_data.bs_data{7} = daily_subscriber_table{:,2:end};
+daily_data.bs_data{8} = daily_customer_table{:,2:end};
+daily_data.bs_var_names{1} = 'pickups counters';
+daily_data.bs_var_names{2} = 'avg trip duration';
+daily_data.bs_var_names{3} = 'avg clients age';
+daily_data.bs_var_names{4} = 'male counters';
+daily_data.bs_var_names{5} = 'female counters';
+daily_data.bs_var_names{6} = 'unknown gender counters';
+daily_data.bs_var_names{7} = 'subscribers counters';
+daily_data.bs_var_names{8} = 'customers counters';
+daily_data.bs_units_of_measure{1} = 'dimensionless';
+daily_data.bs_units_of_measure{2} = 's';
+daily_data.bs_units_of_measure{3} = 'years';
+daily_data.bs_units_of_measure{4} = 'dimensionless';
+daily_data.bs_units_of_measure{5} = 'dimensionless';
+daily_data.bs_units_of_measure{6} = 'dimensionless';
+daily_data.bs_units_of_measure{7} = 'dimensionless';
+daily_data.bs_units_of_measure{8} = 'dimensionless';
+daily_data.meteo_data{1} = repmat(Daily_meteo_DS{:, "temp"}', num_stations, 1);
+daily_data.meteo_data{2} = repmat(Daily_meteo_DS{:, "feelslike"}', num_stations, 1);
+daily_data.meteo_data{3} = repmat(Daily_meteo_DS{:, "humidity"}', num_stations, 1);
+daily_data.meteo_data{4} = repmat(Daily_meteo_DS{:, "precip"}', num_stations, 1);
+daily_data.meteo_data{5} = repmat(Daily_meteo_DS{:, "snow"}', num_stations, 1);
+daily_data.meteo_data{6} = repmat(Daily_meteo_DS{:, "windspeed"}', num_stations, 1);
+daily_data.meteo_data{7} = repmat(Daily_meteo_DS{:, "cloudcover"}', num_stations, 1);
+daily_data.meteo_data{8} = repmat(Daily_meteo_DS{:, "visibility"}', num_stations, 1);
+daily_data.meteo_data{9} = repmat(Daily_meteo_DS{:, "uvindex"}', num_stations, 1);
+daily_data.meteo_var_names{1} = 'avg temperature';
+daily_data.meteo_var_names{2} = 'avg feels like temperature';
+daily_data.meteo_var_names{3} = 'humidity';
+daily_data.meteo_var_names{4} = 'rainfall';
+daily_data.meteo_var_names{5} = 'snowfall';
+daily_data.meteo_var_names{6} = 'windspeed';
+daily_data.meteo_var_names{7} = 'cloud cover';
+daily_data.meteo_var_names{8} = 'visibility';
+daily_data.meteo_var_names{9} = 'UV index';
+daily_data.meteo_units_of_measure{1} = '°C';
+daily_data.meteo_units_of_measure{2} = '°C';
+daily_data.meteo_units_of_measure{3} = '%';
+daily_data.meteo_units_of_measure{4} = 'mm';
+daily_data.meteo_units_of_measure{5} = 'cm';
+daily_data.meteo_units_of_measure{6} = 'km/h';
+daily_data.meteo_units_of_measure{7} = '%';
+daily_data.meteo_units_of_measure{8} = 'km';
+daily_data.meteo_units_of_measure{9} = 'dimensionless';
+daily_data.distances{1} = repmat(dist, 1, 366);
+daily_data.distances_var_names{1} = 'distances from the nearest train station';
+daily_data.distances_units_of_measure{1} = 'degrees';
+daily_data.datetime_calendar = datetime(daily_calendar, 'ConvertFrom', 'datenum');
+daily_data.num_calendar = daily_calendar;
+daily_data.non_working_days = non_working_days;
+daily_data.lockdown_days = lockdown_days;
+daily_data.temporal_granularity = 'day';
+daily_data.measure_type = 'observed';
+daily_data.data_type = 'point';
+daily_data.data_sources{1} = 'https://www.kaggle.com/datasets/vineethakkinapalli/citibike-bike-sharingnewyork-cityjan-to-apr-2021';
+daily_data.data_sources{2} = 'https://www.visualcrossing.com/weather/weather-data-services/New%20York/us/last15days#';
+daily_data.num_stations = num_stations;
+daily_data.location  = 'New York City, Jersey City';
+daily_data.id = id_stations;
+daily_data.lat = lat_stations;
+daily_data.lon = lon_stations;
+daily_data.coordinate_unit = 'degree';
+daily_data.processing_authors{1} = 'Alessandro Chaar';
+daily_data.processing_authors{2} = 'Lorenzo Leoni';
+daily_data.processing_authors{3} = 'Nicola Zambelli';
+daily_data.processing_date = datetime('now');
+daily_data.processing_machine = 'PCWIN64';
+
+save("..\Data\Processed Data\Daily_data.mat", "daily_data")
 
 %% README.md cover creation
 
