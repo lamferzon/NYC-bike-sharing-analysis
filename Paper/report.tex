@@ -1,0 +1,56 @@
+\documentclass[a4paper, 12pt, one column, aas_macros]{article}
+
+% Language and font encodings. This says how to do hyphenation on end of lines.
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Sets page size and margins. You can edit this to your liking
+\usepackage[top=1.3cm, bottom=2.0cm, outer=2.5cm, inner=2.5cm, heightrounded,
+marginparwidth=1.5cm, marginparsep=0.4cm, margin=2cm]{geometry}
+
+% Useful packages
+\usepackage{graphicx} %allows you to use jpg or png images. PDF is still recommended
+\usepackage[colorlinks=False]{hyperref} % add links inside PDF files
+\usepackage{amsmath}  % Math fonts
+\usepackage{amsfonts} %
+\usepackage{amssymb}  %
+
+% Citation package
+\usepackage[authoryear]{natbib}
+\bibliographystyle{abbrvnat}
+\setcitestyle{authoryear,open={(},close={)}}
+
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{import}
+
+\newcommand\todo[1]{\textcolor{red}{#1}}
+
+\title{Statistical analysis of Jersey City bike sharing data using spatio-temporal models}
+\author{Alessandro CHAAR \and Lorenzo LEONI \and Nicola ZAMBELLI}
+\date{%
+	University of Bergamo, Department of Management, Information and Production Engineering\\[2ex]%
+	\today
+}
+
+\begin{document}
+	\maketitle
+	
+	\begin{abstract}
+		Is it possible to predict how many bikes to place at a pickup station to optimize the bike sharing service? Starting from \num{2020} Jersey City (NYC) bike staring data, the aim of this study is to find an answer to this question estimating three different spatio-temporal models. The historical weather data (and not only) will try to explain the daily (and hourly) number of pickups at a station in order to help the service provider in its planning. \\\\
+		\textbf{Keywords}: bike sharing, DCM, HDGM, f-HDGM, D-STEAM.
+	\end{abstract}
+	
+	\import{Sections/}{Dataset description.tex}
+	\import{Sections/}{Scientific questions.tex}
+	\import{Sections/}{Methodology.tex}
+	\import{Sections/}{Data analysis.tex}
+	\import{Sections/}{Results comparison.tex}
+	\import{Sections/}{Conclusions.tex}
+	
+\end{document}

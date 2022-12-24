@@ -1,2 +1,9 @@
+# files
 *.asv
+*.aux
+*.log
+*.out
+*.synctex.gz
+
+# directories
 Scripts/D-STEAM_v2/Code/
