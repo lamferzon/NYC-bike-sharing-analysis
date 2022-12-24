@@ -7,6 +7,27 @@ warning off
 load('../Data/Processed data/Daily_data.mat')
 Transport_ST = readtable('../Data/Sources/Train stations/Jersey_City_train_stations_data.csv');
 
+%% Weather data analysis
+
+meteo_results = array2table(zeros(length(daily_data.meteo_data), 11));
+var_names = {'Variable', 'Min', 'Q1', 'Mean', 'Median', 'Q3', 'Max',...
+    'Std', 'Skewness', 'Kurtosis', 'JB_test'};
+meteo_results.Properties.VariableNames = var_names;
+meteo_results.Variable = daily_data.meteo_var_names';
+for i = 1:length(daily_data.meteo_data)
+    meteo_results.Min(i) = min(daily_data.meteo_data{i}(1,:));
+    meteo_results.Q1(i) = prctile(daily_data.meteo_data{i}(1,:), 25);
+    meteo_results.Mean(i) = mean(daily_data.meteo_data{i}(1,:));
+    meteo_results.Median(i) = median(daily_data.meteo_data{i}(1,:));
+    meteo_results.Q3(i) = prctile(daily_data.meteo_data{i}(1,:), 75);
+    meteo_results.Max(i) = max(daily_data.meteo_data{i}(1,:));
+    meteo_results.Std(i) = std(daily_data.meteo_data{i}(1,:));
+    meteo_results.Skewness(i) = skewness(daily_data.meteo_data{i}(1,:));
+    meteo_results.Kurtosis(i) = kurtosis(daily_data.meteo_data{i}(1,:));
+    meteo_results.JB_test(i) = jbtest(daily_data.meteo_data{i}(1,:));
+end
+save("..\Data\Processed data\Meteo_results.mat", "meteo_results");
+
 %% Creation of the map of the bike sharing and subway/train stations
 
 Dist_tbl = table(daily_data.lat, daily_data.lon, daily_data.distances{1}(:,1));
