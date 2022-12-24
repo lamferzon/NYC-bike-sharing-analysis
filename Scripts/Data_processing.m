@@ -443,31 +443,3 @@ save("..\Data\Processed data\Hourly_data.mat", "hourly_data")
 
 disp("Formatting of daily data done.")
 toc;
-
-%% README.md cover creation
-
-avg_service_usage = mean(daily_data.bs_data{1}, 1);
-daily_calendar = daily_data.datetime_calendar;
-start_ld = datetime(2020, 3, 22);
-end_ld = datetime(2020, 5, 15);
-
-figure
-plot(daily_calendar, avg_service_usage)
-title(['\textbf{Average number of daily bicycle picks-up at stations '...
-    'vs daily rainfall}'], 'Interpreter', 'latex')
-v = [81 0; 135 0; 135 60; 81 60];
-f = [1 2 3 4];
-patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
-    'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
-ax = gca;
-ax.XAxis.TickLabelInterpreter = 'latex';
-xlabel("Time", 'Interpreter', 'latex')
-ay = gca;
-ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex')
-text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
-    'Interpreter', 'latex', 'Color', 'red')
-yyaxis right
-rainfall = daily_data.meteo_data{4};
-plot(daily_calendar, rainfall(1,:))
-ylabel('Rainfall [mm]', 'Interpreter', 'latex')
