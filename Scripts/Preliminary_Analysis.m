@@ -9,24 +9,24 @@ Transport_ST = readtable('../Data/Sources/Train stations/Jersey_City_train_stati
 
 %% Weather data analysis
 
-meteo_results = array2table(zeros(length(daily_data.meteo_data), 11));
+weather_results = array2table(zeros(length(daily_data.weather_data), 11));
 var_names = {'Variable', 'Min', 'Q1', 'Mean', 'Median', 'Q3', 'Max',...
     'Std', 'Skewness', 'Kurtosis', 'JB_test'};
-meteo_results.Properties.VariableNames = var_names;
-meteo_results.Variable = daily_data.meteo_var_names';
-for i = 1:length(daily_data.meteo_data)
-    meteo_results.Min(i) = min(daily_data.meteo_data{i}(1,:));
-    meteo_results.Q1(i) = prctile(daily_data.meteo_data{i}(1,:), 25);
-    meteo_results.Mean(i) = mean(daily_data.meteo_data{i}(1,:));
-    meteo_results.Median(i) = median(daily_data.meteo_data{i}(1,:));
-    meteo_results.Q3(i) = prctile(daily_data.meteo_data{i}(1,:), 75);
-    meteo_results.Max(i) = max(daily_data.meteo_data{i}(1,:));
-    meteo_results.Std(i) = std(daily_data.meteo_data{i}(1,:));
-    meteo_results.Skewness(i) = skewness(daily_data.meteo_data{i}(1,:));
-    meteo_results.Kurtosis(i) = kurtosis(daily_data.meteo_data{i}(1,:));
-    meteo_results.JB_test(i) = jbtest(daily_data.meteo_data{i}(1,:));
+weather_results.Properties.VariableNames = var_names;
+weather_results.Variable = daily_data.weather_var_names';
+for i = 1:length(daily_data.weather_data)
+    weather_results.Min(i) = min(daily_data.weather_data{i}(1,:));
+    weather_results.Q1(i) = prctile(daily_data.weather_data{i}(1,:), 25);
+    weather_results.Mean(i) = mean(daily_data.weather_data{i}(1,:));
+    weather_results.Median(i) = median(daily_data.weather_data{i}(1,:));
+    weather_results.Q3(i) = prctile(daily_data.weather_data{i}(1,:), 75);
+    weather_results.Max(i) = max(daily_data.weather_data{i}(1,:));
+    weather_results.Std(i) = std(daily_data.weather_data{i}(1,:));
+    weather_results.Skewness(i) = skewness(daily_data.weather_data{i}(1,:));
+    weather_results.Kurtosis(i) = kurtosis(daily_data.weather_data{i}(1,:));
+    weather_results.JB_test(i) = jbtest(daily_data.weather_data{i}(1,:));
 end
-save("..\Data\Processed data\Meteo_results.mat", "meteo_results");
+save("..\Data\Processed data\Weather_results.mat", "weather_results");
 
 %% Creation of the map of the bike sharing and subway/train stations
 
@@ -70,7 +70,7 @@ ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex')
 text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
     'Interpreter', 'latex', 'Color', 'red')
 yyaxis right
-rainfall = daily_data.meteo_data{4};
+rainfall = daily_data.weather_data{4};
 plot(daily_calendar, rainfall(1,:))
 ylabel('Rainfall [mm]', 'Interpreter', 'latex')
 
@@ -92,7 +92,7 @@ text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation', 
     'Interpreter', 'latex', 'Color', 'red')
 hold on
 yyaxis right
-plot(daily_calendar, daily_data.meteo_data{1}(1,:))
+plot(daily_calendar, daily_data.weather_data{1}(1,:))
 ylabel('average daily temperature [°C]', 'Interpreter', 'latex')
 
 %% Avg number of daily bicycle picks-up at stations vs avg windspeed
@@ -113,7 +113,7 @@ text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation', 
     'Interpreter', 'latex', 'Color', 'red')
 hold on
 yyaxis right
-plot(daily_calendar, daily_data.meteo_data{6}(1,:))
+plot(daily_calendar, daily_data.weather_data{6}(1,:))
 ylabel('average windspeed [km/h]', 'Interpreter', 'latex')
 
 %% Avg number of daily bicycle picks-up at stations during holidays and weekends
@@ -138,19 +138,20 @@ for i=1:1:360
 end
 title(['\textbf{Average number of daily bicycle picks-up at stations '...
     'during holidays and weekends}'], 'Interpreter', 'latex')
-legend("Avg number of daily bicycle picks-up ", "Holidays and weekends")
+legend("Avg number of daily bicycle picks-up ", "Holidays and weekends",...
+    'Interpreter', 'latex')
 
-%% Linear regression model for meteorological variables
+%% Linear regression model for weather variables
 
-X = [daily_data.meteo_data{1}(1,:); daily_data.meteo_data{2}(1,:); daily_data.meteo_data{3}(1,:)
-    daily_data.meteo_data{4}(1,:); daily_data.meteo_data{5}(1,:); daily_data.meteo_data{6}(1,:)
-    daily_data.meteo_data{7}(1,:); daily_data.meteo_data{8}(1,:); daily_data.meteo_data{9}(1,:)
+X = [daily_data.weather_data{1}(1,:); daily_data.weather_data{2}(1,:); daily_data.weather_data{3}(1,:)
+    daily_data.weather_data{4}(1,:); daily_data.weather_data{5}(1,:); daily_data.weather_data{6}(1,:)
+    daily_data.weather_data{7}(1,:); daily_data.weather_data{8}(1,:); daily_data.weather_data{9}(1,:)
     daily_data.lockdown_days; daily_data.non_working_days]';
 fitlm(X, avg_service_usage')
 
 % removal of the variables that do not satisfy the t-test
-X = [daily_data.meteo_data{2}(1,:); daily_data.meteo_data{6}(1,:); 
-    daily_data.meteo_data{7}(1,:); daily_data.lockdown_days; daily_data.non_working_days]';
+X = [daily_data.weather_data{2}(1,:); daily_data.weather_data{6}(1,:); 
+    daily_data.weather_data{7}(1,:); daily_data.lockdown_days; daily_data.non_working_days]';
 lm_model = fitlm(X, avg_service_usage', "linear")
 
 plot(daily_calendar, lm_model.Fitted)

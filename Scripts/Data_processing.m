@@ -1,14 +1,14 @@
 
 % *Part 1: data processing*
 
-%  Preliminary data processing regarding bike sharing and meteorological parameters 
+%  Preliminary data processing regarding bike sharing and weather parameters 
 %  in New York City during 2020, starting from January 1th to December 31th.
 
 clc
 clearvars
 warning off
 
-%% Bike sharing data (expected execution time: ~ 45 minutes) 
+%% Bike sharing data (expected execution time: ~ 50 minutes) 
 
 %  Information extraction
 tic;
@@ -233,20 +233,20 @@ lockdown_days = ismember(daily_calendar, lockdown);
 disp("Processing of bike sharing data done.")
 toc;
 
-%% Meteorological data
+%% Weather data
 
 %  Information extraction
 
 tic;
 disp(" ")
-disp("Start processing of meteorological data")
+disp("Start processing of weather data")
 disp(" ")
 
-daily_meteo_path = "..\Data\Sources\Meteo\NYC_meteo_daily_data.csv";
-hourly_meteo_path = "..\Data\Sources\Meteo\NYC_meteo_hourly_data.csv";
-Daily_meteo_DS = readtable(daily_meteo_path);
-Hourly_meteo_DS = readtable(hourly_meteo_path);
-Hourly_meteo_DS = Hourly_meteo_DS(1:(24*366), :);
+daily_weather_path = "..\Data\Sources\Weather\NYC_daily_weather_data.csv";
+hourly_weather_path = "..\Data\Sources\Weather\NYC_hourly_weather_data.csv";
+Daily_weather_DS = readtable(daily_weather_path);
+Hourly_weather_DS = readtable(hourly_weather_path);
+Hourly_weather_DS = Hourly_weather_DS(1:(24*366), :);
 
 daily_calendar = convertTo(datetime(2020, 1, (1:366)), "datenum");
 hourly_calendar = repmat(datetime('now'), 24, 366);
@@ -255,7 +255,7 @@ for i=1:366
 end
 hourly_calendar = convertTo(hourly_calendar(:)', "datenum");
 
-disp("Processing of meteorological data done.")
+disp("Processing of weather data done.")
 toc;
 
 %% Train stations data
@@ -282,7 +282,7 @@ for i = 1:length(lat_b)
     dist(i)=min(dist_i);
 end
 
-disp("Processing of meteorological data done.")
+disp("Processing of weather data done.")
 toc;
 
 %% Daily data formatting for DCM and HDGM
@@ -316,33 +316,33 @@ daily_data.bs_units_of_measure{5} = 'dimensionless';
 daily_data.bs_units_of_measure{6} = 'dimensionless';
 daily_data.bs_units_of_measure{7} = 'dimensionless';
 daily_data.bs_units_of_measure{8} = 'dimensionless';
-daily_data.meteo_data{1} = repmat(Daily_meteo_DS{:, "temp"}', num_stations, 1);
-daily_data.meteo_data{2} = repmat(Daily_meteo_DS{:, "feelslike"}', num_stations, 1);
-daily_data.meteo_data{3} = repmat(Daily_meteo_DS{:, "humidity"}', num_stations, 1);
-daily_data.meteo_data{4} = repmat(Daily_meteo_DS{:, "precip"}', num_stations, 1);
-daily_data.meteo_data{5} = repmat(Daily_meteo_DS{:, "snow"}', num_stations, 1);
-daily_data.meteo_data{6} = repmat(Daily_meteo_DS{:, "windspeed"}', num_stations, 1);
-daily_data.meteo_data{7} = repmat(Daily_meteo_DS{:, "cloudcover"}', num_stations, 1);
-daily_data.meteo_data{8} = repmat(Daily_meteo_DS{:, "visibility"}', num_stations, 1);
-daily_data.meteo_data{9} = repmat(Daily_meteo_DS{:, "uvindex"}', num_stations, 1);
-daily_data.meteo_var_names{1} = 'avg temperature';
-daily_data.meteo_var_names{2} = 'avg feels like temperature';
-daily_data.meteo_var_names{3} = 'humidity';
-daily_data.meteo_var_names{4} = 'rainfall';
-daily_data.meteo_var_names{5} = 'snowfall';
-daily_data.meteo_var_names{6} = 'windspeed';
-daily_data.meteo_var_names{7} = 'cloud cover';
-daily_data.meteo_var_names{8} = 'visibility';
-daily_data.meteo_var_names{9} = 'UV index';
-daily_data.meteo_units_of_measure{1} = '°C';
-daily_data.meteo_units_of_measure{2} = '°C';
-daily_data.meteo_units_of_measure{3} = '%';
-daily_data.meteo_units_of_measure{4} = 'mm';
-daily_data.meteo_units_of_measure{5} = 'cm';
-daily_data.meteo_units_of_measure{6} = 'km/h';
-daily_data.meteo_units_of_measure{7} = '%';
-daily_data.meteo_units_of_measure{8} = 'km';
-daily_data.meteo_units_of_measure{9} = 'dimensionless';
+daily_data.weather_data{1} = repmat(Daily_weather_DS{:, "temp"}', num_stations, 1);
+daily_data.weather_data{2} = repmat(Daily_weather_DS{:, "feelslike"}', num_stations, 1);
+daily_data.weather_data{3} = repmat(Daily_weather_DS{:, "humidity"}', num_stations, 1);
+daily_data.weather_data{4} = repmat(Daily_weather_DS{:, "precip"}', num_stations, 1);
+daily_data.weather_data{5} = repmat(Daily_weather_DS{:, "snow"}', num_stations, 1);
+daily_data.weather_data{6} = repmat(Daily_weather_DS{:, "windspeed"}', num_stations, 1);
+daily_data.weather_data{7} = repmat(Daily_weather_DS{:, "cloudcover"}', num_stations, 1);
+daily_data.weather_data{8} = repmat(Daily_weather_DS{:, "visibility"}', num_stations, 1);
+daily_data.weather_data{9} = repmat(Daily_weather_DS{:, "uvindex"}', num_stations, 1);
+daily_data.weather_var_names{1} = 'avg temperature';
+daily_data.weather_var_names{2} = 'avg feels like temperature';
+daily_data.weather_var_names{3} = 'humidity';
+daily_data.weather_var_names{4} = 'rainfall';
+daily_data.weather_var_names{5} = 'snowfall';
+daily_data.weather_var_names{6} = 'windspeed';
+daily_data.weather_var_names{7} = 'cloud cover';
+daily_data.weather_var_names{8} = 'visibility';
+daily_data.weather_var_names{9} = 'UV index';
+daily_data.weather_units_of_measure{1} = '°C';
+daily_data.weather_units_of_measure{2} = '°C';
+daily_data.weather_units_of_measure{3} = '%';
+daily_data.weather_units_of_measure{4} = 'mm';
+daily_data.weather_units_of_measure{5} = 'cm';
+daily_data.weather_units_of_measure{6} = 'km/h';
+daily_data.weather_units_of_measure{7} = '%';
+daily_data.weather_units_of_measure{8} = 'km';
+daily_data.weather_units_of_measure{9} = 'dimensionless';
 daily_data.distances{1} = repmat(dist, 1, 366);
 daily_data.distances_var_names{1} = 'distances from the nearest train station';
 daily_data.distances_units_of_measure{1} = 'degrees';
@@ -417,11 +417,11 @@ for i = 1:366
         hourly_data.Y(count) = {hourly_counters_table{j,start:stop}};
         hourly_data.X_h_hour(count) = {0:1:23};
         hourly_data.X_beta_const(count) = {ones(1, 24)};
-        hourly_data.X_beta_avg_feels_like_T(count) = {Hourly_meteo_DS{(start-1):(stop-1), "feelslike"}'};
-        hourly_data.X_beta_rainfall(count) = {Hourly_meteo_DS{(start-1):(stop-1), "precip"}'};
-        hourly_data.X_beta_snowfall(count) = {Hourly_meteo_DS{(start-1):(stop-1), "snow"}'};
-        hourly_data.X_beta_windspeed(count) = {Hourly_meteo_DS{(start-1):(stop-1), "windspeed"}'};
-        hourly_data.X_beta_cloud_cover(count) = {Hourly_meteo_DS{(start-1):(stop-1), "cloudcover"}'};
+        hourly_data.X_beta_avg_feels_like_T(count) = {Hourly_weather_DS{(start-1):(stop-1), "feelslike"}'};
+        hourly_data.X_beta_rainfall(count) = {Hourly_weather_DS{(start-1):(stop-1), "precip"}'};
+        hourly_data.X_beta_snowfall(count) = {Hourly_weather_DS{(start-1):(stop-1), "snow"}'};
+        hourly_data.X_beta_windspeed(count) = {Hourly_weather_DS{(start-1):(stop-1), "windspeed"}'};
+        hourly_data.X_beta_cloud_cover(count) = {Hourly_weather_DS{(start-1):(stop-1), "cloudcover"}'};
         hourly_data.X_beta_ts_distance(count) = {repmat(dist(j, 1), 1, 24)};
         if lockdown_days(1, i)
             hourly_data.X_beta_lockdown(count) = {ones(1, 24)};
