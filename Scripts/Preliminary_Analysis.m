@@ -57,10 +57,11 @@ for i = 1:daily_data.num_stations
     daily_summary_table.duration_summary{10}(i,1) = jbtest(daily_data.bs_data{2}(i,:));
 end
 
+daily_summary_table.station_id = daily_data.id;
+
 % mean trip duration analysis
 
 avg_duration = mean(daily_data.bs_data{2}, 1, 'omitnan');
-plot(avg_duration)
 daily_summary_table.mean_duration_summary{1} = min(avg_duration);
 daily_summary_table.mean_duration_summary{2} = prctile(avg_duration, 25);
 daily_summary_table.mean_duration_summary{3} = mean(avg_duration);
@@ -72,59 +73,41 @@ daily_summary_table.mean_duration_summary{8} = skewness(avg_duration);
 daily_summary_table.mean_duration_summary{9} = kurtosis(avg_duration);
 daily_summary_table.mean_duration_summary{10} = jbtest(avg_duration);
 
-%% 
+% weather data analysis
 
-var_names_1 = {'Station_ID', 'Min', 'Q1', 'Mean', 'Median', 'Q3', 'Max',...
-    'Std', 'Skewness', 'Kurtosis', 'JB_test'};
-pickups_results = array2table(zeros(daily_data.num_stations+1, 11));
-pickups_results.Properties.VariableNames = var_names_1;
-pickups_results.Station_ID = [num2str(daily_data.id); "avg pickups"];
-
-for i = 1:daily_data.num_stations
-    pickups_results.Min(i) = min(daily_data.bs_data{1}(i,:));
-    pickups_results.Q1(i) = prctile(daily_data.bs_data{1}(i,:), 25);
-    pickups_results.Mean(i) = mean(daily_data.bs_data{1}(i,:));
-    pickups_results.Median(i) = median(daily_data.bs_data{1}(i,:));
-    pickups_results.Q3(i) = prctile(daily_data.bs_data{1}(i,:), 75);
-    pickups_results.Max(i) = max(daily_data.bs_data{1}(i,:));
-    pickups_results.Std(i) = std(daily_data.bs_data{1}(i,:));
-    pickups_results.Skewness(i) = skewness(daily_data.bs_data{1}(i,:));
-    pickups_results.Kurtosis(i) = kurtosis(daily_data.bs_data{1}(i,:));
-    pickups_results.JB_test(i) = jbtest(daily_data.bs_data{1}(i,:));
+for i = 1:10
+    daily_summary_table.weather_summary{i} = zeros(length(daily_data.weather_data), 1);
+    for j = 1:length(daily_data.weather_data)
+        switch i
+            case 1
+                daily_summary_table.weather_summary{i}(j,1) = min(daily_data.weather_data{j}(1,:));
+            case 2
+                daily_summary_table.weather_summary{i}(j,1) = prctile(daily_data.weather_data{j}(1,:), 25);
+            case 3
+                daily_summary_table.weather_summary{i}(j,1) = mean(daily_data.weather_data{j}(1,:));
+            case 4
+                daily_summary_table.weather_summary{i}(j,1) = prctile(daily_data.weather_data{j}(1,:), 50);
+            case 5
+                daily_summary_table.weather_summary{i}(j,1) = prctile(daily_data.weather_data{j}(1,:), 75);
+            case 6
+                daily_summary_table.weather_summary{i}(j,1) = max(daily_data.weather_data{j}(1,:));
+            case 7
+                daily_summary_table.weather_summary{i}(j,1) = std(daily_data.weather_data{j}(1,:));
+            case 8
+                daily_summary_table.weather_summary{i}(j,1) = skewness(daily_data.weather_data{j}(1,:));
+            case 9
+                daily_summary_table.weather_summary{i}(j,1) = kurtosis(daily_data.weather_data{j}(1,:));
+            case 10
+                daily_summary_table.weather_summary{i}(j,1) = jbtest(daily_data.weather_data{j}(1,:));
+        end
+    end
 end
 
-avg_pickups = mean(daily_data.bs_data{1}, 1);
-pickups_results.Min(52) = min(avg_pickups);
-pickups_results.Q1(52) = prctile(avg_pickups, 25);
-pickups_results.Mean(52) = mean(avg_pickups);
-pickups_results.Median(52) = median(avg_pickups);
-pickups_results.Q3(52) = prctile(avg_pickups, 75);
-pickups_results.Max(52) = max(avg_pickups);
-pickups_results.Std(52) = std(avg_pickups);
-pickups_results.Skewness(52) = skewness(avg_pickups);
-pickups_results.Kurtosis(52) = kurtosis(avg_pickups);
-pickups_results.JB_test(52) = jbtest(avg_pickups);
+daily_summary_table.weather_variables = daily_data.weather_var_names';
+daily_summary_table.statistical_indeces = {'Min', 'Q1', 'Mean', 'Median', 'Q3', 'Max',...
+    'Std', 'Skewness', 'Kurtosis', 'JB test'};
 
-%% Weather data analysis
-
-weather_results = array2table(zeros(length(daily_data.weather_data), 11));
-var_names_2 = {'Variable', 'Min', 'Q1', 'Mean', 'Median', 'Q3', 'Max',...
-    'Std', 'Skewness', 'Kurtosis', 'JB_test'};
-weather_results.Properties.VariableNames = var_names_2;
-weather_results.Variable = daily_data.weather_var_names';
-for i = 1:length(daily_data.weather_data)
-    weather_results.Min(i) = min(daily_data.weather_data{i}(1,:));
-    weather_results.Q1(i) = prctile(daily_data.weather_data{i}(1,:), 25);
-    weather_results.Mean(i) = mean(daily_data.weather_data{i}(1,:));
-    weather_results.Median(i) = median(daily_data.weather_data{i}(1,:));
-    weather_results.Q3(i) = prctile(daily_data.weather_data{i}(1,:), 75);
-    weather_results.Max(i) = max(daily_data.weather_data{i}(1,:));
-    weather_results.Std(i) = std(daily_data.weather_data{i}(1,:));
-    weather_results.Skewness(i) = skewness(daily_data.weather_data{i}(1,:));
-    weather_results.Kurtosis(i) = kurtosis(daily_data.weather_data{i}(1,:));
-    weather_results.JB_test(i) = jbtest(daily_data.weather_data{i}(1,:));
-end
-% save("..\Data\Processed data\Weather_results.mat", "weather_results");
+% save("..\Data\Processed data\Daily_summary_table.mat", "daily_summary_table");
 
 %% Creation of the map of the bike sharing and subway/train stations
 
