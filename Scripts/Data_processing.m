@@ -367,7 +367,7 @@ daily_data.processing_authors{3} = 'Nicola Zambelli';
 daily_data.processing_date = datetime('now');
 daily_data.processing_machine = 'PCWIN64';
 
-save("..\Data\Processed data\Daily_data.mat", "daily_data")
+% save("..\Data\Processed data\Daily_data.mat", "daily_data")
 
 disp("Formatting of daily data done.")
 toc;
@@ -439,7 +439,7 @@ for i = 1:366
     start = stop + 1;
 end
 
-save("..\Data\Processed data\Hourly_data.mat", "hourly_data")
+% save("..\Data\Processed data\Hourly_data.mat", "hourly_data")
 
 disp("Formatting of daily data done.")
 toc;
