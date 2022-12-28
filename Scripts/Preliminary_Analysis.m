@@ -5,7 +5,7 @@ clearvars
 warning off
 
 load('../Data/Processed data/Daily_data.mat')
-Transport_ST = readtable('../Data/Sources/Train stations/Jersey_City_train_stations_data.csv');
+transport_ST = readtable('../Data/Sources/Train stations/Jersey_City_train_stations_data.csv');
 
 %% Creation of the summary table
 
@@ -13,101 +13,147 @@ Transport_ST = readtable('../Data/Sources/Train stations/Jersey_City_train_stati
 
 % station-by-station pickups analysis
 
-daily_summary_table.pickups_summary{1} = min(daily_data.bs_data{1}, [], 2);
-daily_summary_table.pickups_summary{2} = prctile(daily_data.bs_data{1}, 25, 2);
-daily_summary_table.pickups_summary{3} = mean(daily_data.bs_data{1}, 2);
-daily_summary_table.pickups_summary{4} = prctile(daily_data.bs_data{1}, 50, 2);
-daily_summary_table.pickups_summary{5} = prctile(daily_data.bs_data{1}, 75, 2);
-daily_summary_table.pickups_summary{6} = max(daily_data.bs_data{1}, [], 2);
-daily_summary_table.pickups_summary{7} = std(daily_data.bs_data{1}, 0, 2);
-daily_summary_table.pickups_summary{8} = skewness(daily_data.bs_data{1}, 1, 2);
-daily_summary_table.pickups_summary{9} = kurtosis(daily_data.bs_data{1}, 1, 2);
-daily_summary_table.pickups_summary{10} = zeros(daily_data.num_stations, 1);
+pickups_data = daily_data.bs_data{1};
+Station_ID = daily_data.id;
+Lat = daily_data.lat;
+Lon = daily_data.lon;
+Min = round(min(pickups_data, [], 2), 2);
+Q1 = round(prctile(pickups_data, 25, 2), 2);
+Mean = round(mean(pickups_data, 2), 2);
+Median = round(prctile(pickups_data, 50, 2), 2);
+Q3 = round(prctile(pickups_data, 75, 2), 2);
+Max = round(max(pickups_data, [], 2), 2);
+Std = round(std(pickups_data, 0, 2), 2);
+Skewness = round(skewness(pickups_data, 1, 2), 2);
+Kurtosis = round(kurtosis(pickups_data, 1, 2), 2);
+JB_test = zeros(daily_data.num_stations, 1);
 for i = 1:daily_data.num_stations
-    daily_summary_table.pickups_summary{10}(i,1) = jbtest(daily_data.bs_data{1}(i,:));
+    JB_test(i,1) = jbtest(pickups_data(i,:));
 end
+pickups_summary = table(Station_ID, Lat, Lon, Min, Q1, Mean, Median, Q3,...
+    Max, Std, Skewness, Kurtosis, JB_test);
+pickups_summary.Properties.VariableUnits = ["dimensionless", "deg", "deg", "#", "#",...
+    "#", "#", "#", "#", "#", "dimensionless", "dimensionless", "dimensionless"];
+daily_summary_table.bs_summary{1} = pickups_summary;
 
 % mean pickups analysis 
 
-avg_pickups = mean(daily_data.bs_data{1}, 1);
-daily_summary_table.mean_pickups_summary{1} = min(avg_pickups);
-daily_summary_table.mean_pickups_summary{2} = prctile(avg_pickups, 25);
-daily_summary_table.mean_pickups_summary{3} = mean(avg_pickups);
-daily_summary_table.mean_pickups_summary{4} = prctile(avg_pickups, 50);
-daily_summary_table.mean_pickups_summary{5} = prctile(avg_pickups, 75);
-daily_summary_table.mean_pickups_summary{6} = max(avg_pickups);
-daily_summary_table.mean_pickups_summary{7} = std(avg_pickups);
-daily_summary_table.mean_pickups_summary{8} = skewness(avg_pickups);
-daily_summary_table.mean_pickups_summary{9} = kurtosis(avg_pickups);
-daily_summary_table.mean_pickups_summary{10} = jbtest(avg_pickups);
+avg_pickups = mean(pickups_data, 1);
+Min = round(min(avg_pickups), 2);
+Q1 = round(prctile(avg_pickups, 25), 2);
+Mean = round(mean(avg_pickups), 2);
+Median = round(prctile(avg_pickups, 50), 2);
+Q3 = round(prctile(avg_pickups, 75), 2);
+Max = round(max(avg_pickups), 2);
+Std = round(std(avg_pickups), 2);
+Skewness = round(skewness(avg_pickups), 2);
+Kurtosis = round(kurtosis(avg_pickups), 2);
+JB_test = jbtest(avg_pickups);
+mean_pickups_summary = table(Min, Q1, Mean, Median, Q3,...
+    Max, Std, Skewness, Kurtosis, JB_test);
+mean_pickups_summary.Properties.VariableUnits = ["#", "#", "#", "#", "#",...
+    "#", "#", "dimensionless", "dimensionless", "dimensionless"];
+daily_summary_table.bs_summary{2} = mean_pickups_summary; 
 
-% station-by-station trip duration analysis
+% station-by-station trip duration (min) analysis
 
-daily_summary_table.duration_summary{1} = min(daily_data.bs_data{2}, [], 2);
-daily_summary_table.duration_summary{2} = prctile(daily_data.bs_data{2}, 25, 2);
-daily_summary_table.duration_summary{3} = mean(daily_data.bs_data{2}, 2, 'omitnan');
-daily_summary_table.duration_summary{4} = prctile(daily_data.bs_data{2}, 50, 2);
-daily_summary_table.duration_summary{5} = prctile(daily_data.bs_data{2}, 75, 2);
-daily_summary_table.duration_summary{6} = max(daily_data.bs_data{2}, [], 2);
-daily_summary_table.duration_summary{7} = std(daily_data.bs_data{2}, 0, 2, 'omitnan');
-daily_summary_table.duration_summary{8} = skewness(daily_data.bs_data{2}, 1, 2);
-daily_summary_table.duration_summary{9} = kurtosis(daily_data.bs_data{2}, 1, 2);
-daily_summary_table.duration_summary{10} = zeros(daily_data.num_stations, 1);
+duration_data = daily_data.bs_data{2}/60;
+Station_ID = daily_data.id;
+Lat = daily_data.lat;
+Lon = daily_data.lon;
+Min = round(min(duration_data, [], 2), 2);
+Q1 = round(prctile(duration_data, 25, 2), 2);
+Mean = round(mean(duration_data, 2, 'omitnan'), 2);
+Median = round(prctile(duration_data, 50, 2), 2);
+Q3 = round(prctile(duration_data, 75, 2), 2);
+Max = round(max(duration_data, [], 2), 2);
+Std = round(std(duration_data, 0, 2, 'omitnan'), 2);
+Skewness = round(skewness(duration_data, 1, 2), 2);
+Kurtosis = round(kurtosis(duration_data, 1, 2), 2);
+JB_test = zeros(daily_data.num_stations, 1);
 for i = 1:daily_data.num_stations
-    daily_summary_table.duration_summary{10}(i,1) = jbtest(daily_data.bs_data{2}(i,:));
+    JB_test(i,1) = jbtest(duration_data(i,:));
 end
-
-daily_summary_table.station_id = daily_data.id;
+trip_duration_summary = table(Station_ID, Lat, Lon, Min, Q1, Mean, Median, Q3,...
+    Max, Std, Skewness, Kurtosis, JB_test);
+trip_duration_summary.Properties.VariableUnits = ["dimensionless", "deg", "deg",...
+    "min", "min", "min", "min", "min", "min", "min", "dimensionless",...
+    "dimensionless", "dimensionless"];
+daily_summary_table.bs_summary{3} = trip_duration_summary;
 
 % mean trip duration analysis
 
-avg_duration = mean(daily_data.bs_data{2}, 1, 'omitnan');
-daily_summary_table.mean_duration_summary{1} = min(avg_duration);
-daily_summary_table.mean_duration_summary{2} = prctile(avg_duration, 25);
-daily_summary_table.mean_duration_summary{3} = mean(avg_duration);
-daily_summary_table.mean_duration_summary{4} = prctile(avg_duration, 50);
-daily_summary_table.mean_duration_summary{5} = prctile(avg_duration, 75);
-daily_summary_table.mean_duration_summary{6} = max(avg_duration);
-daily_summary_table.mean_duration_summary{7} = std(avg_duration);
-daily_summary_table.mean_duration_summary{8} = skewness(avg_duration);
-daily_summary_table.mean_duration_summary{9} = kurtosis(avg_duration);
-daily_summary_table.mean_duration_summary{10} = jbtest(avg_duration);
+avg_duration = mean(duration_data, 1);
+Min = round(min(avg_duration), 2);
+Q1 = round(prctile(avg_duration, 25), 2);
+Mean = round(mean(avg_duration, 'omitnan'), 2);
+Median = round(prctile(avg_duration, 50), 2);
+Q3 = round(prctile(avg_duration, 75), 2);
+Max = round(max(avg_duration), 2);
+Std = round(std(avg_duration, 'omitnan'), 2);
+Skewness = round(skewness(avg_duration), 2);
+Kurtosis = round(kurtosis(avg_duration), 2);
+JB_test = jbtest(avg_duration);
+mean_trip_duration_summary = table(Min, Q1, Mean, Median, Q3,...
+    Max, Std, Skewness, Kurtosis, JB_test);
+mean_trip_duration_summary.Properties.VariableUnits = ["min", "min", "min",...
+    "min", "min", "min", "min", "dimensionless", "dimensionless", "dimensionless"];
+daily_summary_table.bs_summary{4} = mean_trip_duration_summary; 
+
+daily_summary_table.bs_vars{1} = 'pickups';
+daily_summary_table.bs_vars{2} = 'mean pickups';
+daily_summary_table.bs_vars{3} = 'trip duration';
+daily_summary_table.bs_vars{4} = 'mean trip duration';
 
 % weather data analysis
 
-for i = 1:10
-    daily_summary_table.weather_summary{i} = zeros(length(daily_data.weather_data), 1);
-    for j = 1:length(daily_data.weather_data)
-        switch i
-            case 1
-                daily_summary_table.weather_summary{i}(j,1) = min(daily_data.weather_data{j}(1,:));
-            case 2
-                daily_summary_table.weather_summary{i}(j,1) = prctile(daily_data.weather_data{j}(1,:), 25);
-            case 3
-                daily_summary_table.weather_summary{i}(j,1) = mean(daily_data.weather_data{j}(1,:));
-            case 4
-                daily_summary_table.weather_summary{i}(j,1) = prctile(daily_data.weather_data{j}(1,:), 50);
-            case 5
-                daily_summary_table.weather_summary{i}(j,1) = prctile(daily_data.weather_data{j}(1,:), 75);
-            case 6
-                daily_summary_table.weather_summary{i}(j,1) = max(daily_data.weather_data{j}(1,:));
-            case 7
-                daily_summary_table.weather_summary{i}(j,1) = std(daily_data.weather_data{j}(1,:));
-            case 8
-                daily_summary_table.weather_summary{i}(j,1) = skewness(daily_data.weather_data{j}(1,:));
-            case 9
-                daily_summary_table.weather_summary{i}(j,1) = kurtosis(daily_data.weather_data{j}(1,:));
-            case 10
-                daily_summary_table.weather_summary{i}(j,1) = jbtest(daily_data.weather_data{j}(1,:));
-        end
-    end
+weather_vars_units = daily_data.weather_units_of_measure;
+
+for i = 1:length(daily_data.weather_data)
+    weather_data = daily_data.weather_data{i}(1,:);
+    Min = round(min(weather_data), 2);
+    Q1 = round(prctile(weather_data, 25), 2);
+    Mean = round(mean(weather_data), 2);
+    Median = round(prctile(weather_data, 50), 2);
+    Q3 = round(prctile(weather_data, 75), 2);
+    Max = round(max(weather_data), 2);
+    Std = round(std(weather_data, 'omitnan'), 2);
+    Skewness = round(skewness(weather_data), 2);
+    Kurtosis = round(kurtosis(weather_data), 2);
+    JB_test = jbtest(weather_data);
+    weather_summary = table(Min, Q1, Mean, Median, Q3, Max, Std, Skewness,...
+        Kurtosis, JB_test);
+    var_unit = weather_vars_units{i};
+    weather_summary.Properties.VariableUnits = [var_unit, var_unit, var_unit,...
+        var_unit, var_unit, var_unit, var_unit, "dimensionless", "dimensionless",...
+        "dimensionless"];
+    daily_summary_table.weather_summary{i} = weather_summary;
 end
 
-daily_summary_table.weather_variables = daily_data.weather_var_names';
-daily_summary_table.statistical_indeces = {'Min', 'Q1', 'Mean', 'Median', 'Q3', 'Max',...
-    'Std', 'Skewness', 'Kurtosis', 'JB test'};
+daily_summary_table.weather_vars = daily_data.weather_var_names;
 
-% save("..\Data\Processed data\Daily_summary_table.mat", "daily_summary_table");
+% distances analysis
+
+distances = daily_data.distances{1}(:,1);
+Min = round(min(distances), 2);
+Q1 = round(prctile(distances, 25), 2);
+Mean = round(mean(distances), 2);
+Median = round(prctile(distances, 50), 2);
+Q3 = round(prctile(distances, 75), 2);
+Max = round(max(distances), 2);
+Std = round(std(distances), 2);
+Skewness = round(skewness(distances), 2);
+Kurtosis = round(kurtosis(distances), 2);
+JB_test = jbtest(distances);
+distances_summary = table(Min, Q1, Mean, Median, Q3,...
+    Max, Std, Skewness, Kurtosis, JB_test);
+distances_summary.Properties.VariableUnits = ["deg", "deg", "deg",...
+    "deg", "deg", "deg", "deg", "dimensionless", "dimensionless", "dimensionless"];
+daily_summary_table.distances_summary{1} = distances_summary;
+
+daily_summary_table.distances_vars{1} = 'distances from the nearest train station';
+
+save("..\Data\Processed data\Daily_summary_table.mat", "daily_summary_table");
 
 %% Creation of the map of the bike sharing and subway/train stations
 
@@ -120,7 +166,7 @@ c = colorbar;
 c.Label.String = "Distance of the nearest subway/train station [deg]";
 c.FontSize = 18;
 hold on
-t = geoscatter(Transport_ST, "Lat", "Lon", "filled", "Marker", "square",...
+t = geoscatter(transport_ST, "Lat", "Lon", "filled", "Marker", "square",...
     "MarkerFaceColor", "k");
 t.SizeData = 100;
 legend("Bike sharing stations", "Subway/train stations", "FontSize", 14)
