@@ -121,12 +121,13 @@ for i = 1:length(daily_data.weather_data)
     Skewness = round(skewness(weather_data), 2);
     Kurtosis = round(kurtosis(weather_data), 2);
     JB_test = jbtest(weather_data);
+    R2 = corr(avg_pickups', weather_data');
     weather_summary = table(Min, Q1, Mean, Median, Q3, Max, Std, Skewness,...
-        Kurtosis, JB_test);
+        Kurtosis, JB_test, R2);
     var_unit = weather_vars_units{i};
     weather_summary.Properties.VariableUnits = [var_unit, var_unit, var_unit,...
         var_unit, var_unit, var_unit, var_unit, "dimensionless", "dimensionless",...
-        "dimensionless"];
+        "dimensionless", "dimentionless"];
     daily_summary_table.weather_summary{i} = weather_summary;
 end
 
@@ -206,6 +207,7 @@ for i = 1:size(vars, 2)
     ax.XAxis.TickLabelInterpreter = 'latex';
     ay = gca;
     ay.YAxis.TickLabelInterpreter = 'latex';
+    
     % file_name = i + "_" + vars_names(i) + "_hist.pdf";
     % path = "..\Paper\Images\Dataset description\Histograms\" + file_name;
     % exportgraphics(t, path, 'BackgroundColor', 'none');
@@ -229,80 +231,66 @@ legend("Bike sharing stations", "Subway/train stations", "FontSize", 14)
 title('\textbf{Bike sharing and subway/train stations}', 'Interpreter',...
     'latex',"FontSize",24)
 
-%% Avg number of daily bicycle picks-up at stations vs daily rainfall
+%% Creation of the plots
 
-avg_service_usage = mean(daily_data.bs_data{1}, 1);
+% Mean number of daily bicycle picks-up at stations vs daily rainfall
+
 daily_calendar = daily_data.datetime_calendar;
 start_ld = datetime(2020, 3, 22);
 end_ld = datetime(2020, 5, 15);
 
+for i = 3:size(vars, 2)
+    figure
+    t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+    nexttile
+    plot(daily_calendar, avg_pickups)
+    v = [81 0; 135 0; 135 60; 81 60];
+    f = [1 2 3 4];
+    patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
+        'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
+    ax = gca;
+    ax.XAxis.TickLabelInterpreter = 'latex';
+    xlabel("Time", 'Interpreter', 'latex')
+    ay = gca;
+    ay.YAxis.TickLabelInterpreter = 'latex';
+    ylabel('Mean pickups per station', 'Interpreter', 'latex')
+    text(135, 51.5, '\textbf{LD}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
+        'Interpreter', 'latex', 'Color', 'red')
+    hold on
+    yyaxis right
+    plot(daily_calendar, avg_duration, 'LineStyle', ':', 'LineWidth', 1)
+    ay = gca;
+    ay.YAxis(2,1).TickLabelInterpreter = 'latex';
+    ylabel('Mean trip duration [min]', 'Interpreter', 'latex')
+
+    nexttile
+    plot(daily_calendar, vars{:,i}, 'Color', "#77AC30")
+    B = min(vars{:,i});
+    C = max(vars{:,i});
+    ylim([B C])
+    ax = gca;
+    ax.XAxis.TickLabelInterpreter = 'latex';
+    xlabel("Time", 'Interpreter', 'latex')
+    ay = gca;
+    ay.YAxis.TickLabelInterpreter = 'latex';
+    ylabel(vars_units(i), 'Interpreter', 'latex')
+    
+    % file_name = (i-2) + "_" + vars_names(i) + "_plot.pdf";
+    % path = "..\Paper\Images\Dataset description\Plots\" + file_name;
+    % exportgraphics(t, path, 'BackgroundColor', 'none');
+end
+
+% Mean number of daily bicycle pickups at stations during holidays and weekends
+
 figure
-plot(daily_calendar, avg_service_usage)
-title(['\textbf{Average number of daily bicycle picks-up at stations '...
-    'vs daily rainfall}'], 'Interpreter', 'latex')
-v = [81 0; 135 0; 135 60; 81 60];
-f = [1 2 3 4];
-patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
-    'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
+t = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+nexttile
+plot(daily_calendar, avg_pickups)
 ax = gca;
 ax.XAxis.TickLabelInterpreter = 'latex';
 xlabel("Time", 'Interpreter', 'latex')
 ay = gca;
 ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex')
-text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
-    'Interpreter', 'latex', 'Color', 'red')
-yyaxis right
-rainfall = daily_data.weather_data{4};
-plot(daily_calendar, rainfall(1,:))
-ylabel('Rainfall [mm]', 'Interpreter', 'latex')
-
-%% Avg number of daily bicycle pickups at stations vs avg daily temperature
-
-figure
-plot(daily_calendar, avg_service_usage)
-title(['\textbf{Mean number of daily bicycle pickups at stations '...
-    'vs mean daily temperature}'], 'Interpreter', 'latex')
-patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
-    'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
-ax = gca;
-ax.XAxis.TickLabelInterpreter = 'latex';
-xlabel("Time", 'Interpreter', 'latex')
-ay = gca;
-ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Mean pickups [pickups/station]', 'Interpreter', 'latex')
-text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
-    'Interpreter', 'latex', 'Color', 'red')
-hold on
-yyaxis right
-plot(daily_calendar, daily_data.weather_data{1}(1,:))
-ylabel('Mean daily temperature [°C]', 'Interpreter', 'latex')
-
-%% Avg number of daily bicycle pickups at stations vs avg windspeed
-
-figure
-plot(daily_calendar, avg_service_usage)
-title(['\textbf{Average number of daily bicycle pickups at stations '...
-    'vs average windspeed}'], 'Interpreter', 'latex')
-patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
-    'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
-ax = gca;
-ax.XAxis.TickLabelInterpreter = 'latex';
-xlabel("Time", 'Interpreter', 'latex')
-ay = gca;
-ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Mean picks-up [pickups/station]', 'Interpreter', 'latex')
-text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
-    'Interpreter', 'latex', 'Color', 'red')
-hold on
-yyaxis right
-plot(daily_calendar, daily_data.weather_data{6}(1,:))
-ylabel('average windspeed [km/h]', 'Interpreter', 'latex')
-
-%% Avg number of daily bicycle pickups at stations during holidays and weekends
-
-figure
-plot(daily_calendar, avg_service_usage)
 % Saturday and sunday patch
 for i=4:7:366
     vi = [i-1 0; i+1 0; i+1 60; i-1 60];
@@ -319,10 +307,14 @@ for i=1:1:360
             'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
     end
 end
-title(['\textbf{Average number of daily bicycle pickups at stations '...
-    'during holidays and weekends}'], 'Interpreter', 'latex')
-legend("Avg number of daily bicycle picks-up ", "Holidays and weekends",...
-    'Interpreter', 'latex')
+yyaxis right
+plot(daily_calendar, avg_duration, 'LineStyle', ':', 'LineWidth', 1)
+ylabel('Mean trip duration [min]', 'Interpreter', 'latex')
+ay = gca;
+ay.YAxis(2,1).TickLabelInterpreter = 'latex';
+
+% path = "..\Paper\Images\Dataset description\Plots\0_Trend.pdf";
+% exportgraphics(t, path, 'BackgroundColor', 'none');
 
 %% Linear regression model for weather variables
 
