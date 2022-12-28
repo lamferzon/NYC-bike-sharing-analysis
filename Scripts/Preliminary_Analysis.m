@@ -83,7 +83,7 @@ daily_summary_table.bs_summary{3} = trip_duration_summary;
 
 % mean trip duration analysis
 
-avg_duration = mean(duration_data, 1);
+avg_duration = mean(duration_data, 1, 'omitnan');
 Min = round(min(avg_duration), 2);
 Q1 = round(prctile(avg_duration, 25), 2);
 Mean = round(mean(avg_duration, 'omitnan'), 2);
@@ -153,7 +153,63 @@ daily_summary_table.distances_summary{1} = distances_summary;
 
 daily_summary_table.distances_vars{1} = 'distances from the nearest train station';
 
-save("..\Data\Processed data\Daily_summary_table.mat", "daily_summary_table");
+% save("..\Data\Processed data\Daily_summary_table.mat", "daily_summary_table");
+
+%% Creation of the histograms and box-plots of the variables
+
+vars = table(avg_pickups', avg_duration', daily_data.weather_data{1}(1,:)',...
+    daily_data.weather_data{2}(1,:)', daily_data.weather_data{3}(1,:)',...
+    daily_data.weather_data{4}(1,:)', daily_data.weather_data{5}(1,:)',...
+    daily_data.weather_data{6}(1,:)', daily_data.weather_data{7}(1,:)',...
+    daily_data.weather_data{8}(1,:)', daily_data.weather_data{9}(1,:)');
+vars_names = ["Mean_pickups", "Mean_trip_duration", "Mean_temperature",...
+    "Mean_feels_like_temperature", "Humidity", "Rainfall", "Snowfall",...
+    "Wind_speed", "Cloud_cover", "Visibility", "UV_index"];
+vars_units = ["Mean pickups [pickups/station]", "Mean trip duration [min]",...
+    "Mean temperature [$^{\circ}$C]", "Mean feels-like temperature [$^{\circ}$C]",...
+    "Humidity [$\%$]", "Rainfall [mm]", "Snowfall [cm]", "Wind speed [km/h]",...
+    "Cloud cover [$\%$]", "Visibility [km]", "UV index"];
+
+for i = 1:size(vars, 2)
+    figure
+    t = tiledlayout(1, 2, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+    nexttile
+    if i == 11
+        C = categorical(vars{:,11}, [0 1 2 3 4 5 6 7 8 9 10],...
+            {'0','1','2','3','4','5','6','7','8','9','10'});
+        h = get(histogram(C, 'FaceColor', '#0072BD'));
+        xline(median(vars{:,i})+1, 'Color', 'red', 'LineWidth', 1.5,...
+        'LineStyle', '-.')
+    else
+        h = get(histogram(vars{:,i}, 'NumBins', 15, 'FaceColor', '#0072BD'));
+        xline(median(vars{:,i}), 'Color', 'red', 'LineWidth', 1.5,...
+        'LineStyle', '-.')
+        xlim([h.BinLimits(1,1)-1 h.BinLimits(1,2)+1])
+    end
+    xlabel(vars_units(i), 'Interpreter', 'latex')
+    ylabel("Frequency", 'Interpreter', 'latex')
+    ax = gca;
+    ax.XAxis.TickLabelInterpreter = 'latex';
+    ay = gca;
+    ay.YAxis.TickLabelInterpreter = 'latex';
+    nexttile
+    boxplot(vars{:,i}, 'Orientation', 'horizontal',...
+        'Notch', 'off', 'OutlierSize', 1.5)
+    if i == 11
+        xlim([-1 11])
+    else
+        xlim([h.BinLimits(1,1)-1 h.BinLimits(1,2)+1])
+    end
+    xlabel(vars_units(i), 'Interpreter', 'latex')
+    ax = gca;
+    set(gca,'YTickLabel',[]);
+    ax.XAxis.TickLabelInterpreter = 'latex';
+    ay = gca;
+    ay.YAxis.TickLabelInterpreter = 'latex';
+    % file_name = i + "_" + vars_names(i) + "_hist.pdf";
+    % path = "..\Paper\Images\Dataset description\Histograms\" + file_name;
+    % exportgraphics(t, path, 'BackgroundColor', 'none');
+end
 
 %% Creation of the map of the bike sharing and subway/train stations
 
@@ -201,12 +257,12 @@ rainfall = daily_data.weather_data{4};
 plot(daily_calendar, rainfall(1,:))
 ylabel('Rainfall [mm]', 'Interpreter', 'latex')
 
-%% Avg number of daily bicycle picks-up at stations vs avg daily temperature
+%% Avg number of daily bicycle pickups at stations vs avg daily temperature
 
 figure
 plot(daily_calendar, avg_service_usage)
-title(['\textbf{Average number of daily bicycle picks-up at stations '...
-    'vs average daily temperature}'], 'Interpreter', 'latex')
+title(['\textbf{Mean number of daily bicycle pickups at stations '...
+    'vs mean daily temperature}'], 'Interpreter', 'latex')
 patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
     'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
 ax = gca;
@@ -214,19 +270,19 @@ ax.XAxis.TickLabelInterpreter = 'latex';
 xlabel("Time", 'Interpreter', 'latex')
 ay = gca;
 ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex')
+ylabel('Mean pickups [pickups/station]', 'Interpreter', 'latex')
 text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
     'Interpreter', 'latex', 'Color', 'red')
 hold on
 yyaxis right
 plot(daily_calendar, daily_data.weather_data{1}(1,:))
-ylabel('average daily temperature [°C]', 'Interpreter', 'latex')
+ylabel('Mean daily temperature [°C]', 'Interpreter', 'latex')
 
-%% Avg number of daily bicycle picks-up at stations vs avg windspeed
+%% Avg number of daily bicycle pickups at stations vs avg windspeed
 
 figure
 plot(daily_calendar, avg_service_usage)
-title(['\textbf{Average number of daily bicycle picks-up at stations '...
+title(['\textbf{Average number of daily bicycle pickups at stations '...
     'vs average windspeed}'], 'Interpreter', 'latex')
 patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
     'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
@@ -235,7 +291,7 @@ ax.XAxis.TickLabelInterpreter = 'latex';
 xlabel("Time", 'Interpreter', 'latex')
 ay = gca;
 ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Average picks-up [picks-up/station]', 'Interpreter', 'latex')
+ylabel('Mean picks-up [pickups/station]', 'Interpreter', 'latex')
 text(135, 52, '\textbf{Lockdown}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
     'Interpreter', 'latex', 'Color', 'red')
 hold on
@@ -243,7 +299,7 @@ yyaxis right
 plot(daily_calendar, daily_data.weather_data{6}(1,:))
 ylabel('average windspeed [km/h]', 'Interpreter', 'latex')
 
-%% Avg number of daily bicycle picks-up at stations during holidays and weekends
+%% Avg number of daily bicycle pickups at stations during holidays and weekends
 
 figure
 plot(daily_calendar, avg_service_usage)
@@ -263,7 +319,7 @@ for i=1:1:360
             'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
     end
 end
-title(['\textbf{Average number of daily bicycle picks-up at stations '...
+title(['\textbf{Average number of daily bicycle pickups at stations '...
     'during holidays and weekends}'], 'Interpreter', 'latex')
 legend("Avg number of daily bicycle picks-up ", "Holidays and weekends",...
     'Interpreter', 'latex')
