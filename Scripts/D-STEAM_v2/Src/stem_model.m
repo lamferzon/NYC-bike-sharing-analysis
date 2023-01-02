@@ -2842,7 +2842,7 @@ classdef stem_model < handle
                 'MarkerEdgeColor','k');
             
             
-            if min(y_values(:))*max(y_values(:))>0
+            if min(y_values(:))*max(y_values(:))>= 0
                 colormap(flipud(stem_misc.get_s_colormap()))
                 cl = colorbar;
                 cl.Limits=[min(y_values(:)) max(y_values(:))];
