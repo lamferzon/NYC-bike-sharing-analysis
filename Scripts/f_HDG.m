@@ -1,3 +1,5 @@
+% *Part 3 - estimation of the f-HDG model*
+
 clc
 clearvars
 warning off
@@ -37,6 +39,10 @@ input_data.stem_modeltype = o_modeltype;
 input_data.data_table = data;
 input_data.stem_fda = o_fda;
 o_data = stem_data(input_data);
+
+% validation
+S_val = randsample(51, round(.3*51))'; 
+o_data.stem_validation = stem_validation('pickups', S_val);
 
 % object stem_par creation
 o_par = stem_par(o_data,'exponential');
