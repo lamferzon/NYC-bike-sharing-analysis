@@ -8,7 +8,7 @@ clc
 clearvars
 warning off
 
-%% Bike sharing data (expected execution time: ~ 50 minutes) 
+%% Bike sharing data (expected execution time: ~ 45/50 minutes) 
 
 %  Information extraction
 tic;
@@ -380,26 +380,26 @@ disp("Start formatting of hourly data")
 disp(" ")
 
 var_names = {'Profile', 'Y_name', 'Y', 'X_h_hour', 'X_beta_const',...
-    'X_beta_avg_feels_like_T', 'X_beta_rainfall', 'X_beta_snowfall',...
+    'X_beta_avg_feels_like_T', 'X_beta_rainfall', 'X_beta_visibility',...
     'X_beta_windspeed', 'X_beta_cloud_cover', 'X_beta_ts_distance',...
     'X_beta_holidays', 'X_beta_lockdown', 'Y_coordinate', 'X_coordinate',...
     'Time'};
-var_units = {'', '', 'bikes', 'h', 'cons', '﻿^{\circ}C', 'mm', 'cm', 'km/h',...
+var_units = {'', '', 'bikes', 'h', 'cons', '﻿^{\circ}C', 'mm', 'km', 'km/h',...
     '\%', 'deg', '', '', 'deg', 'deg', 'd'};
 hourly_data = array2table(zeros(366*num_stations, length(var_names)));
 hourly_data.Properties.VariableNames = var_names;
 hourly_data.Properties.VariableUnits = var_units;
 % hourly_data.Profile = 1:(366*num_stations);
 hourly_data.Y_name = repmat({'pickups'}, 366*num_stations, 1);
-hourly_data.Y_coordinates = repmat(lat_stations, 366, 1);
-hourly_data.X_coordinates = repmat(lon_stations, 366, 1);
+hourly_data.Y_coordinate = repmat(lat_stations, 366, 1);
+hourly_data.X_coordinate = repmat(lon_stations, 366, 1);
 
 hourly_data.Y = num2cell(hourly_data.Y);
 hourly_data.X_h_hour = num2cell(hourly_data.Y);
 hourly_data.X_beta_const = num2cell(hourly_data.X_beta_const);
 hourly_data.X_beta_avg_feels_like_T = num2cell(hourly_data.X_beta_avg_feels_like_T);
 hourly_data.X_beta_rainfall = num2cell(hourly_data.X_beta_rainfall);
-hourly_data.X_beta_snowfall = num2cell(hourly_data.X_beta_snowfall);
+hourly_data.X_beta_visibility = num2cell(hourly_data.X_beta_visibility);
 hourly_data.X_beta_windspeed = num2cell(hourly_data.X_beta_windspeed);
 hourly_data.X_beta_cloud_cover = num2cell(hourly_data.X_beta_cloud_cover);
 hourly_data.X_beta_ts_distance = num2cell(hourly_data.X_beta_ts_distance);
@@ -419,7 +419,7 @@ for i = 1:366
         hourly_data.X_beta_const(count) = {ones(1, 24)};
         hourly_data.X_beta_avg_feels_like_T(count) = {Hourly_weather_DS{(start-1):(stop-1), "feelslike"}'};
         hourly_data.X_beta_rainfall(count) = {Hourly_weather_DS{(start-1):(stop-1), "precip"}'};
-        hourly_data.X_beta_snowfall(count) = {Hourly_weather_DS{(start-1):(stop-1), "snow"}'};
+        hourly_data.X_beta_visibility(count) = {Hourly_weather_DS{(start-1):(stop-1), "visibility"}'};
         hourly_data.X_beta_windspeed(count) = {Hourly_weather_DS{(start-1):(stop-1), "windspeed"}'};
         hourly_data.X_beta_cloud_cover(count) = {Hourly_weather_DS{(start-1):(stop-1), "cloudcover"}'};
         hourly_data.X_beta_ts_distance(count) = {repmat(dist(j, 1), 1, 24)};

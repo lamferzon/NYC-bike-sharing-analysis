@@ -1,4 +1,5 @@
-% *Part 3 - estimation of the f-HDG model*
+
+% *Part 3 - estimation (and validation) of the f-HDG model*
 
 clc
 clearvars
@@ -11,7 +12,7 @@ load ../Data/'Processed Data'/Hourly_data.mat
 
 %% Regressors configuration
 
-flag = 2;
+flag = 1;
 switch flag
     case 1 % entire dataset
         data = hourly_data;
@@ -41,7 +42,7 @@ input_data.stem_fda = o_fda;
 o_data = stem_data(input_data);
 
 % validation
-S_val = randsample(51, round(.3*51))'; 
+S_val = [20, 32, 36, 26]'; 
 o_data.stem_validation = stem_validation('pickups', S_val);
 
 % object stem_par creation
@@ -56,7 +57,7 @@ o_par.beta = o_model.get_beta0();
 o_par.sigma_eps = o_model.get_coe_log_sigma_eps0();
 o_par.theta_z = ones(1,n_basis.z)*0.05;
 o_par.G = diag(ones(n_basis.z,1)*0.5);
-o_par.v_z = eye(n_basis.z)*2;
+o_par.v_z = eye(n_basis.z)*15;
 o_model.set_initial_values(o_par);
 
 %% Profiles plotting
@@ -97,9 +98,9 @@ o_model.plot_par
 
 switch flag
     case 1
-        save('..\Scripts\Output\f_HDG_model_1', 'o_model');
+        save('..\Data\Outputs\f_HDG_model_1', 'o_model');
     case 2
-        save('..\Scripts\Output\f_HDG_model_2', 'o_model');
+        save('..\Data\Outputs\f_HDG_model_2', 'o_model');
     case 3
-        save('..\Scripts\Output\f_HDG_model_3', 'o_model');
+        save('..\Data\Outputs\f_HDG_model_3', 'o_model');
 end
