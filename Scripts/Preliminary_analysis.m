@@ -173,7 +173,7 @@ vars_units = ["Mean pickups [pickups/station]", "Mean trip duration [min]",...
 
 for i = 1:size(vars, 2)
     figure
-    t = tiledlayout(1, 2, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+    t = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
     nexttile
     if i == 11
         C = categorical(vars{:,11}, [0 1 2 3 4 5 6 7 8 9 10],...
@@ -193,6 +193,13 @@ for i = 1:size(vars, 2)
     ax.XAxis.TickLabelInterpreter = 'latex';
     ay = gca;
     ay.YAxis.TickLabelInterpreter = 'latex';
+
+    % file_name = i + "_" + vars_names(i) + "_hist.pdf";
+    % path = "..\Paper\Images\Dataset description\Histograms\" + file_name;
+    % exportgraphics(t, path, 'BackgroundColor', 'none');
+
+    figure
+    t1 = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
     nexttile
     boxplot(vars{:,i}, 'Orientation', 'horizontal',...
         'Notch', 'off', 'OutlierSize', 1.5)
@@ -205,35 +212,54 @@ for i = 1:size(vars, 2)
     ax = gca;
     set(gca,'YTickLabel',[]);
     ax.XAxis.TickLabelInterpreter = 'latex';
+    ax.XGrid = 'on';
     ay = gca;
     ay.YAxis.TickLabelInterpreter = 'latex';
-    
-    % file_name = i + "_" + vars_names(i) + "_hist.pdf";
-    % path = "..\Paper\Images\Dataset description\Histograms\" + file_name;
-    % exportgraphics(t, path, 'BackgroundColor', 'none');
+
+    % file_name1 = i + "_" + vars_names(i) + "_box.pdf";
+    % path1 = "..\Paper\Images\Dataset description\Box-plots\" + file_name1;
+    % exportgraphics(t1, path1, 'BackgroundColor', 'none');
+
+    if i == 8 || i == 9 || i == 11
+        % file_name3 = vars_names(i) + "_box.pdf";
+        % path1 = "..\Paper\Images\Dataset description\Chosen\" + file_name3;
+        % exportgraphics(t1, path1, 'BackgroundColor', 'none');
+    end
 end
 
 %% Creation of the map of the bike sharing and subway/train stations
 
+figure
+t = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+nexttile
 Dist_tbl = table(daily_data.lat, daily_data.lon, daily_data.distances{1}(:,1));
 Dist_tbl.Properties.VariableNames = ["lat_b", "lon_b", "distances"];
 s = geoscatter(Dist_tbl, "lat_b", "lon_b", "filled");
 s.ColorVariable = "distances";
 s.SizeData = 100;
+gx = s.Parent;
+gx.LatitudeLabel.Interpreter = "latex";
+gx.LongitudeLabel.Interpreter = "latex";
+% gx.LatitudeAxis.TickLabelInterpreter = 'latex';
+% gx.LongitudeAxis.TickLabelInterpreter = 'latex';
 c = colorbar;
 c.Label.String = "Distance of the nearest subway/train station [deg]";
-c.FontSize = 18;
+c.Label.Interpreter = "latex";
+c.FontSize = 12;
+c.TickLabelInterpreter = "latex";
 hold on
-t = geoscatter(transport_ST, "Lat", "Lon", "filled", "Marker", "square",...
+g = geoscatter(transport_ST, "Lat", "Lon", "filled", "Marker", "square",...
     "MarkerFaceColor", "k");
-t.SizeData = 100;
-legend("Bike sharing stations", "Subway/train stations", "FontSize", 14)
-title('\textbf{Bike sharing and subway/train stations}', 'Interpreter',...
-    'latex',"FontSize",24)
+g.SizeData = 100;
+legend("Bike sharing stations", "Subway/train stations", "FontSize", 10,...
+    "Interpreter", "latex", 'Location', 'northwest')
+
+% path = "..\Paper\Images\Dataset description\Chosen\Map.pdf" ;
+% exportgraphics(t, path, 'BackgroundColor', 'none');
 
 %% Creation of the plots
 
-% Mean number of daily bicycle picks-up at stations vs daily rainfall
+% Mean daily pickups and mean daily trip duration at stations vs weather varibles
 
 daily_calendar = daily_data.datetime_calendar;
 start_ld = datetime(2020, 3, 22);
@@ -244,18 +270,13 @@ for i = 3:size(vars, 2)
     t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
     nexttile
     plot(daily_calendar, avg_pickups)
-    v = [81 0; 135 0; 135 60; 81 60];
-    f = [1 2 3 4];
-    patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none',...
-        'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
     ax = gca;
     ax.XAxis.TickLabelInterpreter = 'latex';
-    xlabel("Time", 'Interpreter', 'latex')
+    xlabel("Time [day]", 'Interpreter', 'latex')
+    ax.XGrid = 'on';
     ay = gca;
     ay.YAxis.TickLabelInterpreter = 'latex';
-    ylabel('Mean pickups per station', 'Interpreter', 'latex')
-    text(135, 51.5, '\textbf{LD}', 'VerticalAlignment', 'baseline', 'Rotation',  90,...
-        'Interpreter', 'latex', 'Color', 'red')
+    ylabel('Mean pickups [pks/station]', 'Interpreter', 'latex')
     hold on
     yyaxis right
     plot(daily_calendar, avg_duration, 'LineStyle', ':', 'LineWidth', 1)
@@ -270,7 +291,8 @@ for i = 3:size(vars, 2)
     ylim([B C])
     ax = gca;
     ax.XAxis.TickLabelInterpreter = 'latex';
-    xlabel("Time", 'Interpreter', 'latex')
+    xlabel("Time [day]", 'Interpreter', 'latex')
+    ax.XGrid = 'on';
     ay = gca;
     ay.YAxis.TickLabelInterpreter = 'latex';
     ylabel(vars_units(i), 'Interpreter', 'latex')
@@ -280,40 +302,94 @@ for i = 3:size(vars, 2)
     % exportgraphics(t, path, 'BackgroundColor', 'none');
 end
 
-% Mean number of daily bicycle pickups at stations during holidays and weekends
+% Plots and box-plots of the significant weather variables
+
+sel = [4 6];
+for i = 1:size(sel, 2)
+    j = sel(i);
+    figure
+    t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+    nexttile
+    plot(daily_calendar, avg_pickups)
+    ax = gca;
+    ax.XAxis.TickLabelInterpreter = 'latex';
+    xlabel("Time [day]", 'Interpreter', 'latex')
+    ax.XGrid = 'on';
+    ay = gca;
+    ay.YAxis.TickLabelInterpreter = 'latex';
+    ylabel("Mean pickups [pks/station]", 'Interpreter', 'latex')
+    yyaxis right
+    plot(daily_calendar, vars{:, j}, 'Color', "#77AC30")
+    ay.YAxis(2,1).TickLabelInterpreter = 'latex';
+    ay.YColor = "#77AC30";
+    ylabel(vars_units(j), 'Interpreter', 'latex', 'Color', "#77AC30")
+
+    nexttile
+    boxplot(vars{:, j}, 'Orientation', 'horizontal', 'OutlierSize', 1.5)
+    ax = gca;
+    ax.XAxis.TickLabelInterpreter = 'latex';
+    xlabel(vars_units(j), 'Interpreter', 'latex')
+    ax.XGrid = 'on';
+
+    % file_name = vars_names(j) + "_plot_box.pdf";
+    % path = "..\Paper\Images\Dataset description\Chosen\" + file_name;
+    % exportgraphics(t, path, 'BackgroundColor', 'none');
+end
+
+% Mean daily pickups and mean daily trip duration at stations vs holidays,
+% weekends and lockdown
 
 figure
-t = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
 nexttile
 plot(daily_calendar, avg_pickups)
 ax = gca;
 ax.XAxis.TickLabelInterpreter = 'latex';
-xlabel("Time", 'Interpreter', 'latex')
+xlabel("Time [day]", 'Interpreter', 'latex')
 ay = gca;
 ay.YAxis.TickLabelInterpreter = 'latex';
-% Saturday and sunday patch
-for i=4:7:366
-    vi = [i-1 0; i+1 0; i+1 60; i-1 60];
-    patch('Faces', f, 'Vertices', vi, 'EdgeColor', 'none',...
-        'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
-end
-holiday=[1 20 48 146 185 251 286 316 331 360];
-c=1;
-for i=1:1:360
-    if i==holiday(c)
-        c=c+1;
+ylabel('Mean pickups [pks/station]', 'Interpreter', 'latex')
+v = [81 0; 135 0; 135 60; 81 60];
+f = [1 2 3 4];
+patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none', ...
+    'FaceColor', [1 1 0], 'FaceAlpha',.25)
+holidays = [1 20 48 146 185 251 286 316 331 360];
+c = 1;
+for i = 1:1:360
+    if i == holidays(c)
+        c = c+1;
         vi = [i-1 0; i+1 0; i+1 60; i-1 60];
         patch('Faces', f, 'Vertices', vi, 'EdgeColor', 'none',...
-            'FaceColor', [.7 .7 .7], 'FaceAlpha',.25)
+            'FaceColor', [.7 .7 .7], 'FaceAlpha', .25)
     end
 end
 yyaxis right
 plot(daily_calendar, avg_duration, 'LineStyle', ':', 'LineWidth', 1)
 ylabel('Mean trip duration [min]', 'Interpreter', 'latex')
-ay = gca;
 ay.YAxis(2,1).TickLabelInterpreter = 'latex';
+legend("", "Lockdown", "Holidays", 'Interpreter', 'latex', 'Location', 'northwest')
 
-% path = "..\Paper\Images\Dataset description\Plots\0_Trend.pdf";
+nexttile
+plot(daily_calendar, avg_pickups)
+ax = gca;
+ax.XAxis.TickLabelInterpreter = 'latex';
+xlabel('Time [day]', 'Interpreter', 'latex')
+ay = gca;
+ay.YAxis.TickLabelInterpreter = 'latex';
+ylabel('Mean pickups [pks/station]', 'Interpreter', 'latex')
+for i = 4:7:366
+    vi = [i-1 0; i+1 0; i+1 60; i-1 60];
+    patch('Faces', f, 'Vertices', vi, 'EdgeColor', 'none',...
+        'FaceColor', [.7 .7 .7], 'FaceAlpha', .25)
+end
+
+yyaxis right
+plot(daily_calendar, avg_duration, 'LineStyle', ':', 'LineWidth', 1)
+ylabel('Mean trip duration [min]', 'Interpreter', 'latex')
+ay.YAxis(2,1).TickLabelInterpreter = 'latex';
+legend("", "Weekends", 'Interpreter', 'latex', 'Location', 'northwest')
+
+% path = "..\Paper\Images\Dataset description\Chosen\Trend.pdf";
 % exportgraphics(t, path, 'BackgroundColor', 'none');
 
 %% Linear regression model for weather variables
