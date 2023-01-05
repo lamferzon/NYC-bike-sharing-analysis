@@ -16,10 +16,10 @@ flag = 1;
 switch flag
     case 1 % entire dataset
         data = hourly_data;
-    case 2 % no lockdown and snowfall
-        data = hourly_data(:, [1:7, 9:12, 14:16]);
-    case 3 % no dummy variables and snowfall 
-        data = hourly_data(:, [1:7, 9:11, 14:16]);
+    case 2 % only feels-like temperature and lockdown
+        data = hourly_data(:, [1:6 13:16]);
+    % case 3 % no dummy variables and snowfall 
+        % data = hourly_data(:, [1:7, 9:11, 14:16]);
 end
 
 %% Objects creation
