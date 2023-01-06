@@ -39,7 +39,37 @@ Also in this case the weather variables are sampled in discrete time with daily 
 	\item \textbf{UV index}: indicates the energy of UV rays, with a dimensionless variable ranging from \num{1} to \num{10}.
 \end{itemize}
 The reason why we have taken into consideration the weather variables is because it's easy to think that the weather can influence a person's choice of rent or not rent a bike. For example, we report two plots that showing how some meteorological variables affect rentals.
+\\
+\\
+\\
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+	\hline
+	\multicolumn{1}{|c|}{\textbf{Variable}} & \textbf{Min} & \textbf{Max} & \textbf{Mean} & \textbf{Median} & \textbf{Std} & \textbf{Skewness}  & 
+	\multicolumn{1}{c|}{\textbf{Kurtosis}}\\
+	\hline
+	\textbf{temperature (°C)} & -3.5 & 30.4 & 14.546 & 14 & 8.49 & 0.042 & 1.855\\
+	\hline
+	\textbf{feels like temperature} & -7.7 & 33.3 & 13.805 & 13.9 & 9.796 & 0.0405 & 1.958 \\
+	\hline
+	\textbf{humidity (\%)} & 35.1 & 93.5 & 65.283 & 66.100 & 13.775 & 0.0752 & 2.176 \\
+	\hline
+	\textbf{rainfall (mm)} & 0 & 31.03 & 1.11 & 0 & 3.44 & 5.44 & 39.01\\
+	\hline
+	\textbf{snowfall (cm)} & 0 & 157.50 & 0.775 & 0 & 9.61 & 14.45 & 219.19\\
+	\hline
+	\textbf{windspeed (km/h)} & 9.90 & 47.8 & 20.64 & 19.90 & 6.89 & 0.98 & 3.90\\
+	\hline
+	\textbf{cloud cover (\%)} & 0.10 & 100 & 39.45 & 37.15 & 29.79 & 0.35 & 1.95\\
+	\hline
+	\textbf{visibility (km)} & 6.50 & 16 & 15.29 & 16 & 1.54 & -2.99 & 12.83\\
+	\hline
+	\textbf{UV index'} & 0 & 10 & 5.92 & 6 & 2.88 & -0.21 & 1.84\\
+	\hline
+	
 
+\end{tabular}
+\\
+\\
 \begin{figure}[h!]
 	\centering
 	\subfigure[]{\label{T_plot_box}\includegraphics[height=160px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_plot}}\quad
