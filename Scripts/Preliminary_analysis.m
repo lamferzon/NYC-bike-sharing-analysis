@@ -220,7 +220,7 @@ for i = 1:size(vars, 2)
     % path1 = "..\Paper\Images\Dataset description\Box-plots\" + file_name1;
     % exportgraphics(t1, path1, 'BackgroundColor', 'none');
 
-    if i == 8 || i == 9 || i == 11
+    if i == 4 || i == 5 || i == 6 || i == 8 || i == 9 || i == 11
         % file_name3 = vars_names(i) + "_box.pdf";
         % path1 = "..\Paper\Images\Dataset description\Chosen\" + file_name3;
         % exportgraphics(t1, path1, 'BackgroundColor', 'none');
@@ -308,7 +308,7 @@ sel = [4 6];
 for i = 1:size(sel, 2)
     j = sel(i);
     figure
-    t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+    t = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
     nexttile
     plot(daily_calendar, avg_pickups)
     ax = gca;
@@ -324,14 +324,14 @@ for i = 1:size(sel, 2)
     ay.YColor = "#77AC30";
     ylabel(vars_units(j), 'Interpreter', 'latex', 'Color', "#77AC30")
 
-    nexttile
-    boxplot(vars{:, j}, 'Orientation', 'horizontal', 'OutlierSize', 1.5)
-    ax = gca;
-    ax.XAxis.TickLabelInterpreter = 'latex';
-    xlabel(vars_units(j), 'Interpreter', 'latex')
-    ax.XGrid = 'on';
+    % nexttile
+    % boxplot(vars{:, j}, 'Orientation', 'horizontal', 'OutlierSize', 1.5)
+    % ax = gca;
+    % ax.XAxis.TickLabelInterpreter = 'latex';
+    % xlabel(vars_units(j), 'Interpreter', 'latex')
+    % ax.XGrid = 'on';
 
-    % file_name = vars_names(j) + "_plot_box.pdf";
+    % file_name = vars_names(j) + "_plot.pdf";
     % path = "..\Paper\Images\Dataset description\Chosen\" + file_name;
     % exportgraphics(t, path, 'BackgroundColor', 'none');
 end
