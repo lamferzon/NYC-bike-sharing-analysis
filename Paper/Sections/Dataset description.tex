@@ -1,22 +1,22 @@
 \section{Dataset description}
-The dataset is provided by the website Kaggle and it contains ride details for the year \num{2020} of the company Citi Bike in the Jersey City area. Citi Bike is a privately owned public bicycle sharing system serving the New York City boroughs of the Bronx, Brooklyn, Manhattan, and Queens, as well as Jersey City, New Jersey. In order to provide an effective analysis, we have collected data relating to the most significant weather variables in the city of New York and we have generated two dummy variables that associate two events with each observation that can influence the analyses, i.e. the presence of public holidays and the presence of lockdowns as in \num{2020} there were restrictions in the city of New York due to the COVID-\num{19} pandemic.
-Through a data processing work, we have obtained a dataset that contains the information sampled in discrete time with daily and hourly frequency. Below are some characteristics of the available data.
+The dataset is provided by the website Kaggle and it contains ride details for the year \num{2020} of the company Citi Bike in the Jersey City area. Citi Bike is a privately owned public bicycle sharing system serving the New York City boroughs of the Bronx, Brooklyn, Manhattan, and Queens, as well as Jersey City, New Jersey. The bike sharing network of this provider counts \num{51} rental stations. In order to explain the bike sharing variables, we have collected data relating to the most significant weather variables in the city of New York starting from the historical weather data that the website Visual Crossing makes available for the users. Moreover, we have generated two dummy variables that associate two events to each observation that can influence the analysis, i.e. the presence of public holidays and the presence of lockdowns because in \num{2020} there were restrictions in the city of New York due to the COVID-\num{19} pandemic.
+Through a data processing work, we have obtained a dataset that contains the information sampled in discrete time with daily and hourly frequency. Below we have summarized some information regarding the available data.
 
-\subsection{Bike data}
+\subsection{Bike sharing variables}
 This partition contains all the information relating to the bike rental:
 \begin{itemize}
-	\item \textbf{pickups counters}: number of rentals of a given station (figure \ref{Trend});
-	\item \textbf{mean trip duration}: mean rental time (figure \ref{Trend});
-	\item \textbf{mean clients age}: mean age of customers who rent;
-	\item \textbf{male counters}: male client number;
-	\item \textbf{female counters}: female client number;
-	\item \textbf{unknown gender counters}: unknown gender number;
+	\item \textbf{pickups counters}: number of rentals at a station (figure \ref{Trend});
+	\item \textbf{mean trip duration}: mean rental time at station (figure \ref{Trend});
+	\item \textbf{mean users age}: mean age of the users who rent at a station;
+	\item \textbf{male counters}: number of male users at a station;
+	\item \textbf{female counters}: number of female users at a station;
+	\item \textbf{unknown gender counters}: number of people who have not specify their gender at a station;
 	\item \textbf{subscribers counters}: number of customers who have an annual subscription;
 	\item \textbf{customers counters}: number of customers who have \num{4}-hour pass or \num{3}-day pass;
 	\item \textbf{distance}: indicates the distance between a rental station and the nearest train or subway station in \unit{\kilo\meter}. (figure \ref{Map})
 	
 \end{itemize}
-All this data is sampled hourly and daily, except for the distance, that is a time-invariant variable, which we have entered by carrying out an in-depth analysis of the means of transport in the area, with the hypothesis that it may influence the demand for rentals.
+All this data is sampled hourly and daily, except for the distance that is a time-invariant variable, which we have entered by carrying out an in-depth analysis of the means of public transport in the area, with the hypothesis that it may influence the demand for rentals.
 
 \begin{figure}[h!]
 	\centering
@@ -25,7 +25,7 @@ All this data is sampled hourly and daily, except for the distance, that is a ti
 	\caption[]{the maps summarizes our area of interest. On the left, the black squares indicate the means of transport stations, the dots indicate the bike sharing stations, the colorbar describes the distance from the nearest means of transport station. On the right, it is the public transport map from which we have obtained the coordinates of the main stations, in particular in blue is the route of the path service which reaches Manhattan, in yellow is the NJ transport service which extends over the entire Jersey area.}
 \end{figure} 
 
-\subsection{Weather data}
+\subsection{Weather variables}
 Also in this case the weather variables are sampled in discrete time with daily and hourly frequency and they are thus defined:
 \begin{itemize}
 	\item \textbf{mean temperature}: in \unit{\degreeCelsius};
@@ -36,7 +36,7 @@ Also in this case the weather variables are sampled in discrete time with daily 
 	\item \textbf{mean wind speed}: in \unit{\kilo\meter/\hour};
 	\item \textbf{cloud cover}: describes the percentage of covered sky;
 	\item \textbf{visibility}: describes the maximum distance of visibility in \unit{\kilo\meter}. In the absence of fog there is a field of vision of \num{16} km;
-	\item \textbf{UV index}: indicates the energy of UV rays, with a dimensionless variable ranging from \num{1} to \num{10}.
+	\item \textbf{UV index}: indicates the energy of UV rays with a dimensionless variable ranging from \num{1} to \num{10}.
 \end{itemize}
 The reason why we have taken into consideration the weather variables is because it's easy to think that the weather can influence a person's choice of rent or not rent a bike. For example, we report two plots that showing how some meteorological variables affect rentals.
 \\
@@ -81,11 +81,11 @@ The reason why we have taken into consideration the weather variables is because
 	\caption{On the top left and right, there is the trend of two bike sharing variables, the pickups per station in blue and the average trip duration in dotted red line. On bottom there is the trend of two weather variables in green line, on left is indicated the average feels-like temperature, on right there is the rainfall. The light red patch describes the lockdown period. It is easy to observe that the weather variables have a strong influence, in particular the temperature has a positive effect on the rentals, on the contrary the amount of rainfall has a negative impact. Unfortunately the lockdown breaks these considerations, probably because many people didn't have the possibility to rent a bike}
 \end{figure}
 
-\subsection{Other data}
+\subsection{Dummy variables}
 As already mentioned, we hypothesize that some events may influence the demand for bike rentals, especially the presence of lockdowns or the presence of public holidays. So we have defined the following binary dummy variables:
 \begin{itemize}
 	\item \textbf{lockdown}: this is equal to \num{1} if there are restrictions in New York City, due to Covid and \num{0} if there are none;
-	\item \textbf{holidays}: is equal to \num{1} when it is Sunday or when there is a public holiday, \num{0} on the remaining days.
+	\item \textbf{holidays}: is equal to \num{1} when it is Saturday, Sunday or when there is a public holiday, \num{0} on the remaining days.
 \end{itemize}
 
 \begin{figure}[h!]
