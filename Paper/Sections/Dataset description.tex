@@ -20,9 +20,9 @@ All this data is sampled hourly and daily, except for the distance, that is a ti
 
 \begin{figure}[h!]
 	\centering
-	\subfigure[]{\label{Trend}\includegraphics[height=155px]{Images/Dataset description/Chosen/Trend}}\quad
-	\subfigure[]{\label{Map}\includegraphics[height=155px]{Images/Dataset description/Chosen/Map}}\quad
-	\caption[]{trend of the The maps summarizes our area of interest. On the left, the black squares indicate the means of transport stations, the dots indicate the bike sharing stations, the color bar describes the distance from the nearest means of transport station. On the right, it is the public transport map from which we have obtained the coordinates of the main stations, in particular in blue is the route of the path service which reaches Manhattan, in yellow is the NJ transport service which extends over the entire Jersey area.}
+	\subfigure[]{\label{Distances_map}\includegraphics[height=200px]{Images/Dataset description/Chosen/Distances_map}}\quad
+	\subfigure[]{\label{Train_map}\includegraphics[height=200px]{Images/Dataset description/Chosen/Train_map}}\quad
+	\caption[]{the maps summarizes our area of interest. On the left, the black squares indicate the means of transport stations, the dots indicate the bike sharing stations, the colorbar describes the distance from the nearest means of transport station. On the right, it is the public transport map from which we have obtained the coordinates of the main stations, in particular in blue is the route of the path service which reaches Manhattan, in yellow is the NJ transport service which extends over the entire Jersey area.}
 \end{figure} 
 
 \subsection{Weather data}
@@ -42,12 +42,12 @@ The reason why we have taken into consideration the weather variables is because
 
 \begin{figure}[h!]
 	\centering
-	\subfigure[]{\label{T_plot_box}\includegraphics[height=155px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_plot}}\quad
-	\subfigure[]{\label{Rain_plot_box}\includegraphics[height=155px]{Images/Dataset description/Chosen/Rainfall_plot}}\quad
-	\subfigure[]{\label{Ty_box}\includegraphics[height=155px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_box}}\quad
-	\subfigure[]{\label{Rain_box}\includegraphics[height=155px]{Images/Dataset description/Chosen/Rainfall_box}}\quad
-	\subfigure[]{\label{Cloud_box}\includegraphics[height=155px]{Images/Dataset description/Chosen/Cloud_cover_box}}\quad
-	\subfigure[]{\label{UV_box}\includegraphics[height=155px]{Images/Dataset description/Chosen/UV_index_box}}\quad
+	\subfigure[]{\label{T_plot_box}\includegraphics[height=160px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_plot}}\quad
+	\subfigure[]{\label{Rain_plot_box}\includegraphics[height=160px]{Images/Dataset description/Chosen/Rainfall_plot}}\quad
+	\subfigure[]{\label{T_box}\includegraphics[height=160px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_box}}\quad
+	\subfigure[]{\label{Rain_box}\includegraphics[height=160px]{Images/Dataset description/Chosen/Rainfall_box}}\quad
+	\subfigure[]{\label{Cloud_box}\includegraphics[height=160px]{Images/Dataset description/Chosen/Cloud_cover_box}}\quad
+	\subfigure[]{\label{UV_box}\includegraphics[height=160px]{Images/Dataset description/Chosen/UV_index_box}}\quad
 	\caption{On the top left and right, there is the trend of two bike sharing variables, the pickups per station in blue and the average trip duration in dotted red line. On bottom there is the trend of two weather variables in green line, on left is indicated the average feels-like temperature, on right there is the rainfall. The light red patch describes the lockdown period. It is easy to observe that the weather variables have a strong influence, in particular the temperature has a positive effect on the rentals, on the contrary the amount of rainfall has a negative impact. Unfortunately the lockdown breaks these considerations, probably because many people didn't have the possibility to rent a bike}
 \end{figure}
 
@@ -57,3 +57,8 @@ As already mentioned, we hypothesize that some events may influence the demand f
 	\item \textbf{lockdown}: this is equal to \num{1} if there are restrictions in New York City, due to Covid and \num{0} if there are none;
 	\item \textbf{holidays}: is equal to \num{1} when it is Sunday or when there is a public holiday, \num{0} on the remaining days.
 \end{itemize}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height = 200px]{Images/Dataset description/Chosen/Trend}
+\end{figure}
