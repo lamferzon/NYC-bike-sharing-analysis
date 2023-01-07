@@ -22,24 +22,24 @@ All these variables was sampled both hourly and daily, except for the distance t
 	\centering
 	\subfigure[]{\label{Distances_map}\includegraphics[height=172px]{Images/Dataset description/Chosen/Distances_map}}\quad
 	\subfigure[]{\label{Train_map}\includegraphics[height=172px]{Images/Dataset description/Chosen/Train_map}}\quad
-	\caption[]{map of the bike rental stations and of the nearest subway/train stations (a) and map of the public transport network in Jersey City (b); in particular in blue it's indicated the path of the public transport service which reaches Manhattan, instead in yellow those which extends over the entire Jersey area.}
+	\caption[]{map of the bike rental stations and of the nearest subway/train stations (a) and map of the public transport network in Jersey City (b); in particular the blue line indicates the path of the public transport service which reaches Manhattan, instead the yellow line those which extends over the entire Jersey area.}
 	\label{Maps}
 \end{figure} 
 
 \subsection{Weather variables}
-The weather frequency variables that Visual Crossing provides to users with daily or hourly are:
+The weather frequency variables that Visual Crossing provides to users with daily or hourly frequency are:
 \begin{itemize}
 	\item \textbf{mean temperature}: in \unit{\degreeCelsius};
-	\item \textbf{mean feels-like temperature}: in \unit{\degreeCelsius} (figure \ref{T_plot_box});
-	\item \textbf{relative humidity}: in percentage;
-	\item \textbf{rainfall}: in \unit{\milli\meter} (figure \ref{Rain_plot_box});
+	\item \textbf{mean feels-like temperature}: in \unit{\degreeCelsius} (figure \ref{T_plot});
+	\item \textbf{relative humidity}: in percentage (figure \ref{Humidity_box});
+	\item \textbf{rainfall}: in \unit{\milli\meter} (figure \ref{Rain_plot});
 	\item \textbf{snowfall}: in \unit{\centi\meter};
-	\item \textbf{mean wind speed}: in \unit{\kilo\meter/\hour};
-	\item \textbf{cloud cover}: percentage of covered sky;
+	\item \textbf{mean wind speed}: in \unit{\kilo\meter/\hour} (figure \ref{Wind_box});
+	\item \textbf{cloud cover}: percentage of covered sky (figure \ref{Cloud_box});
 	\item \textbf{visibility}: maximum distance of visibility in \unit{\kilo\meter}. If the field of vision is greater than \SI{16}{\kilo\meter}, then the visibility value remains this one;
-	\item \textbf{UV index}: indicates the energy of UV rays from \num{1} to \num{10}.
+	\item \textbf{UV index}: indicates the energy of UV rays from \num{1} to \num{10} (figure \ref{UV_box}).
 \end{itemize}
-In table \ref{Weather_stats} we have summarized 
+In table \ref{Weather_stats} we have summarized some of the most important statistics indicators to describe the distribution of each weather variable.
 
 \begin{table}[h!]
 	\centering
@@ -73,23 +73,31 @@ In table \ref{Weather_stats} we have summarized
 
 \begin{figure}[h!]
 	\centering
-	\subfigure[]{\label{T_plot_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_plot}}\quad
-	\subfigure[]{\label{Rain_plot_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Rainfall_plot}}\quad
-	\subfigure[]{\label{T_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_box}}\quad
-	\subfigure[]{\label{Rain_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Rainfall_box}}\quad
+	\subfigure[]{\label{T_plot}\includegraphics[height=172px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_plot}}\quad
+	\subfigure[]{\label{Rain_plot}\includegraphics[height=172px]{Images/Dataset description/Chosen/Rainfall_plot}}\quad
+	\caption{comparison between the trend of the mean number of daily pickups calculated on the entire bike sharing network and two weather variables, i.e. the mean daily feels-like temperature (a) and the daily rainfall (b). Through these plots we can see that temperature has a positive effects on rentals, instead rainfall a negative impact.}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\subfigure[]{\label{Humidity_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Humidity_box}}\quad
+	\subfigure[]{\label{Wind_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Wind_speed_box}}\quad
 	\subfigure[]{\label{Cloud_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Cloud_cover_box}}\quad
 	\subfigure[]{\label{UV_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/UV_index_box}}\quad
-	\caption{On the top left and right, there is the trend of two bike sharing variables, the pickups per station in blue and the average trip duration in dotted red line. On bottom there is the trend of two weather variables in green line, on left is indicated the average feels-like temperature, on right there is the rainfall. The light red patch describes the lockdown period. It is easy to observe that the weather variables have a strong influence, in particular the temperature has a positive effect on the rentals, on the contrary the amount of rainfall has a negative impact. Unfortunately the lockdown breaks these considerations, probably because many people didn't have the possibility to rent a bike}
+	\caption{box-plots of some weather variables.}
 \end{figure}
 
 \subsection{Dummy variables}
-As already mentioned, we hypothesize that some events may influence the demand for bike rentals, especially the presence of lockdowns or the presence of public holidays. So we have defined the following binary dummy variables:
+We have hypothesized that not only weather may influence the demand of bicycle rentals, but also some events could provide their contribute, in particular the lockdown due to the COVID-\num{19} pandemicand the US federal holidays. For this reason we have defined the following binary dummy variables:
 \begin{itemize}
-	\item \textbf{lockdown}: this is equal to \num{1} if there are restrictions in New York City, due to Covid and \num{0} if there are none;
-	\item \textbf{holidays}: is equal to \num{1} when it is Saturday, Sunday or when there is a public holiday, \num{0} on the remaining days.
+	\item \textbf{lockdown}: this is equal to \num{1} if that day of \num{2020} there was the lockdown, \num{0} otherwise (figure \ref{Trend_ld});
+	\item \textbf{weekends and holidays}: is equal to \num{1} if that day was Saturday, Sunday or a festive day, \num{0} otherwise (figure \ref{Trend_sundays}).
 \end{itemize}
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height = 200px]{Images/Dataset description/Chosen/Trend}
+	\centering
+	\subfigure[]{\label{Trend_ld}\includegraphics[height=172px]{Images/Dataset description/Chosen/Trend_ld}}\quad
+	\subfigure[]{\label{Trend_sundays}\includegraphics[height=172px]{Images/Dataset description/Chosen/Trend_sundays}}\quad
+	\caption{in both graphs we can note as events influence the mean number of daily rentals. During the lockdown, in fact, there was not the possible to leave own home, instead in the weekends or during holidays a pickups' peak, either positive or negative, occurs.}
 \end{figure}

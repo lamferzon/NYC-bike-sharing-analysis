@@ -220,7 +220,7 @@ for i = 1:size(vars, 2)
     % path1 = "..\Paper\Images\Dataset description\Box-plots\" + file_name1;
     % exportgraphics(t1, path1, 'BackgroundColor', 'none');
 
-    if i == 4 || i == 5 || i == 6 || i == 8 || i == 9 || i == 11
+    if i == 5 || i == 8 || i == 9 || i == 11
         % file_name3 = vars_names(i) + "_box.pdf";
         % path1 = "..\Paper\Images\Dataset description\Chosen\" + file_name3;
         % exportgraphics(t1, path1, 'BackgroundColor', 'none');
@@ -317,7 +317,7 @@ for i = 1:size(sel, 2)
     ax.XGrid = 'on';
     ay = gca;
     ay.YAxis.TickLabelInterpreter = 'latex';
-    ylabel("Mean pickups [pks/station]", 'Interpreter', 'latex')
+    ylabel("Mean number of pickups [pks/station]", 'Interpreter', 'latex')
     yyaxis right
     plot(daily_calendar, vars{:, j}, 'Color', "#77AC30")
     ay.YAxis(2,1).TickLabelInterpreter = 'latex';
@@ -340,7 +340,7 @@ end
 % weekends and lockdown
 
 figure
-t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+t1 = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
 nexttile
 plot(daily_calendar, avg_pickups)
 ax = gca;
@@ -348,7 +348,7 @@ ax.XAxis.TickLabelInterpreter = 'latex';
 xlabel("Time [day]", 'Interpreter', 'latex')
 ay = gca;
 ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Mean pickups [pks/station]', 'Interpreter', 'latex')
+ylabel('Mean number of pickups [pks/station]', 'Interpreter', 'latex')
 v = [81 0; 135 0; 135 60; 81 60];
 f = [1 2 3 4];
 patch('Faces', f, 'Vertices', v, 'EdgeColor', 'none', ...
@@ -369,6 +369,11 @@ ylabel('Mean trip duration [min]', 'Interpreter', 'latex')
 ay.YAxis(2,1).TickLabelInterpreter = 'latex';
 legend("", "Lockdown", "Holidays", 'Interpreter', 'latex', 'Location', 'northwest')
 
+% path1 = "..\Paper\Images\Dataset description\Chosen\Trend_ld.pdf";
+% exportgraphics(t1, path1, 'BackgroundColor', 'none');
+
+figure
+t2 = tiledlayout(1, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
 nexttile
 plot(daily_calendar, avg_pickups)
 ax = gca;
@@ -376,7 +381,7 @@ ax.XAxis.TickLabelInterpreter = 'latex';
 xlabel('Time [day]', 'Interpreter', 'latex')
 ay = gca;
 ay.YAxis.TickLabelInterpreter = 'latex';
-ylabel('Mean pickups [pks/station]', 'Interpreter', 'latex')
+ylabel('Mean number of pickups [pks/station]', 'Interpreter', 'latex')
 for i = 4:7:366
     vi = [i-1 0; i+1 0; i+1 60; i-1 60];
     patch('Faces', f, 'Vertices', vi, 'EdgeColor', 'none',...
@@ -389,8 +394,8 @@ ylabel('Mean trip duration [min]', 'Interpreter', 'latex')
 ay.YAxis(2,1).TickLabelInterpreter = 'latex';
 legend("", "Weekends", 'Interpreter', 'latex', 'Location', 'northwest')
 
-% path = "..\Paper\Images\Dataset description\Chosen\Trend.pdf";
-% exportgraphics(t, path, 'BackgroundColor', 'none');
+% path2 = "..\Paper\Images\Dataset description\Chosen\Trend_sundays.pdf";
+% exportgraphics(t2, path2, 'BackgroundColor', 'none');
 
 %% Linear regression model for weather variables
 
