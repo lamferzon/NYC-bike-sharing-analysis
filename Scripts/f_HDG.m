@@ -12,7 +12,7 @@ load ../Data/'Processed Data'/Hourly_data.mat
 
 %% Regressors configuration
 
-flag = 1;
+flag = 2;
 switch flag
     case 1 % entire dataset
         data = hourly_data;

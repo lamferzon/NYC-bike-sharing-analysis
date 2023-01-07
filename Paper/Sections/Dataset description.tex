@@ -16,7 +16,7 @@ This partition contains all the information relating to the bike rental:
 	\item \textbf{distance}: indicates the distance between a rental station and the nearest train or subway station in \unit{\kilo\meter} (figure \ref{Distances_map}).
 	
 \end{itemize}
-All these variables was sampled both hourly and daily, except for the distance that is a time-invariant covariate which we have obtained by carrying out an in-depth analysis of public transport network in Jersey City.
+All these variables are both space-variant and time-variant, except for the distance that is a time-invariant covariate which we have obtained by carrying out an in-depth analysis of public transport network in Jersey City.
 
 \begin{figure}[h!]
 	\centering
@@ -39,7 +39,7 @@ The weather frequency variables that Visual Crossing provides to users with dail
 	\item \textbf{visibility}: maximum distance of visibility in \unit{\kilo\meter}. If the field of vision is greater than \SI{16}{\kilo\meter}, then the visibility value remains this one;
 	\item \textbf{UV index}: indicates the energy of UV rays from \num{1} to \num{10} (figure \ref{UV_box}).
 \end{itemize}
-In table \ref{Weather_stats} we have summarized some of the most important statistics indicators to describe the distribution of each weather variable.
+Weather variables are time-variant, but space-invariant because the \num{51} rental stations belong to the same geographical are. In table \ref{Weather_stats} we have summarized some of the most important statistics indicators to describe the distribution of each weather variable.
 
 \begin{table}[h!]
 	\centering
@@ -93,6 +93,7 @@ We have hypothesized that not only weather may influence the demand of bicycle r
 	\item \textbf{lockdown}: this is equal to \num{1} if that day of \num{2020} there was the lockdown, \num{0} otherwise (figure \ref{Trend_ld});
 	\item \textbf{weekends and holidays}: is equal to \num{1} if that day was Saturday, Sunday or a festive day, \num{0} otherwise (figure \ref{Trend_sundays}).
 \end{itemize}
+Dummy variables are time-variant, but space-invariant.
 
 \begin{figure}[h!]
 	\centering

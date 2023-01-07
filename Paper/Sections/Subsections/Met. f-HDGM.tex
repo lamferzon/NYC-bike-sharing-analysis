@@ -1,12 +1,21 @@
 \subsection{Description of the f-HDGM}
-When we have to analyse data observed at high frequency (time domain) or resolution (spatial domain), the inferential approach on which DCM and HDGM are based may not be appropriate. In our case we have \num{51} stations and \num{1}-year of data, i.e. \num{18,666} observations in daily data case and well \num{411,264} observations in hourly data case, a \SI{2103}{\percent} increase which could cause a dramatic increase in computational time. In order to avoid this undesirable effect we have decide to resort to the \textit{functional data analysis} (FDA): instead of estimating the time-series related to the number of hourly pickups at each rental station, a functional model estimates a linear combination of functions, common to all stations, to describe the daily trend. Given a spatial point \textit{\textbf{s}}, fixed a day \textit{t} and an hour \textit{h}, the values of the covariates and latent variables tell how to combine these functions to provide an estimate of $y(\boldsymbol{s}, t, h)$. D-STEM v\num{2} implements the univariate functional version of the HDG model:
+When we have to analyse data observed at high frequency (time domain) or resolution (spatial domain), the inferential approach on which DCM and HDGM are based may not be appropriate. In our case we have \num{51} stations and \num{1}-year of data, i.e. \num{18,666} observations in daily data case and well \num{411,264} observations in hourly data case, a \SI{2103}{\percent} increase which could cause a dramatic increase in computational time. In order to avoid this undesirable effect we have decide to resort to the \textit{functional data analysis} (FDA): instead of estimating the time-series related to the number of hourly pickups at each rental station, a functional model estimates a linear combination of functions, common to all stations, to describe the daily trend. Given a spatial point \textit{\textbf{s}}, fixed a day \textit{t} and an hour \textit{h}, the values of the covariates and latent variables tell how to combine these functions to provide an estimate of $y(\boldsymbol{s}, t, h)$. \textbf{D-STEM} v\num{2} implements the univariate functional version of the HDG model:
 \begin{displaymath}
-	y(\boldsymbol{s}, t, h) = \boldsymbol{x}(\boldsymbol{s}, t, h)' \cdot \boldsymbol{\beta}(h) + \boldsymbol{\Phi}(h)' \cdot \boldsymbol{z}(\boldsymbol{s}, t) + \boldsymbol{\epsilon}(\boldsymbol{s}, t, h)
+	y(\boldsymbol{s}, t, h) = \boldsymbol{x}(\boldsymbol{s}, t, h)' \cdot \boldsymbol{\beta}(h) + \boldsymbol{\Phi}(h)' \cdot \boldsymbol{z}(\boldsymbol{s}, t) + \epsilon(\boldsymbol{s}, t, h)
 \end{displaymath} 
 \begin{displaymath}
 	\boldsymbol{z}(\boldsymbol{s}, t) = \boldsymbol{G} \cdot \boldsymbol{z}(\boldsymbol{s}, t-1) + \boldsymbol{\eta}(\boldsymbol{s}, t)
 \end{displaymath}
 The considerations made for the HDGM are valid, however there are some differences:
 \begin{itemize}
-	\item $\boldsymbol{\beta}(h)$ is a collection of splines, one for each
+	\item $\boldsymbol{\beta}(h)$ is a collection of splines, one for each regressor. Each spline is the linear combination of $n_\beta$ basis functions; these are common to all covariates, instead the $n_\beta$ combinatorial coefficients change from variable to variable in order to describe in the best way the hourly contribute of a specific regressor in explaining $y$;
+	\item $\boldsymbol{\Phi}(h)$ represents a collection of $n_z$ basis functions that properly combined with the $n_z$ latent variables 	$\boldsymbol{z}(\boldsymbol{s}, t)$ describe what $\boldsymbol{x}(\boldsymbol{s}, t, h)' \cdot \boldsymbol{\beta}(h)$ is not able to explain, i.e. the spatio-temporal correlation;
+	\item the variance of $\epsilon$ is a spline obtained by linear combined $n_\epsilon$ basis functions. The aim of making $\sigma_\epsilon^2$ a time signal is to find when in $h$ domain the model performs worse.
+\end{itemize}
+In our specific case:
+\begin{itemize}
+	\item $t$ is the \num{2020} day index, instead $h$ is the day hour index; 
+	\item $y(\boldsymbol{s}, t, h)$ indicates the number of pickups' made during the hour $h$ of the day $t$ at the rental station located in $\boldsymbol{s}$, instead $\boldsymbol{x}(\boldsymbol{s}, t, h)$ contains the constant, the values of the most significant weather variables, dummy variables and distance. We have also estimated a second simpler model contained only the constant, the feels-like temperature and the lockdown dummy in order to increase the descriptive power of the latent variables $\boldsymbol{z}(\boldsymbol{s}, t)$;
+	\item we have chosen to use the Fourier basis seen the daily periodicity of the data;
+	\item $n_\beta = 5$, $n_\epsilon = 5$ and $n_z = 7$; we have decide to give more resolution to the latent component.
 \end{itemize}
