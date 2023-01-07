@@ -1,9 +1,9 @@
 \section{Methodology}
 To reach our aims, i.e. explaining the mean number of rentals (univariate case) and the mean trip duration (bivariate case) for each pickup station using the covariates previously described, we have decided to employ the following spatio-temporal models:
 \begin{itemize}
-	\item the \textbf{Dynamic Coregionalization Model (DCM)} (\cite{dcm});
-	\item the \textbf{Hidden Dynamic Geostatistical Model (HDGM)} (\cite{hdgm});
-	\item the \textbf{Functional Hidden Dynamic Geostatistical Model (f-HDGM)} (\cite{dstem}).
+	\item the \textbf{Dynamic Coregionalization Model (DCM)} for daily data (\cite{dcm});
+	\item the \textbf{Hidden Dynamic Geostatistical Model (HDGM)} for daily data(\cite{hdgm});
+	\item the \textbf{Functional Hidden Dynamic Geostatistical Model (f-HDGM)} for hourly data (\cite{dstem}).
 \end{itemize}
 After having selected the most significant covariates employing a backward approach based on the p-values of t-test and estimated models through the EM algorithm, we have validated them using \num{47} fixed pickup stations for training and \num{4} fixed rental stations for testing, one for every area of Jersey City. For doing each of these operations we have employed D-STEAM v\num{2}, a software for MATLAB developed for modelling functional spatio-temporal data.
 

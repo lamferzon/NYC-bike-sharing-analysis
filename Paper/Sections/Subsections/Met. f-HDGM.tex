@@ -1,1 +1,12 @@
-\subsection{Synthetic description of the f-HDGM}
+\subsection{Description of the f-HDGM}
+When we have to analyse data observed at high frequency (time domain) or resolution (spatial domain), the inferential approach on which DCM and HDGM are based may not be appropriate. In our case we have \num{51} stations and \num{1}-year of data, i.e. \num{18,666} observations in daily data case and well \num{411,264} observations in hourly data case, a \SI{2103}{\percent} increase which could cause a dramatic increase in computational time. In order to avoid this undesirable effect we have decide to resort to the \textit{functional data analysis} (FDA): instead of estimating the time-series related to the number of hourly pickups at each rental station, a functional model estimates a linear combination of functions, common to all stations, to describe the daily trend. Given a spatial point \textit{\textbf{s}}, fixed a day \textit{t} and an hour \textit{h}, the values of the covariates and latent variables tell how to combine these functions to provide an estimate of $y(\boldsymbol{s}, t, h)$. D-STEM v\num{2} implements the univariate functional version of the HDG model:
+\begin{displaymath}
+	y(\boldsymbol{s}, t, h) = \boldsymbol{x}(\boldsymbol{s}, t, h)' \cdot \boldsymbol{\beta}(h) + \boldsymbol{\Phi}(h)' \cdot \boldsymbol{z}(\boldsymbol{s}, t) + \boldsymbol{\epsilon}(\boldsymbol{s}, t, h)
+\end{displaymath} 
+\begin{displaymath}
+	\boldsymbol{z}(\boldsymbol{s}, t) = \boldsymbol{G} \cdot \boldsymbol{z}(\boldsymbol{s}, t-1) + \boldsymbol{\eta}(\boldsymbol{s}, t)
+\end{displaymath}
+The considerations made for the HDGM are valid, however there are some differences:
+\begin{itemize}
+	\item $\boldsymbol{\beta}(h)$ is a collection of splines, one for each
+\end{itemize}
