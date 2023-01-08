@@ -6,6 +6,8 @@
 *.synctex.gz
 *.bbl
 *.blg
+*.lot
+*.lof
 
 
 # directories

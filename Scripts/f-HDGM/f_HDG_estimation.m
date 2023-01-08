@@ -1,5 +1,5 @@
 
-% *Part 3 - estimation (and validation) of the f-HDG model*
+% Estimation and validation of the f-HDG model*
 
 clc
 clearvars
@@ -7,8 +7,9 @@ warning off
 
 %% Data loading 
 
-addpath('D-STEAM_v2\Src\');
-load ../Data/'Processed Data'/Hourly_data.mat
+addpath('../D-STEAM_v2/Src/');
+load ../../Data/'Processed Data'/Hourly_data.mat
+load S_val.mat
 
 %% Regressors configuration
 
@@ -18,8 +19,6 @@ switch flag
         data = hourly_data;
     case 2 % only feels-like temperature and lockdown
         data = hourly_data(:, [1:6 13:16]);
-    % case 3 % no dummy variables and snowfall 
-        % data = hourly_data(:, [1:7, 9:11, 14:16]);
 end
 
 %% Objects creation
@@ -42,7 +41,7 @@ input_data.stem_fda = o_fda;
 o_data = stem_data(input_data);
 
 % validation
-S_val = [20, 32, 36, 26]'; 
+% S_val = randsample(51, round(0.3*51))'; 
 o_data.stem_validation = stem_validation('pickups', S_val);
 
 % object stem_par creation
@@ -57,7 +56,7 @@ o_par.beta = o_model.get_beta0();
 o_par.sigma_eps = o_model.get_coe_log_sigma_eps0();
 o_par.theta_z = ones(1,n_basis.z)*0.05;
 o_par.G = diag(ones(n_basis.z,1)*0.5);
-o_par.v_z = eye(n_basis.z)*15;
+o_par.v_z = eye(n_basis.z)*.5;
 o_model.set_initial_values(o_par);
 
 %% Profiles plotting
@@ -98,9 +97,7 @@ o_model.plot_par
 
 switch flag
     case 1
-        save('..\Data\Outputs\f_HDG_model_1', 'o_model');
+        save('..\..\Data\Outputs\f_HDG_model_1', 'o_model');
     case 2
-        save('..\Data\Outputs\f_HDG_model_2', 'o_model');
-    case 3
-        save('..\Data\Outputs\f_HDG_model_3', 'o_model');
+        save('..\..\Data\Outputs\f_HDG_model_2', 'o_model');
 end
