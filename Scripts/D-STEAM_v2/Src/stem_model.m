@@ -2200,22 +2200,24 @@ classdef stem_model < handle
                     k = obj.stem_par.k_beta;
                     if not(isempty(obj.stem_par.varcov))
                         for i = 1:length(obj.stem_data.stem_varset_p.X_beta_name{1,1})
-                            covariate = ['\beta_{',obj.stem_data.stem_varset_p.X_beta_name{1,1}{i}, '}(',obj.stem_data.stem_varset_p.X_h_name,')'];
+                            covariate = "$\beta_{" + obj.stem_data.stem_varset_p.X_beta_name{1,1}{i} + "}$(\textit{h})";
                             basis = full(getbasismatrix(h,obj.stem_data.stem_fda.spline_basis_beta));
                             beta = obj.stem_par.beta((i-1)*k+(1:k));
                             beta_h = basis*beta;
                             subplot(nrow,ncol,i);
-                            plot(h, beta_h, 'k');
+                            plot(h, beta_h, 'b');
                             for j=1:3
                                 beta_h_up = beta_h + coef(j)*sqrt(diag(basis*obj.stem_par.varcov((i-1)*k+(1:k),(i-1)*k+(1:k))*basis'));
                                 beta_h_low = beta_h - coef(j)*sqrt(diag(basis*obj.stem_par.varcov((i-1)*k+(1:k),(i-1)*k+(1:k))*basis'));
-
-                                patch([h fliplr(h)],[beta_h_up' fliplr(beta_h_low')],'r','FaceAlpha',0.15,'EdgeAlpha',0)
+                                patch([h fliplr(h)],[beta_h_up' fliplr(beta_h_low')], [.301 .745 .933], 'FaceAlpha',0.15,'EdgeAlpha',0)
                             end
-                            title(covariate,'FontSize',14);
-                            set(gca,'FontSize',14);
-                            xlabel(obj.stem_data.stem_varset_p.X_h_name,'FontSize',14);
+                            title(covariate, 'FontSize', 14, 'Interpreter', 'latex');
+                            set(gca, 'FontSize', 14);
+                            xlabel("\textit{h}" , 'FontSize', 14, 'Interpreter', 'latex');
                             xlim([h(1),h(end)]);
+                            ax = gca;
+                            ax.XAxis.TickLabelInterpreter = 'latex';
+                            ax.YAxis.TickLabelInterpreter = 'latex';
                         end
                         counter = counter + length(obj.stem_data.X_beta_name{1,1});
                     else
@@ -2245,7 +2247,7 @@ classdef stem_model < handle
                     h = range(1):0.1:range(2);
                     k = obj.stem_par.k_sigma;
                     if not(isempty(obj.stem_par.varcov))
-                        covariate = ['\sigma_{\epsilon}^2(',obj.stem_data.stem_varset_p.X_h_name,')'];
+                        covariate = "$\sigma_{\epsilon}^2$(\textit{h})";
                         basis = full(getbasismatrix(h,obj.stem_data.stem_fda.spline_basis_sigma));
                         sigma_eps = obj.stem_par.sigma_eps;
                         if obj.stem_par.flag_logsigma==1
@@ -2258,16 +2260,19 @@ classdef stem_model < handle
                             else
                                 subplot(nrow,ncol,1);
                             end
-                            plot(h, sigma_eps_h,'k');
+                            plot(h, sigma_eps_h, 'b');
                             for j=1:3
                                 sigma_eps_h_up = sigma_eps_h + coef(j)*sqrt(Varcov1);
                                 sigma_eps_h_low = sigma_eps_h - coef(j)*sqrt(Varcov1);  
-                                patch([h fliplr(h)],[sigma_eps_h_up' fliplr(sigma_eps_h_low')],'r','FaceAlpha',0.15,'EdgeAlpha',0)
+                                patch([h fliplr(h)],[sigma_eps_h_up' fliplr(sigma_eps_h_low')], [.301 .745 .933],'FaceAlpha',0.15,'EdgeAlpha',0)
                             end
                             xlim([h(1), h(end)]);
-                            title(covariate,'FontSize',14);
-                            set(gca,'FontSize',14);
-                            xlabel(obj.stem_data.stem_varset_p.X_h_name,'FontSize',14);
+                            title(covariate, 'FontSize', 14, 'Interpreter', 'latex');
+                            set(gca, 'FontSize', 14);
+                            xlabel("\textit{h}", 'FontSize', 14, 'Interpreter', 'latex');
+                            ax = gca;
+                            ax.XAxis.TickLabelInterpreter = 'latex';
+                            ax.YAxis.TickLabelInterpreter = 'latex';
                         else 
                             %Currently sigma_eps(h) is estimated by log
                             %transmission to enfore the positive value of

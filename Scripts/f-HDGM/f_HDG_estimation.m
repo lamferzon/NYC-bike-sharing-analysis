@@ -17,8 +17,8 @@ flag = 2;
 switch flag
     case 1 % entire dataset
         data = hourly_data;
-    case 2 % only feels-like temperature and lockdown
-        data = hourly_data(:, [1:6 13:16]);
+    case 2 % only feels-like temperature, distance and dummy variables
+        data = hourly_data(:, [1:6 11:16]);
 end
 
 %% Objects creation
