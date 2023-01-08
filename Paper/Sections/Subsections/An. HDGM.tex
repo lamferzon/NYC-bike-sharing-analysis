@@ -1,1 +1,42 @@
 \subsection{HDGM}
+\subsection{Model Selection}
+To select simpler but good performing models, two different types of models are considered, namely:
+\begin{itemize}
+	\item the complete models, which contain all the available covariates (weather, distances, lockdown and time) 
+	\item the selected models, which include only the covariates that have been selected through a backward approach where at each iteration the covariate with the worst performance was excluded from the model until reaching a level significant of 5%
+\end{itemize}
+Once we have obtained the select models, we want to evaluate their performance compared to the Full models. Through the Cross Validation we evaluate the predictive capabilities of the models. The interesting thing is that, by making model selection , we not only obtained a simpler model to interpret but we also managed to improve, even if only slightly, the predictive capabilities. 
+
+Another way to compare the two model categories is to take a look at the Log-likelihoods. Also in this case the selected models have a better index than the complete models, as they have slightly higher Log-likelihoods.
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{c|cc|cc}
+		\hline
+		\multicolumn{1}{l|}{} & \multicolumn{2}{c|}{\textit{Full}} & \multicolumn{2}{c}{\textit{Selected} }\\ 
+		\hline
+		\textbf{CV MSE} & \multicolumn{1}{c|}{\textbf{pickups }} & \textbf{duration} & \multicolumn{1}{c|}{\textbf{pickups}} & \textbf{duration} \\ 
+		\hline
+		\textbf{2-variate } & \multicolumn{1}{c|}{0.3670}  & 0.7118   & \multicolumn{1}{c|}{0.3609}  & 0.7024   \\ 
+		\hline
+		\textbf{1-variate } & \multicolumn{1}{c|}{0.3673}  & 0.6889   & \multicolumn{1}{c|}{0.3650}  & 0.6829   \\ 
+		\hline
+	\end{tabular}
+	\caption{Cross-validation mean squared errors in log-standardized scale for response variables in Full and Selected models}
+	\label{Cross-validation mean squared errors HDGM}
+\end{table}
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{c|c|c}
+		\hline
+		\textit{Model} &\textit{pickups } & \textit{duration} \\ 
+		\hline
+		\textbf{2-variate } & -342.12  & -268.85    \\ 
+		\hline
+		\textbf{1-variate pickups } & 3507.62  & 3557.33    \\ 
+		\hline
+		\textbf{1-variate duration} & -5491.65  & -5451.83   \\ 
+		\hline
+	\end{tabular}
+	\caption{Log-likelihoods of the six models}
+	\label{Log-likelihoods HDGM}
+\end{table}
