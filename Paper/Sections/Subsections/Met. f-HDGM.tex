@@ -15,7 +15,7 @@ The considerations made for the HDGM are valid, however there are some differenc
 In our specific case:
 \begin{itemize}
 	\item $t$ is the \num{2020} day index, instead $h$ is the day hour index; 
-	\item $y(\boldsymbol{s}, t, h)$ indicates the number of pickups' made during the hour $h$ of the day $t$ at the rental station located in $\boldsymbol{s}$, instead $\boldsymbol{x}(\boldsymbol{s}, t, h)$ contains the constant, the values of the most significant weather variables, dummy variables and distance. We have also estimated a second simpler model contained only the constant, the feels-like temperature and the lockdown dummy in order to increase the descriptive power of the latent variables $\boldsymbol{z}(\boldsymbol{s}, t)$;
+	\item $y(\boldsymbol{s}, t, h)$ indicates the number of pickups' made during the hour $h$ of the day $t$ at the rental station located in $\boldsymbol{s}$, instead $\boldsymbol{x}(\boldsymbol{s}, t, h)$ contains the constant, the values of the most significant weather variables, dummy variables and distance. We have also estimated two simpler models contained a reduced number of covariates in order to increase the descriptive power of the latent variables $\boldsymbol{z}(\boldsymbol{s}, t)$;
 	\item we have chosen to use the Fourier basis seen the daily periodicity of the data;
 	\item $n_\beta = 5$, $n_\epsilon = 5$ and $n_z = 7$; we have decide to give more resolution to the latent component.
 \end{itemize}

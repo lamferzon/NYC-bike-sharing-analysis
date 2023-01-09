@@ -16,7 +16,7 @@ This partition contains all the information relating to the bike rental:
 	\item \textbf{distance}: indicates the distance between a rental station and the nearest train or subway station in \unit{\kilo\meter} (figure \ref{Distances_map}).
 	
 \end{itemize}
-All these variables are both space-variant and time-variant, except for the distance that is a time-invariant covariate which we have obtained by carrying out an in-depth analysis of public transport network in Jersey City.
+All these variables are both space-variant and time-variant, except for the distance that is a time-invariant covariate which we have obtained by carrying out an in-depth analysis of public transport network in Jersey City. In table \ref{Bike_sharing_stats} we have summarized some statistics regarding the bike sharing variables which we have decided to take into account in our analysis.
 
 \begin{figure}[h!]
 	\centering
@@ -32,14 +32,14 @@ All these variables are both space-variant and time-variant, except for the dist
 		\hline
 		\textit{} & \textit{Min.} & \textit{Max.} & \textit{Mean} & \textit{Median} & \textit{Std} & \textit{Skew.}  & \textit{Kurt.}\\
 		\hline
-		\textbf{avg. pickups} & 0.06 & 58.27 & 18.04 & 17.32 & 10.24 & 0.88 & 4.35  \\
+		\textbf{Mean pickups} & 0.06 & 58.27 & 18.04 & 17.32 & 10.24 & 0.88 & 4.35  \\
 		\hline
-		\textbf{avg.trip duration} & 6.60 & 387.21 & 26.76 & 21.30 & 28.92 & 7.08 & 75.13  \\
+		\textbf{Mean trip duration} & 6.60 & 387.21 & 26.76 & 21.30 & 28.92 & 7.08 & 75.13  \\
 		\hline
-		\textbf{distance} & 0.05 & 1.29 & 0.49 & 0.35 & 0.36 & 0.89 & 2.65  \\
+		\textbf{Distance} & 0.05 & 1.29 & 0.49 & 0.35 & 0.36 & 0.89 & 2.65  \\
 		\hline
 	\end{tabular}
-	\caption{main statistics concerning Bike sharing variables.}
+	\caption[Main statistics concerning bike sharing variables]{main statistics concerning bike sharing variables.}
 	\label{Bike_sharing_stats}
 \end{table}
 \subsection{Weather variables}
@@ -83,7 +83,7 @@ Weather variables are time-variant, but space-invariant because the \num{51} ren
 		\textbf{UV index} & \num{ 0} & \num{10} & \num{5.92} & \num{6} & \num{2.88} & \num{-0.21} & \num{1.84} & \num{0.46} \\
 		\hline
 	\end{tabular}
-	\caption{main statistics concerning weather variables. The R2 index describes the linear correlation between a meteorological covariate and the mean number of daily pickups.}
+	\caption[Main statistics concerning weather variables]{main statistics concerning weather variables. The R2 index describes the linear correlation between a meteorological covariate and the mean number of daily pickups.}
 	\label{Weather_stats}
 \end{table}
 
