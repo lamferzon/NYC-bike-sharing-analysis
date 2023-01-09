@@ -212,23 +212,74 @@ obj_stem_model.set_varcov;
 obj_stem_model.set_logL;
 
 
-%CV MSE Mean
-sum_MSE_1=0;
-sum_R2_1=0;
-sum_MSE_2=0;
-sum_R2_2=0;
+Res_pickups=obj_stem_model.stem_validation_result{1, 1}.res_back;
+Res_duration=obj_stem_model.stem_validation_result{1, 2}.res_back;
+MSE_s_p=ones(15,1);
+RMSE_s_p=ones(15,1);
+MSE_s_d=ones(15,1);
+RMSE_s_d=ones(15,1);
+%compute MSE_s and RMSE_s
 for i=1:15
-sum_MSE_1 = sum_MSE_1 + obj_stem_model.stem_validation_result{1}.cv_mse_s(i);
-sum_R2_1 = sum_R2_1 + obj_stem_model.stem_validation_result{1}.cv_R2_t(i);
-sum_MSE_2=sum_MSE_2 + obj_stem_model.stem_validation_result{2}.cv_mse_s(i);
-sum_R2_2=sum_R2_2 + obj_stem_model.stem_validation_result{2}.cv_R2_t(i);
+    sum_res_s_p=0;
+    sum_res_s_d=0;
+    for j=1:366
+        if isnan(Res_pickups(i,j))
+            Res_pickups(i,j)=0;
+        end
+        if isnan(Res_duration(i,j))
+            Res_duration(i,j)=0;
+        end
+        sum_res_s_p=sum_res_s_p+ Res_pickups(i,j)^2;
+        sum_res_s_d=sum_res_s_d+ Res_duration(i,j)^2;
+    end
+    MSE_s_p(i,1)=sum_res_s_p/366;
+    RMSE_s_p(i,1)=sqrt(sum_res_s_p/366);
+    MSE_s_d(i,1)=sum_res_s_d/366;
+    RMSE_s_d(i,1)=sqrt(sum_res_s_d/366);
 end
-MSE_Mean_1=sum_MSE_1/15;
-R2_Mean_1=sum_R2_1/15;
-MSE_Mean_2=sum_MSE_2/15;
-R2_Mean_2=sum_R2_2/15;
-MSE_Mean_1
-R2_Mean_1
 
-MSE_Mean_2
-R2_Mean_2
+MSE_t_p=ones(1,366);
+RMSE_t_p=ones(1,366);
+MSE_t_d=ones(1,366);
+RMSE_t_d=ones(1,366);
+for i=1:366
+    sum_res_t_p=0;
+    sum_res_t_d=0;
+    for j=1:15
+        if isnan(Res_pickups(j,i))
+            Res_pickups(j,i)=0;
+        end
+        if isnan(Res_duration(j,i))
+            Res_duration(j,i)=0;
+        end
+        sum_res_t_p=sum_res_t_p+ Res_pickups(j,i)^2;
+        sum_res_t_d=sum_res_t_d+ Res_duration(j,i)^2;
+    end
+    MSE_t_p(1,i)=sum_res_t_p/15;
+    RMSE_t_p(1,i)=sqrt(sum_res_t_p/15);
+    MSE_t_d(1,i)=sum_res_t_d/15;
+    RMSE_t_d(1,i)=sqrt(sum_res_t_d/15);
+end
+plot(RMSE_t_p)
+plot(RMSE_t_d)
+%Summary
+
+RMSE_s_p_MIN=round(min(RMSE_s_p));
+RMSE_s_p_MAX=round(max(RMSE_s_p));
+RMSE_s_p_MEAN=round(mean(RMSE_s_p));
+RMSE_s_p_MEDIAN=round(median(RMSE_s_p));
+
+RMSE_s_d_MIN=round(min(RMSE_s_d));
+RMSE_s_d_MAX=round(max(RMSE_s_d));
+RMSE_s_d_MEAN=round(mean(RMSE_s_d));
+RMSE_s_d_MEDIAN=round(median(RMSE_s_d));
+
+RMSE_t_p_MIN=round(min(RMSE_t_p));
+RMSE_t_p_MAX=round(max(RMSE_t_p));
+RMSE_t_p_MEAN=round(mean(RMSE_t_p));
+RMSE_t_p_MEDIAN=round(median(RMSE_t_p));
+
+RMSE_t_d_MIN=round(min(RMSE_t_d));
+RMSE_t_d_MAX=round(max(RMSE_t_d));
+RMSE_t_d_MEAN=round(mean(RMSE_t_d));
+RMSE_t_d_MEDIAN=round(median(RMSE_t_d));

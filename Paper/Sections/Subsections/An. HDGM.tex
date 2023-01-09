@@ -1,10 +1,10 @@
 \subsection{HDGM}
 \paragraph{Model Selection} To select simpler but good performing models, two different types of models are considered, namely:
 \begin{itemize}
-	\item Full models, which contain all the available covariates (weather, distances, lockdown and Holidays) 
-	\item Selected models, which include only the covariates that have been selected through a backward approach where at each iteration the covariate with the worst performance was excluded from the model until reaching a level significant of \num{5}\%
+	\item Full models, which contain all the available covariates (weather, distances, lockdown and Holidays).
+	\item Selected models, which include only the covariates that have been selected through a backward approach where at each iteration the covariate with the worst performance was excluded from the model until reaching a level significant of \num{5}\%.
 \end{itemize}
-Once we have obtained the select models, we want to evaluate their performance compared to the Full models. Through the Cross Validation we evaluate the predictive capabilities of the models. The interesting thing is that, by making model selection , we not only obtained a simpler model to interpret but we also managed to improve, even if only slightly, the predictive capabilities. 
+Once we have obtained the select models, we want to evaluate their performance compared to the full models. Through the Cross Validation we evaluate the predictive capabilities of the models. The interesting thing is that, by making model selection, we not only obtained a simpler model to interpret, but we also managed to improve, even if only slightly, the predictive capabilities. 
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{c|cc|cc}
@@ -27,7 +27,7 @@ Another way to compare the two model categories is to take a look at the Log-lik
 	\centering
 	\begin{tabular}{c|c|c}
 		\hline
-		\textit{Model} &\textit{pickups } & \textit{duration} \\ 
+		\textit{Model} &\textit{full } & \textit{selected} \\ 
 		\hline
 		\textbf{2-variate } & -342.12  & -268.85    \\ 
 		\hline
@@ -39,3 +39,47 @@ Another way to compare the two model categories is to take a look at the Log-lik
 	\caption{Log-likelihoods of the six models}
 	\label{Log-likelihoods HDGM}
 \end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|ccccccl}
+		\hline
+		& $\hat{\beta}_{const}$  & $\hat{\beta}_{temp}$ & $\hat{\beta}_{rain}$ & $\hat{\beta}_{dist}$ & $\hat{\beta}_{UV}$ &$\hat{\beta}_{Holidays}$      \\ \cline{2-7} 
+		\multicolumn{1}{|c|}{\textbf{pickups}}  & $-0.048_{(0.126)}$ & $+0.275_{(0.035)}$ & $-0.070_{(0.009)}$ & $+0.039_{(0.027)}$ & $+0.205_{(0.013)}$ &              \\
+		\multicolumn{1}{|c|}{\textbf{duration}} & $+0.297_{(0.081)}$  & $+0.273_{(0.044)}$ &               &               & $+0.153_{(0.017)}$  & $+0.202_{(0.029)}$
+	\end{tabular}
+\caption{Estimated $\beta$ parameters for the multivariate HDG model}
+\label{Bivariate Beta HDGM}
+\end{table}
+
+\begin{table}[]
+	\begin{tabular}{|llll}
+		\hline
+		& $\hat{g_i}$  & $\hat{\sigma_i}$ & $\hat{\theta_i}$  \\ \cline{2-4} 
+		\multicolumn{1}{|l|}{\textbf{pickups}}  &  $+0.92_{(0)}$ &  $+0.039_{(0.027)}$ & \multicolumn{1}{c}{$+0.02_{(0)}$ } \\
+		\multicolumn{1}{|l|}{\textbf{duration}} &  $+0.81_{(0.01)}$ &  $+0.039_{(0.027)}$ &     $+0.02_{(0)}$                              
+	\end{tabular}
+	\caption{Estimated parameters for the multivariate HDG model}
+\label{Bivariate Param_HDGM}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\renewcommand\arraystretch{1.3}
+	\begin{tabular}{c|c|c|c|c|}
+		\hline
+		\textit{} & \textit{Min.} & \textit{Max.} & \textit{Mean} & \textit{Median} \\
+		\hline
+		\textbf{RMSEs pickups} & 4 & 30 & 11 & 8 \\
+		\hline
+		\textbf{RMSEs distance} & 459 & 37228 & 6399 & 2788 \\
+		\hline
+		\textbf{RMSEt pickups} & 0 & 37 & 11 & 11 \\
+		\hline
+		\textbf{RMSEt distance} & 0 & 133395 & 2542 & 670\\
+		\hline
+	\end{tabular}
+	\caption{main statistics RMSE HDGM.}
+	\label{RMSE_HDGM_stats}
+\end{table}
+\paragraph{Model Analysis} 

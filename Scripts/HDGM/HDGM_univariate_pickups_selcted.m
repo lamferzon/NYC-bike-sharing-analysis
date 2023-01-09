@@ -125,7 +125,7 @@ obj_stem_gridlist_p.add(obj_stem_grid);
 %      Model building     %
 
 obj_stem_datestamp = stem_datestamp('01-01-2020 00:00','31-12-2020 00:00',d);
-S_val=[4	42	50	32	38	30	25	49	31	33	28	43	46	51	26];
+S_val=[4 42	50	32	38	30	25	49	31	33	28	43	46	51	26];
 obj_stem_validation=stem_validation({daily_data.bs_var_names{1}},{S_val},0,{'point'});
 
 shape = [];
@@ -170,12 +170,51 @@ obj_stem_model.stem_validation_result{1}.cv_R2_s
 %CV MSE Mean
 sum_MSE=0;
 sum_R2=0;
+sum_sest_stat33=0;
 for i=1:15
-sum_MSE = sum_MSE + obj_stem_model.stem_validation_result{1}.cv_mse_s(i);
-sum_R2 = sum_R2 + obj_stem_model.stem_validation_result{1}.cv_R2_t(i);
+    sum_MSE = sum_MSE + obj_stem_model.stem_validation_result{1}.cv_mse_s(i);
+    sum_R2 = sum_R2 + obj_stem_model.stem_validation_result{1}.cv_R2_t(i);
+    sum_sest_stat33=sum_sest_stat33+ obj_stem_model.stem_validation_result{1}.res_back(1)^2;
 end
 MSE_Mean=sum_MSE/15;
 R2_Mean=sum_R2/15;
 MSE_Mean
 R2_Mean
-  
+%staz 33
+plot(daily_data.bs_data{1}(33,:))
+hold on
+plot( obj_stem_model.stem_validation_result{1, 1}.y_hat_back(10,:))
+
+%conf intervall 95% pred+- 1.96* pred se
+s_est=sqrt(sum_sest_stat33/(10));
+upper=ones(366,1);
+lower=ones(366,1);
+for i=1:366
+    upper(i,1)= obj_stem_model.stem_validation_result{1,1}.y_hat_back(10,i)+1.96*s_est;
+    lower(i,1)= obj_stem_model.stem_validation_result{1,1}.y_hat_back(10,i)-1.96*s_est;
+end
+figure
+plot(daily_data.bs_data{1}(33,:),LineWidth=1)
+hold on
+plot( obj_stem_model.stem_validation_result{1, 1}.y_hat_back(10,:),LineWidth=2)
+hold on
+plot(upper(:,1),LineStyle="--",LineWidth=2);
+hold on
+plot(lower(:,1),LineStyle="--",LineWidth=2);
+legend('Observed Value','Predicted Value',' Upper IC 95%', 'Lower IC 95%')
+obj_stem_model.plot_validation
+
+Res=obj_stem_model.stem_validation_result{1, 1}.res_back;
+MSE_s=ones(15,1);
+RMSE_s=ones(15,1);
+for i=1:15
+    sum_res_s=0;
+    for j=1:366
+        if isnan(Res(i,j))
+          Res(i,j)=0;
+        end
+        sum_res_s=sum_res_s+ Res(i,j)^2;
+    end
+    MSE_s(i,1)=sum_res_s/366;
+    RMSE_s(i,1)=sqrt(sum_res_s/366);
+end

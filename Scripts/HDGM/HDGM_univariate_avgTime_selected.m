@@ -187,3 +187,23 @@ MSE_Mean=sum_MSE/15;
 R2_Mean=sum_R2/15;
 MSE_Mean
 R2_Mean
+
+%conf intervall 95% 1.96
+upper=ones(366,1);
+lower=ones(366,1);
+for i=1:366
+    upper(i,1)= obj_stem_model.stem_validation_result{1,1}.y_hat_back(10,i)+1.96*...
+        std(obj_stem_model.stem_validation_result{1,1}.y_hat_back(10,1:i));
+    lower(i,1)= obj_stem_model.stem_validation_result{1,1}.y_hat_back(10,i)-1.96*...
+        std(obj_stem_model.stem_validation_result{1,1}.y_hat_back(10,1:i));
+end
+figure
+plot(daily_data.bs_data{2}(33,:))
+hold on
+plot( obj_stem_model.stem_validation_result{1, 1}.y_hat_back(10,:))
+hold on
+plot(upper(:,1),LineStyle="--");
+hold on
+plot(lower(:,1),LineStyle="--");
+title('station 33 1-Variate Pickups Model Prediction')
+legend('Observed Value','Predicted Value',' Upper IC 95%', 'Lower IC 95%')
