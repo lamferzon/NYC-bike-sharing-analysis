@@ -1,11 +1,9 @@
 clc
 clearvars
-
 addpath('..\D-STEAM_v2\Src\')
 load('..\..\Data\Processed data\Daily_data.mat')
-
-data.Y{1} = daily_data.bs_data{1};
-data.Y_name{1} = daily_data.bs_var_names{1};
+data.Y{1} = daily_data.bs_data{2};
+data.Y_name{1} = daily_data.bs_var_names{2};
 d=366; %days
 p=12; %n° covariates
 
@@ -60,7 +58,7 @@ obj_stem_gridlist_p.add(obj_stem_grid);
 
 obj_stem_datestamp = stem_datestamp('01-01-2020 00:00','31-12-2020 00:00',d);
 S_val=[]; %tolgo la stazione S_val per fare validazione 20 32 35 36
-obj_stem_validation=stem_validation({daily_data.bs_var_names{1}},{S_val},0,{'point'});
+obj_stem_validation=stem_validation({daily_data.bs_var_names{2}},{S_val},0,{'point'});
 
 shape = [];
 obj_stem_modeltype = stem_modeltype('HDGM'); %dico a stem il tipo
@@ -98,15 +96,14 @@ obj_stem_model.set_varcov;
 obj_stem_model.set_logL;
 
 obj_stem_model.print
-
 %% VALIDATION
 
 clc
 clearvars
 addpath('..\D-STEAM_v2\Src\')
 load('..\..\Data\Processed data\Daily_data.mat')
-data.Y{1} = daily_data.bs_data{1};
-data.Y_name{1} = daily_data.bs_var_names{1};
+data.Y{1} = daily_data.bs_data{2};
+data.Y_name{1} = daily_data.bs_var_names{2};
 d=366; %days
 p=12; %n° covariates
 
@@ -161,7 +158,7 @@ obj_stem_gridlist_p.add(obj_stem_grid);
 
 obj_stem_datestamp = stem_datestamp('01-01-2020 00:00','31-12-2020 00:00',d);
 S_val=[4	42	50	32	38	30	25	49	31	33	28	43	46	51	26];
-obj_stem_validation=stem_validation({daily_data.bs_var_names{1}},{S_val},0,{'point'});
+obj_stem_validation=stem_validation({daily_data.bs_var_names{2}},{S_val},0,{'point'});
 
 shape = [];
 obj_stem_modeltype = stem_modeltype('HDGM'); %dico a stem il tipo
@@ -189,7 +186,7 @@ obj_stem_par.sigma_eps = 0.3;
 obj_stem_model.set_initial_values(obj_stem_par);
 
 %Model estimation
-exit_toll = 0.001;
+exit_toll = 0.0001;
 max_iterations = 200;
 obj_stem_EM_options = stem_EM_options();
 obj_stem_EM_options.exit_tol_par = exit_toll;

@@ -1,13 +1,12 @@
 clc
 clearvars
-
 addpath('..\D-STEAM_v2\Src\')
 load('..\..\Data\Processed data\Daily_data.mat')
 
-data.Y{1} = daily_data.bs_data{1};
-data.Y_name{1} = daily_data.bs_var_names{1};
+data.Y{1} = daily_data.bs_data{2};
+data.Y_name{1} = daily_data.bs_var_names{2};
 d=366; %days
-p=12; %n° covariates
+p=4; %n° covariates
 
 %construct Lockdown and Holidays Matrix
 Lockdown=ones(daily_data.num_stations,d);
@@ -23,25 +22,12 @@ end
 X=ones(daily_data.num_stations,p,d); %costant covriate
 % weather data
 X(1:daily_data.num_stations,2,1:d)=daily_data.weather_data{2};
-X(1:daily_data.num_stations,3,1:d)=daily_data.weather_data{4};
-X(1:daily_data.num_stations,4,1:d)=daily_data.weather_data{6};
-X(1:daily_data.num_stations,5,1:d)=daily_data.weather_data{7};
-%distance data tempo invariante
-X(1:daily_data.num_stations,6,1:d)=daily_data.distances{1};
-% Lockdown and Holidays
-X(1:daily_data.num_stations,7,1:d)=Lockdown;
-X(1:daily_data.num_stations,8,1:d)=Holidays;
+X(1:daily_data.num_stations,3,1:d)=Holidays;
+X(1:daily_data.num_stations,4,1:d)=daily_data.weather_data{9};
 
-X(1:daily_data.num_stations,9,1:d)=daily_data.weather_data{3};
-X(1:daily_data.num_stations,10,1:d)=daily_data.weather_data{5};
-X(1:daily_data.num_stations,11,1:d)=daily_data.weather_data{8};
-X(1:daily_data.num_stations,12,1:d)=daily_data.weather_data{9};
 data.X_beta{1} = X; %Xbeta
 data.X_beta_name{1} = {'costant' daily_data.weather_var_names{2}...
-    daily_data.weather_var_names{4} daily_data.weather_var_names{6} ...
-    daily_data.weather_var_names{7} ,'Distance' 'Lockdown' 'Holidays'...
-    daily_data.weather_var_names{3} daily_data.weather_var_names{5}...
-    daily_data.weather_var_names{8} daily_data.weather_var_names{9}};
+    'Holidays' daily_data.weather_var_names{9}};
 
 data.X_z{1} = ones(daily_data.num_stations, 1);
 data.X_z_name{1} = {'constant'};
@@ -60,7 +46,7 @@ obj_stem_gridlist_p.add(obj_stem_grid);
 
 obj_stem_datestamp = stem_datestamp('01-01-2020 00:00','31-12-2020 00:00',d);
 S_val=[]; %tolgo la stazione S_val per fare validazione 20 32 35 36
-obj_stem_validation=stem_validation({daily_data.bs_var_names{1}},{S_val},0,{'point'});
+obj_stem_validation=stem_validation({daily_data.bs_var_names{2}},{S_val},0,{'point'});
 
 shape = [];
 obj_stem_modeltype = stem_modeltype('HDGM'); %dico a stem il tipo
@@ -98,17 +84,18 @@ obj_stem_model.set_varcov;
 obj_stem_model.set_logL;
 
 obj_stem_model.print
-
 %% VALIDATION
 
 clc
 clearvars
+
 addpath('..\D-STEAM_v2\Src\')
 load('..\..\Data\Processed data\Daily_data.mat')
-data.Y{1} = daily_data.bs_data{1};
-data.Y_name{1} = daily_data.bs_var_names{1};
+
+data.Y{1} = daily_data.bs_data{2};
+data.Y_name{1} = daily_data.bs_var_names{2};
 d=366; %days
-p=12; %n° covariates
+p=4; %n° covariates
 
 %construct Lockdown and Holidays Matrix
 Lockdown=ones(daily_data.num_stations,d);
@@ -124,25 +111,12 @@ end
 X=ones(daily_data.num_stations,p,d); %costant covriate
 % weather data
 X(1:daily_data.num_stations,2,1:d)=daily_data.weather_data{2};
-X(1:daily_data.num_stations,3,1:d)=daily_data.weather_data{4};
-X(1:daily_data.num_stations,4,1:d)=daily_data.weather_data{6};
-X(1:daily_data.num_stations,5,1:d)=daily_data.weather_data{7};
-%distance data tempo invariante
-X(1:daily_data.num_stations,6,1:d)=daily_data.distances{1};
-% Lockdown and Holidays
-X(1:daily_data.num_stations,7,1:d)=Lockdown;
-X(1:daily_data.num_stations,8,1:d)=Holidays;
+X(1:daily_data.num_stations,3,1:d)=Holidays;
+X(1:daily_data.num_stations,4,1:d)=daily_data.weather_data{9};
 
-X(1:daily_data.num_stations,9,1:d)=daily_data.weather_data{3};
-X(1:daily_data.num_stations,10,1:d)=daily_data.weather_data{5};
-X(1:daily_data.num_stations,11,1:d)=daily_data.weather_data{8};
-X(1:daily_data.num_stations,12,1:d)=daily_data.weather_data{9};
 data.X_beta{1} = X; %Xbeta
 data.X_beta_name{1} = {'costant' daily_data.weather_var_names{2}...
-    daily_data.weather_var_names{4} daily_data.weather_var_names{6} ...
-    daily_data.weather_var_names{7} ,'Distance' 'Lockdown' 'Holidays'...
-    daily_data.weather_var_names{3} daily_data.weather_var_names{5}...
-    daily_data.weather_var_names{8} daily_data.weather_var_names{9}};
+    'Holidays' daily_data.weather_var_names{9}};
 
 data.X_z{1} = ones(daily_data.num_stations, 1);
 data.X_z_name{1} = {'constant'};
@@ -161,7 +135,7 @@ obj_stem_gridlist_p.add(obj_stem_grid);
 
 obj_stem_datestamp = stem_datestamp('01-01-2020 00:00','31-12-2020 00:00',d);
 S_val=[4	42	50	32	38	30	25	49	31	33	28	43	46	51	26];
-obj_stem_validation=stem_validation({daily_data.bs_var_names{1}},{S_val},0,{'point'});
+obj_stem_validation=stem_validation({daily_data.bs_var_names{2}},{S_val},0,{'point'});
 
 shape = [];
 obj_stem_modeltype = stem_modeltype('HDGM'); %dico a stem il tipo
@@ -189,7 +163,7 @@ obj_stem_par.sigma_eps = 0.3;
 obj_stem_model.set_initial_values(obj_stem_par);
 
 %Model estimation
-exit_toll = 0.001;
+exit_toll = 0.0001;
 max_iterations = 200;
 obj_stem_EM_options = stem_EM_options();
 obj_stem_EM_options.exit_tol_par = exit_toll;
