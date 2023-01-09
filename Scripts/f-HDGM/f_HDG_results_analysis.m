@@ -164,25 +164,35 @@ for i = 1:3
     axis.YAxis(2,1).TickLabelInterpreter = 'latex';
     axis.YColor = "#D95319";
     ylabel("MSE$_h$", 'Interpreter', 'latex')
-    legend("no rounding", "rounding", "", "", 'Interpreter', 'latex', 'Location', 'northwest')
+    legend("No rounding", "Rounding", "", "", 'Interpreter', 'latex', 'Location', 'northwest')
 
     nexttile
-    plot(daily_data.datetime_calendar, mod.model_val.t_domain.RMSE_t, 'Color', "#4DBEEE")
-    ylim([0 4.5])
+    winter_RMSE = mod.model_val.t_domain.RMSE_t(1:day(datetime(2020,3,21), "dayofyear"));
+    winter_RMSE_plot = [winter_RMSE; NaN(366 - size(winter_RMSE, 1), 1)];
+    lockdown_RMSE = mod.model_val.t_domain.RMSE_t(day(datetime(2020,3,22), "dayofyear"):day(datetime(2020,5,14), "dayofyear"));
+    lockdown_RMSE_plot = [NaN(size(winter_RMSE, 1), 1); lockdown_RMSE; NaN(366 - size(lockdown_RMSE, 1) - size(winter_RMSE, 1), 1)];
+    summer_RMSE = mod.model_val.t_domain.RMSE_t(day(datetime(2020,5,15), "dayofyear"):day(datetime(2020,9,21), "dayofyear"));
+    summer_RMSE_plot = [NaN(size(winter_RMSE,1) + size(lockdown_RMSE,1), 1); summer_RMSE; NaN(366 - size(summer_RMSE, 1) - size(winter_RMSE,1) - size(lockdown_RMSE,1), 1)];
+    autumn_RMSE = mod.model_val.t_domain.RMSE_t(day(datetime(2020,9,22), "dayofyear"):day(datetime(2020,12,31), "dayofyear"));
+    autumn_RMSE_plot = [NaN(366 - size(autumn_RMSE, 1), 1); autumn_RMSE];
+    plot(daily_data.datetime_calendar, winter_RMSE_plot, 'Color', "#D95319")
+    hold on
+    plot(daily_data.datetime_calendar, lockdown_RMSE_plot, 'Color', "#77AC30")
+    plot(daily_data.datetime_calendar, summer_RMSE_plot, 'Color', "#EDB120")
+    plot(daily_data.datetime_calendar, autumn_RMSE_plot, 'Color', "#7E2F8E")
+    xlim([daily_data.datetime_calendar(1,1) daily_data.datetime_calendar(1,366)])
     axis = gca;
     axis.XGrid = 'on';
     axis.XAxis.TickLabelInterpreter = 'latex';
     axis.YAxis.TickLabelInterpreter = 'latex';
     ylabel("RMSE$_t$", 'Interpreter', 'latex')
     xlabel("Day", 'Interpreter', 'latex')
-
-    yyaxis right
-    plot(daily_data.datetime_calendar, mod.model_val.t_domain.MSE_t, 'Color', "#D95319")
-    ylim([0 4.5])
-    axis = gca;
-    axis.YAxis(2,1).TickLabelInterpreter = 'latex';
-    axis.YColor = "#D95319";
-    ylabel("MSE$_h$", 'Interpreter', 'latex')
+    yline(mean(winter_RMSE), '--', 'Color', "#D95319", 'Interpreter', 'latex', 'LineWidth', 1)
+    yline(mean(lockdown_RMSE), '--', 'Color', "#77AC30", 'LineWidth', 1, 'Interpreter', 'latex')
+    yline(mean(summer_RMSE), 'Color', "#EDB120", 'LineStyle', '--', 'LineWidth', 1)
+    yline(mean(autumn_RMSE), 'Color', "#7E2F8E", 'LineStyle', '--', 'LineWidth', 1)
+    legend("", "", "", "", "Mean winter", "Mean lockdown", "Mean summer",...
+        "Mean autumn", 'Interpreter', 'latex', 'NumColumns', 4, 'Location', 'south')
     
     if i == 2
         path = "..\..\Paper\Images\Data analysis\f-HDGM\Chosen\";
@@ -195,6 +205,14 @@ for i = 1:3
 end
 
 % save("..\..\Results\f_HDGM_results", "f_HDG_results");
+
+%% Profiles plotting
+
+lat0 = 40.7184; 
+lon0 = -74.0389;
+t_start = day(datetime(2020, 7, 1),"dayofyear");
+t_end = day(datetime(2020, 7, 30),"dayofyear");
+stem_model_M.plot_profile(lat0, lon0, t_start, t_end);
 
 %% Functions
 
