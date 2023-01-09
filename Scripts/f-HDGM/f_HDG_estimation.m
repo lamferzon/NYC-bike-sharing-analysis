@@ -13,11 +13,13 @@ load S_val.mat
 
 %% Regressors configuration
 
-flag = 2;
+flag = 3;
 switch flag
     case 1 % entire dataset
         data = hourly_data;
-    case 2 % only feels-like temperature, distance and dummy variables
+    case 2 % only feels-like temperature and lockdown
+        data = hourly_data(:, [1:6 13:16]);
+    case 3 % only feels-like temperature, distance and dummy variables
         data = hourly_data(:, [1:6 11:16]);
 end
 
@@ -100,4 +102,6 @@ switch flag
         save('..\..\Data\Outputs\f_HDG_model_1', 'o_model');
     case 2
         save('..\..\Data\Outputs\f_HDG_model_2', 'o_model');
+    case 3
+        save('..\..\Data\Outputs\f_HDG_model_3', 'o_model');
 end

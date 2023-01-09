@@ -379,13 +379,17 @@ disp(" ")
 disp("Start formatting of hourly data")
 disp(" ")
 
+happy = convertTo(datetime(2020, 5, 15),...
+    "datenum"):1:convertTo(datetime(2020, 9, 20), "datenum");
+happy = ismember(daily_calendar, happy);
+
 var_names = {'Profile', 'Y_name', 'Y', 'X_h_hour', 'X_beta_const',...
     'X_beta_avg_feels_like_T', 'X_beta_rainfall', 'X_beta_visibility',...
     'X_beta_windspeed', 'X_beta_cloud_cover', 'X_beta_ts_distance',...
-    'X_beta_holidays', 'X_beta_lockdown', 'Y_coordinate', 'X_coordinate',...
-    'Time'};
+    'X_beta_holidays', 'X_beta_lockdown', 'X_beta_happy', 'Y_coordinate',...
+    'X_coordinate', 'Time'};
 var_units = {'', '', 'bikes', 'h', 'cons', '﻿^{\circ}C', 'mm', 'km', 'km/h',...
-    '\%', 'deg', '', '', 'deg', 'deg', 'd'};
+    '\%', 'deg', '', '', '', 'deg', 'deg', 'd'};
 hourly_data = array2table(zeros(366*num_stations, length(var_names)));
 hourly_data.Properties.VariableNames = var_names;
 hourly_data.Properties.VariableUnits = var_units;
@@ -405,6 +409,7 @@ hourly_data.X_beta_cloud_cover = num2cell(hourly_data.X_beta_cloud_cover);
 hourly_data.X_beta_ts_distance = num2cell(hourly_data.X_beta_ts_distance);
 hourly_data.X_beta_holidays = num2cell(hourly_data.X_beta_holidays);
 hourly_data.X_beta_lockdown = num2cell(hourly_data.X_beta_lockdown);
+hourly_data.X_beta_happy = num2cell(hourly_data.X_beta_happy);
 hourly_data.Time = datetime(hourly_data.Time, 'ConvertFrom', 'datenum');
 
 count = 1;
@@ -432,6 +437,11 @@ for i = 1:366
             hourly_data.X_beta_holidays(count) = {ones(1, 24)};
         else
             hourly_data.X_beta_holidays(count) = {zeros(1, 24)};
+        end
+        if happy(1, i)
+            hourly_data.X_beta_happy(count) = {ones(1, 24)};
+        else
+            hourly_data.X_beta_happy(count) = {zeros(1, 24)};
         end
         hourly_data.Time(count) = datetime(2020, 1, i);
         count = count + 1;

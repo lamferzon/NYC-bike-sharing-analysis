@@ -2053,7 +2053,7 @@ classdef stem_model < handle
             end            
         end
         
-        function plot_par(obj,vertical)
+        function t = plot_par(obj,vertical)
             %DESCRIPTION: plot the beta(h) and sigma_eps2(h) when modeltype is f-HDGM
             %
             %INPUT
@@ -2199,21 +2199,32 @@ classdef stem_model < handle
                     h = range(1):0.1:range(2);
                     k = obj.stem_par.k_beta;
                     if not(isempty(obj.stem_par.varcov))
+                        t = tiledlayout(nrow, ncol, 'TileSpacing', 'Compact', 'Padding', 'Compact');
                         for i = 1:length(obj.stem_data.stem_varset_p.X_beta_name{1,1})
+                            nexttile
                             covariate = "$\beta_{" + obj.stem_data.stem_varset_p.X_beta_name{1,1}{i} + "}$(\textit{h})";
                             basis = full(getbasismatrix(h,obj.stem_data.stem_fda.spline_basis_beta));
                             beta = obj.stem_par.beta((i-1)*k+(1:k));
                             beta_h = basis*beta;
-                            subplot(nrow,ncol,i);
-                            plot(h, beta_h, 'b');
+                            % subplot(nrow,ncol,i);
+                            plot(h, beta_h, 'b', 'LineWidth', 1);
+                            grid on
                             for j=1:3
                                 beta_h_up = beta_h + coef(j)*sqrt(diag(basis*obj.stem_par.varcov((i-1)*k+(1:k),(i-1)*k+(1:k))*basis'));
                                 beta_h_low = beta_h - coef(j)*sqrt(diag(basis*obj.stem_par.varcov((i-1)*k+(1:k),(i-1)*k+(1:k))*basis'));
-                                patch([h fliplr(h)],[beta_h_up' fliplr(beta_h_low')], [.301 .745 .933], 'FaceAlpha',0.15,'EdgeAlpha',0)
+                                switch j
+                                    case 1
+                                        alpha = .30;
+                                    case 2
+                                        alpha = .20;
+                                    case 3
+                                        alpha = .10;
+                                end
+                                patch([h fliplr(h)],[beta_h_up' fliplr(beta_h_low')], [.301 .745 .933], 'FaceAlpha', alpha, 'EdgeAlpha', 0);
                             end
                             title(covariate, 'FontSize', 14, 'Interpreter', 'latex');
                             set(gca, 'FontSize', 14);
-                            xlabel("\textit{h}" , 'FontSize', 14, 'Interpreter', 'latex');
+                            xlabel("Hour", 'FontSize', 14, 'Interpreter', 'latex');
                             xlim([h(1),h(end)]);
                             ax = gca;
                             ax.XAxis.TickLabelInterpreter = 'latex';
@@ -2255,21 +2266,31 @@ classdef stem_model < handle
                             Varcov_eps = obj.stem_par.varcov(counter+(1:k),counter+(1:k));
                             Varcov = diag(basis*Varcov_eps*basis');
                             Varcov1 = (exp(Varcov)-ones(length(Varcov),1)).*((sigma_eps_h).^2).*(exp(Varcov));
-                            if obj.stem_par.flag_beta_spline==1
-                                subplot(nrow,ncol,length(obj.stem_data.stem_varset_p.X_beta_name{1,1})+1);
-                            else
-                                subplot(nrow,ncol,1);
-                            end
-                            plot(h, sigma_eps_h, 'b');
+                            % if obj.stem_par.flag_beta_spline==1
+                            %     subplot(nrow,ncol,length(obj.stem_data.stem_varset_p.X_beta_name{1,1})+1);
+                            % else
+                            %     subplot(nrow,ncol,1);
+                            % end
+                            nexttile
+                            plot(h, sigma_eps_h, 'Color', [.85 .325 .098], 'LineWidth', 1);
+                            grid on
                             for j=1:3
                                 sigma_eps_h_up = sigma_eps_h + coef(j)*sqrt(Varcov1);
-                                sigma_eps_h_low = sigma_eps_h - coef(j)*sqrt(Varcov1);  
-                                patch([h fliplr(h)],[sigma_eps_h_up' fliplr(sigma_eps_h_low')], [.301 .745 .933],'FaceAlpha',0.15,'EdgeAlpha',0)
+                                sigma_eps_h_low = sigma_eps_h - coef(j)*sqrt(Varcov1);
+                                switch j
+                                    case 1
+                                        alpha = .30;
+                                    case 2
+                                        alpha = .20;
+                                    case 3
+                                        alpha = .10;
+                                end
+                                patch([h fliplr(h)],[sigma_eps_h_up' fliplr(sigma_eps_h_low')], [.85 .325 .098], 'FaceAlpha', alpha, 'EdgeAlpha', 0)
                             end
                             xlim([h(1), h(end)]);
                             title(covariate, 'FontSize', 14, 'Interpreter', 'latex');
                             set(gca, 'FontSize', 14);
-                            xlabel("\textit{h}", 'FontSize', 14, 'Interpreter', 'latex');
+                            xlabel("Hour", 'FontSize', 14, 'Interpreter', 'latex');
                             ax = gca;
                             ax.XAxis.TickLabelInterpreter = 'latex';
                             ax.YAxis.TickLabelInterpreter = 'latex';
@@ -2280,6 +2301,7 @@ classdef stem_model < handle
                             %Nothing to do here.
                         end 
                     else
+                        disp("here")
                         covariate = ['\sigma_{\epsilon}^2(',obj.stem_data.stem_varset_p.X_h_name,')'];
                         basis = full(getbasismatrix(h,obj.stem_data.stem_fda.spline_basis_sigma));
                         sigma_eps = obj.stem_par.sigma_eps;
@@ -2301,7 +2323,6 @@ classdef stem_model < handle
                     end
                 end
             end
-           
         end 
         
         function plot_validation(obj,vertical,variable_name)
@@ -2899,7 +2920,7 @@ classdef stem_model < handle
             grid on
         end
         
-        function beta_Chi2_test(obj)
+        function output = beta_Chi2_test(obj)
             %DESCRIPTION: print the Chi2 test for significance of covariates when modeltype is f-HDGM
             %
             %INPUT
