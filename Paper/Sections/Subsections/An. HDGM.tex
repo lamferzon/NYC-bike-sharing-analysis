@@ -1,19 +1,20 @@
 \subsection{HDGM}
+
 \subsubsection{Model selection} To select simpler but good performing models, two different types of models are considered, namely:
 \begin{itemize}
-	\item Full models, which contain all the available covariates (weather, distances, lockdown and Holidays).
-	\item Selected models, which include only the covariates that have been selected through a backward approach where at each iteration the covariate with the worst performance was excluded from the model until reaching a level significant of \num{5}\%.
+	\item \textbf{full models}: contain all the available covariates (weather, distances, lockdown and Holidays).
+	\item \textbf{selected models}: include only the covariates that have been selected through a backward approach where at each iteration the covariate with the worst performance was excluded from the model until reaching a level significant of \num{5}\%.
 \end{itemize}
-Once we have obtained the select models, we want to evaluate their performance compared to the full models. Through the Cross Validation we evaluate the predictive capabilities of the models. The interesting thing is that, by making model selection, we not only obtained a simpler model to interpret, but we also managed to improve, even if only slightly, the predictive capabilities (Table \ref{Cross-validation mean squared errors HDGM}).
+Once we have obtained the select models, we want to evaluate their performance compared to the full models. Through the Cross Validation we evaluate the predictive capabilities of the models. The interesting thing is that, by making model selection, we not only obtained a simpler model to interpret, but we also managed to improve, even if only slightly, the predictive capabilities (table \ref{Cross-validation mean squared errors HDGM}).
  
 \begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{c|cc|cc}
 		\hline
-		\multicolumn{1}{l|}{} & \multicolumn{2}{c|}{\textit{Full}} & \multicolumn{2}{c}{\textit{Selected} }\\ 
+		\multicolumn{1}{l|}{} & \multicolumn{2}{c|}{\textit{CV MSE, full model}} & \multicolumn{2}{c}{\textit{CV MSE, selected model} }\\ 
 		\hline
-		\textbf{CV MSE} & \multicolumn{1}{c|}{\textbf{pickups }} & \textbf{duration} & \multicolumn{1}{c|}{\textbf{pickups}} & \textbf{duration} \\ 
+		\textit{Model} & \multicolumn{1}{c|}{\textit{Pickups}} & \textit{Trip duration} & \multicolumn{1}{c|}{\textit{Pickups}} & \textit{Trip duration} \\ 
 		\hline
 		\textbf{2-variate } & \multicolumn{1}{c|}{0.3670}  & 0.7118   & \multicolumn{1}{c|}{0.3609}  & 0.7024   \\ 
 		\hline
@@ -25,14 +26,14 @@ Once we have obtained the select models, we want to evaluate their performance c
 \end{table}
 
 \noindent
-Another way to compare the two model categories is to take a look at the Log-likelihoods. Also in this case the selected models have a better index than the complete models, as they have slightly higher Log-likelihoods (Table \ref{Log-likelihoods HDGM}). 
+Another way to compare the two model categories is to take a look at the Log-likelihoods. Also in this case the selected models have a better index than the complete models, as they have slightly higher Log-likelihoods (table \ref{Log-likelihoods HDGM}). 
 
 \begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{c|c|c}
 		\hline
-		\textit{Model} &\textit{full } & \textit{selected} \\ 
+		\textit{Model} &\textit{Full } & \textit{Selected} \\ 
 		\hline
 		\textbf{2-variate } & -342.12  & -268.85    \\ 
 		\hline
@@ -61,19 +62,20 @@ adequately describe the relationships of the variables with respect to our respo
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{|ccccccl}
 		\hline
-		& $\hat{\beta}_{const}$  & $\hat{\beta}_{temp}$ & $\hat{\beta}_{rain}$ & $\hat{\beta}_{dist}$ & $\hat{\beta}_{UV}$ &$\hat{\beta}_{Holidays}$      \\ \cline{2-7} 
-		\multicolumn{1}{|c|}{\textbf{pickups}}  & $-0.048_{(0.126)}$ & $+0.275_{(0.035)}$ & $-0.070_{(0.009)}$ & $+0.039_{(0.027)}$ & $+0.205_{(0.013)}$ &              \\
-		\multicolumn{1}{|c|}{\textbf{duration}} & $+0.297_{(0.081)}$  & $+0.273_{(0.044)}$ &               &               & $+0.153_{(0.017)}$  & $+0.202_{(0.029)}$
+		\textit{Variable} & $\hat{\beta}_{const}$  & $\hat{\beta}_{temp}$ & $\hat{\beta}_{rain}$ & $\hat{\beta}_{dist}$ & $\hat{\beta}_{UV}$ &$\hat{\beta}_{Holidays}$      \\ \cline{2-7} 
+		\multicolumn{1}{|c|}{\textbf{Pickups}}  & $-0.048_{(0.126)}$ & $+0.275_{(0.035)}$ & $-0.070_{(0.009)}$ & $+0.039_{(0.027)}$ & $+0.205_{(0.013)}$ &              \\
+		\multicolumn{1}{|c|}{\textbf{Duration}} & $+0.297_{(0.081)}$  & $+0.273_{(0.044)}$ &               &               & $+0.153_{(0.017)}$  & $+0.202_{(0.029)}$
 	\end{tabular}
 	\caption[Estimated $\boldsymbol{\beta}$ for the multivariate model (HDGM)]{estimated $\boldsymbol{\beta}$ for the multivariate model, HDGM.}
 	\label{Bivariate Beta HDGM}
 \end{table}
 
-The other parameters describing the selected bivariate model are shown in the Table \ref{Bivariate Param_HDGM}
+\noindent
+The other parameters which describe the selected bivariate model are shown in the table \ref{Bivariate Param_HDGM}:
 \begin{itemize}
-	\item The analysis of the $\hat{g_i}$ values suggests that the two response variables have different temporal dynamics, in particular, the number of bikes rented has higher persistence than the average rental duration. 
-	\item As expected, the $\hat{\sigma_i}$ has very distant values with respect to the two variables. In detail, the average duration has a very high $\hat{\sigma_i}$, which describes the high volatility of this variable. This value is consistent with the cross-validation MSE results of table \ref{Cross-validation mean squared errors HDGM}, where the model that describing the average rental duration performed worse.
-	\item  The estimated parameter $\theta_i$ represents the range of the spatial correlation, common to all response variables. It amounts to just over $2 km$ for this dataset, confirming a fairly regular overall spatial behaviour.
+	\item the analysis of the $\hat{g_i}$ values suggests that the two response variables have different temporal dynamics, in particular, the number of bikes rented has higher persistence than the average rental duration;
+	\item as expected, the $\hat{\sigma_i}$ has very distant values with respect to the two variables. In detail, the average duration has a very high $\hat{\sigma_i}$, which describes the high volatility of this variable. This value is consistent with the cross-validation MSE results of table \ref{Cross-validation mean squared errors HDGM}, where the model that describing the average rental duration performed worse;
+	\item the estimated parameter $\theta_i$ represents the range of the spatial correlation, common to all response variables. It amounts to just over $2 km$ for this dataset, confirming a fairly regular overall spatial behaviour.
 \end{itemize}
 
 \begin{table}
@@ -81,9 +83,9 @@ The other parameters describing the selected bivariate model are shown in the Ta
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{|cccc}
 		\hline
-		& $\hat{g_i}$  & $\hat{\sigma_i}$ & $\hat{\theta_i}$  \\ \cline{2-4} 
-		\multicolumn{1}{|l|}{\textbf{pickups}}  &  $0.92_{(0)}$ &  $0.128_{(0.002)}$ & \multicolumn{1}{c}{$0.02_{(0)}$ } \\
-		\multicolumn{1}{|l|}{\textbf{duration}} &  $0.81_{(0.01)}$ &  $0.487_{(0.006)}$ &     $0.02_{(0)}$                              
+		\textit{Response variable} & $\hat{g_i}$  & $\hat{\sigma_i}$ & $\hat{\theta_i}$  \\ \cline{2-4} 
+		\multicolumn{1}{|c|}{\textbf{Pickups}}  &  $0.92_{(0)}$ &  $0.128_{(0.002)}$ & \multicolumn{1}{c}{$0.02_{(0)}$ } \\
+		\multicolumn{1}{|c|}{\textbf{Trip duration}} &  $0.81_{(0.01)}$ &  $0.487_{(0.006)}$ &     $0.02_{(0)}$                              
 	\end{tabular}
 	\caption[Estimated parameters of the multivariate model (HDGM)]{estimated parameters of the multivariate model, HDGM.}
 	\label{Bivariate Param_HDGM}

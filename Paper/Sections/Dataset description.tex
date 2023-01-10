@@ -6,14 +6,14 @@ Through a preliminary data processing work, we have extracted from the original 
 This partition contains all the information relating to the bike rental: 
 \begin{itemize}
 	\item \textbf{pickups counter}: number of pickups at a rental station;
-	\item \textbf{mean trip duration}: mean rental time of a user who picks-up a bike at a rental station in \si{\min};
+	\item \textbf{mean trip duration}: mean rental time of a user who picks-up a bike at a rental station;
 	\item \textbf{mean users age}: mean age of a user who picks-up a bike at a rental station;
 	\item \textbf{male counter}: number of males who pick-up a bike at a rental station;
 	\item \textbf{female counter}: number of women who pick-up a bike at a rental station;
 	\item \textbf{unknown gender counter}: number  of people who have not specify their gender who pick-up a bike at a rental station;
 	\item \textbf{subscribers counter}: number of customers who pick-up a bike at a rental station having an annual subscription;
 	\item \textbf{customers counter}: number of customers who pick-up a bike at a rental station having a \num{4}-hour pass or a \num{3}-day pass;
-	\item \textbf{distance}: indicates the distance between a rental station and the nearest train or subway station in \unit{\kilo\meter} (figure \ref{Distances_map}).
+	\item \textbf{distance}: indicates the distance between a rental station and the nearest train or subway station (figure \ref{Distances_map}).
 	
 \end{itemize}
 All these variables are both space-variant and time-variant, except for the distance that is a time-invariant covariate which we have obtained by carrying out an in-depth analysis of public transport network in Jersey City. In table \ref{Bike_sharing_stats} we have summarized some statistics regarding the bike sharing variables which we have decided to take into account in our analysis.
@@ -29,15 +29,15 @@ All these variables are both space-variant and time-variant, except for the dist
 \begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
-	\begin{tabular}{c|c|c|c|c|c|c|c}
+	\begin{tabular}{c|c|c|c|c|c|c|c|c}
 		\hline
-		\textit{} & \textit{Min.} & \textit{Max.} & \textit{Mean} & \textit{Median} & \textit{Std} & \textit{Skew.}  & \textit{Kurt.}\\
+		\textit{Bike sharing variable} & \textit{Unit} & \textit{Min.} & \textit{Max.} & \textit{Mean} & \textit{Median} & \textit{Std} & \textit{Skew.}  & \textit{Kurt.}\\
 		\hline
-		\textbf{Mean pickups} & 0.06 & 58.27 & 18.04 & 17.32 & 10.24 & 0.88 & 4.35  \\
+		\textbf{Mean pickups} & - & 0.06 & 58.27 & 18.04 & 17.32 & 10.24 & 0.88 & 4.35  \\
 		\hline
-		\textbf{Mean trip duration} & 6.60 & 387.21 & 26.76 & 21.30 & 28.92 & 7.08 & 75.13  \\
+		\textbf{Mean trip duration} & \si{\min} & 6.60 & 387.21 & 26.76 & 21.30 & 28.92 & 7.08 & 75.13  \\
 		\hline
-		\textbf{Distance} & 0.05 & 1.29 & 0.49 & 0.35 & 0.36 & 0.89 & 2.65  \\
+		\textbf{Distance} & \si{\kilo\meter} & 0.05 & 1.29 & 0.49 & 0.35 & 0.36 & 0.89 & 2.65  \\
 		\hline
 	\end{tabular}
 	\caption[Main statistics concerning bike sharing variables]{main statistics concerning bike sharing variables.}
@@ -47,14 +47,14 @@ All these variables are both space-variant and time-variant, except for the dist
 \subsection{Weather variables}
 The weather frequency variables that Visual Crossing provides to users with daily or hourly frequency are:
 \begin{itemize}
-	\item \textbf{mean temperature}: in \unit{\degreeCelsius};
-	\item \textbf{mean feels-like temperature}: in \unit{\degreeCelsius} (figure \ref{T_plot});
-	\item \textbf{relative humidity}: in percentage (figure \ref{Humidity_box});
-	\item \textbf{rainfall}: in \unit{\milli\meter} (figure \ref{Rain_plot});
-	\item \textbf{snowfall}: in \unit{\centi\meter};
-	\item \textbf{mean wind speed}: in \unit{\kilo\meter/\hour} (figure \ref{Wind_box});
+	\item \textbf{mean temperature};
+	\item \textbf{mean feels-like temperature} (figure \ref{T_plot});
+	\item \textbf{relative humidity} (figure \ref{Humidity_box});
+	\item \textbf{rainfall} (figure \ref{Rain_plot});
+	\item \textbf{snowfall};
+	\item \textbf{mean wind speed} (figure \ref{Wind_box});
 	\item \textbf{cloud cover}: percentage of covered sky (figure \ref{Cloud_box});
-	\item \textbf{visibility}: maximum distance of visibility in \unit{\kilo\meter}. If the field of vision is greater than \SI{16}{\kilo\meter}, then the visibility value remains this one;
+	\item \textbf{visibility}: maximum distance of visibility. If the field of vision is greater than \SI{16}{\kilo\meter}, then the visibility value remains this one;
 	\item \textbf{UV index}: indicates the energy of UV rays from \num{1} to \num{10} (figure \ref{UV_box}).
 \end{itemize}
 Weather variables are time-variant, but space-invariant because the \num{51} rental stations belong to the same geographical are. In table \ref{Weather_stats} we have summarized some of the most important statistics indicators to describe the distribution of each weather variable.
@@ -62,27 +62,27 @@ Weather variables are time-variant, but space-invariant because the \num{51} ren
 \begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
-	\begin{tabular}{c|c|c|c|c|c|c|c|c}
+	\begin{tabular}{c|c|c|c|c|c|c|c|c|c}
 		\hline
-		\textit{} & \textit{Min.} & \textit{Max.} & \textit{Mean} & \textit{Median} & \textit{Std} & \textit{Skew.}  & \textit{Kurt.} & \textit{R2} \\
+		\textit{Weather variable} & \textit{Unit} & \textit{Min.} & \textit{Max.} & \textit{Mean} & \textit{Median} & \textit{Std} & \textit{Skew.}  & \textit{Kurt.} & \textit{R2} \\
 		\hline
-		\textbf{Temperature} & \num{-3.50} & \num{30.40} & \num{14.55} & \num{14} & \num{8.50} & \num{0.04} & \num{1.86} & \num{0.67} \\
+		\textbf{Temperature} & \unit{\degreeCelsius} & \num{-3.50} & \num{30.40} & \num{14.55} & \num{14} & \num{8.50} & \num{0.04} & \num{1.86} & \num{0.67} \\
 		\hline
-		\textbf{Feels-like temp.} & \num{-7.70} & \num{33.30} & \num{13.81} & \num{13.90} & \num{9.80} & \num{0.04} & \num{1.96} & \num{0.66} \\
+		\textbf{Feels-like temp.} & \unit{\degreeCelsius} & \num{-7.70} & \num{33.30} & \num{13.81} & \num{13.90} & \num{9.80} & \num{0.04} & \num{1.96} & \num{0.66} \\
 		\hline
-		\textbf{Humidity} & \num{35.10} & \num{93.50} & \num{65.28} & \num{66.10} & \num{13.78} & \num{0.08} & \num{2.18} & $\sim 0$ \\
+		\textbf{Humidity} & \si{\percent} & \num{35.10} & \num{93.50} & \num{65.28} & \num{66.10} & \num{13.78} & \num{0.08} & \num{2.18} & $\sim 0$ \\
 		\hline
-		\textbf{Rainfall} & \num{0} & \num{31.03} & \num{1.11} & \num{0} & \num{3.44} & \num{5.44} & \num{39.01} & \num{-0.06} \\
+		\textbf{Rainfall} & \si{\milli\meter} & \num{0} & \num{31.03} & \num{1.11} & \num{0} & \num{3.44} & \num{5.44} & \num{39.01} & \num{-0.06} \\
 		\hline
-		\textbf{Snowfall} & \num{0} & \num{157.50} & \num{0.78} & \num{0} & \num{9.61} & \num{14.45} & \num{219.19} & \num{-0.05} \\
+		\textbf{Snowfall} & \si{\centi\meter} & \num{0} & \num{157.50} & \num{0.78} & \num{0} & \num{9.61} & \num{14.45} & \num{219.19} & \num{-0.05} \\
 		\hline
-		\textbf{Wind speed} & \num{9.90} & \num{47.80} & \num{20.64} & \num{19.90} & \num{6.89} & \num{0.98} & \num{3.90} & \num{-0.26} \\
+		\textbf{Wind speed} & \si{\kilo\meter/\hour} & \num{9.90} & \num{47.80} & \num{20.64} & \num{19.90} & \num{6.89} & \num{0.98} & \num{3.90} & \num{-0.26} \\
 		\hline
-		\textbf{Cloud cover} & \num{0.10} & \num{100} & \num{39.45} & \num{37.15} & \num{29.79} & \num{0.35} &\num{ 1.95} & \num{-0.33} \\
+		\textbf{Cloud cover} & \si{\percent} & \num{0.10} & \num{100} & \num{39.45} & \num{37.15} & \num{29.79} & \num{0.35} &\num{ 1.95} & \num{-0.33} \\
 		\hline
-		\textbf{Visibility} & \num{6.50} & \num{16} & \num{15.29} & \num{16} & \num{1.54} & \num{-2.99} & \num{12.83} & \num{0.24} \\
+		\textbf{Visibility} & \si{\kilo\meter} & \num{6.50} & \num{16} & \num{15.29} & \num{16} & \num{1.54} & \num{-2.99} & \num{12.83} & \num{0.24} \\
 		\hline
-		\textbf{UV index} & \num{ 0} & \num{10} & \num{5.92} & \num{6} & \num{2.88} & \num{-0.21} & \num{1.84} & \num{0.46} \\
+		\textbf{UV index} & - & \num{ 0} & \num{10} & \num{5.92} & \num{6} & \num{2.88} & \num{-0.21} & \num{1.84} & \num{0.46} \\
 		\hline
 	\end{tabular}
 	\caption[Main statistics concerning weather variables]{main statistics concerning weather variables. The R2 index describes the linear correlation between a meteorological covariate and the mean number of daily pickups.}
