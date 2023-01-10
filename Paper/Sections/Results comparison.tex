@@ -9,22 +9,22 @@ After having analysed the results coming from estimates of the DCM and HDGM, i.e
 		\hline
 		\textit{} & \textit{Variable} & \textit{Model} & \textit{Min.} & \textit{Max.} & \textit{Mean} & \textit{Median} & \textit{Std}\\
 		\hline
-		\multirow{6}{4em}{\textbf{RMSE$_t$}} & \multirow{3}{4em}{Pickups [pks/day]} & DCM & \num{0.31} & \num{52.23} & \num{12.74} & \num{10.67} & \num{9.77} \\ \cline{3-8}
-		& & HDGM & \num{0} & \num{36.86} & \num{11.12} & \num{11.13} & \num{6.21} \\ \cline{3-8}
-		& & f-HDGM & \num{3.60} & \num{29.39} & \num{10.81} & \num{10.04} & \num{4.73} \\ \cline{2-8}
-		& \multirow{3}{4em}{Duration [\si{\min}]} & DCM & \num{1} & \num{1001} & \num{33} & \num{11} & \num{99} \\ \cline{3-8} 
-		& & HDGM & \num{0} & \num{2223} & \num{42} & \num{335} & \num{176} \\ \cline{3-8}
+		\multirow{6}{4em}{\textbf{RMSE$_t$}} & \multirow{3}{4em}{Pickups [pks/day]} & DCM & \cellcolor{orange}\num{0.31} & \cellcolor{red}\num{52.23} & \cellcolor{red}\num{12.74} & \cellcolor{orange}\num{10.67} & \cellcolor{red}\num{9.77} \\ \cline{3-8}
+		& & HDGM & \cellcolor{green}\num{0} & \cellcolor{orange}\num{36.86} & \cellcolor{orange}\num{11.12} & \cellcolor{red}\num{11.13} & \cellcolor{orange}\num{6.21} \\ \cline{3-8}
+		& & f-HDGM & \cellcolor{red}\num{3.60} & \cellcolor{green}\num{29.39} & \cellcolor{green}\num{10.81} & \cellcolor{green}\num{10.04} & \cellcolor{green}\num{4.73} \\ \cline{2-8}
+		& \multirow{3}{4em}{Duration [\si{\min}]} & DCM & \cellcolor{red}\num{1} & \cellcolor{green}\num{1001} & \cellcolor{green}\num{33} & \cellcolor{green}\num{11} & \cellcolor{green}\num{99} \\ \cline{3-8} 
+		& & HDGM & \cellcolor{green}\num{0} & \cellcolor{red}\num{2223} & \cellcolor{red}\num{42} & \cellcolor{red}\num{335} & \cellcolor{red}\num{176} \\ \cline{3-8}
 		& & f-HDGM & - & - & - & - & - \\
 		\hline
-		\multirow{6}{4em}{\textbf{RMSE$_s$}} & \multirow{3}{4em}{Pickups [pks/day]} & DCM & \num{4.98} & \num{47.87} & \num{12.24} & \num{7.82} & \num{10.74} \\ \cline{3-8}
-		& & HDGM & \num{3.54} & \num{30.39} & \num{10.64} & \num{7.74} & \num{7.23} \\ \cline{3-8}
-		& & f-HDGM & \num{3.44} & \num{27.24} & \num{9.92} & \num{6.30} & \num{6.60} \\ \cline{2-8}
-		& \multirow{3}{4em}{Duration [\si{\min}]} & DCM & \num{15} & \num{229} & \num{79} & \num{43} & \num{70} \\ \cline{3-8} 
-		& & HDGM & \num{8} & \num{620} & \num{107} & \num{46} & \num{150} \\ \cline{3-8}
+		\multirow{6}{4em}{\textbf{RMSE$_s$}} & \multirow{3}{4em}{Pickups [pks/day]} & DCM & \cellcolor{red}\num{4.98} & \cellcolor{red}\num{47.87} & \cellcolor{red}\num{12.24} & \cellcolor{red}\num{7.82} & \cellcolor{red}\num{10.74} \\ \cline{3-8}
+		& & HDGM & \cellcolor{orange}\num{3.54} & \cellcolor{orange}\num{30.39} & \cellcolor{orange}\num{10.64} & \cellcolor{orange}\num{7.74} & \cellcolor{orange}\num{7.23} \\ \cline{3-8}
+		& & f-HDGM & \cellcolor{green}\num{3.44} & \cellcolor{green}\num{27.24} & \cellcolor{green}\num{9.92} & \cellcolor{green}\num{6.30} & \cellcolor{green}\num{6.60} \\ \cline{2-8}
+		& \multirow{3}{4em}{Duration [\si{\min}]} & DCM & \cellcolor{red}\num{15} & \cellcolor{green}\num{229} & \cellcolor{green}\num{79} & \cellcolor{green}\num{43} & \cellcolor{green}\num{70} \\ \cline{3-8} 
+		& & HDGM & \cellcolor{green}\num{8} & \cellcolor{red}\num{620} & \cellcolor{red}\num{107} & \cellcolor{red}\num{46} & \cellcolor{red}\num{150} \\ \cline{3-8}
 		& & f-HDGM & - & - & - & - & - \\
 		\hline
 	\end{tabular}
-	\caption[Comparison between models in validation]{comparison between models in validation.}
+	\caption[Comparison between models in validation]{comparison between models in validation. The best results are shown in green, the worst ones in red and intermediate values in orange.}
 	\label{RMSE_final_comp}
 \end{table}
 
