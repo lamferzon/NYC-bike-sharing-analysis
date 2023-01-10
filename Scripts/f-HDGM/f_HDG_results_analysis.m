@@ -200,11 +200,44 @@ for i = 1:3
         path = "..\..\Paper\Images\Data analysis\f-HDGM\Validation\";
     end
     file_name = "RMSE_" + m_type + ".pdf";
-    
     % exportgraphics(t, path + file_name, 'BackgroundColor', 'none');
 end
 
 % save("..\..\Results\f_HDGM_results", "f_HDG_results");
+
+%% Comparison between RMSEs 
+
+t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
+nexttile
+plot(0:1:23, f_HDG_results.model_L.model_val.h_domain.RMSE_h)
+xlim([0 23])
+hold on
+plot(0:1:23, f_HDG_results.model_M.model_val.h_domain.RMSE_h)
+plot(0:1:23, f_HDG_results.model_S.model_val.h_domain.RMSE_h)
+axis = gca;
+axis.XGrid = 'on';
+axis.XAxis.TickLabelInterpreter = 'latex';
+axis.YAxis.TickLabelInterpreter = 'latex';
+ylabel("RMSE$_h$", 'Interpreter', 'latex')
+xlabel("Hour", 'Interpreter', 'latex')
+legend("Large model", "Medium model", "Small model", 'Interpreter', 'latex', 'Location', 'northwest')
+
+nexttile
+plot(daily_data.datetime_calendar, f_HDG_results.model_L.model_val.t_domain.RMSE_t)
+hold on
+plot(daily_data.datetime_calendar, f_HDG_results.model_M.model_val.t_domain.RMSE_t)
+plot(daily_data.datetime_calendar, f_HDG_results.model_S.model_val.t_domain.RMSE_t)
+axis = gca;
+axis.XGrid = 'on';
+axis.XAxis.TickLabelInterpreter = 'latex';
+axis.YAxis.TickLabelInterpreter = 'latex';
+ylabel("RMSE$_t$", 'Interpreter', 'latex')
+xlabel("Day", 'Interpreter', 'latex')
+legend("Large model", "Medium model", "Small model", 'Interpreter', 'latex', 'Location', 'northwest')
+
+path = "..\..\Paper\Images\Data analysis\f-HDGM\Chosen\";
+file_name = "RMSE_comp.pdf";
+% exportgraphics(t, path + file_name, 'BackgroundColor', 'none');
 
 %% Profiles plotting
 
