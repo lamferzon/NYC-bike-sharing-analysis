@@ -151,7 +151,7 @@ for i = 1:3
     axis.XGrid = 'on';
     axis.XAxis.TickLabelInterpreter = 'latex';
     axis.YAxis.TickLabelInterpreter = 'latex';
-    ylabel("RMSE$_h$", 'Interpreter', 'latex')
+    ylabel("RMSE$_h$ [pks/h]", 'Interpreter', 'latex')
     xlabel("Hour", 'Interpreter', 'latex')
 
     yyaxis right
@@ -163,7 +163,7 @@ for i = 1:3
     axis = gca;
     axis.YAxis(2,1).TickLabelInterpreter = 'latex';
     axis.YColor = "#D95319";
-    ylabel("MSE$_h$", 'Interpreter', 'latex')
+    ylabel("MSE$_h$ [pks$^2$/h$^2$]", 'Interpreter', 'latex')
     legend("No rounding", "Rounding", "", "", 'Interpreter', 'latex', 'Location', 'northwest')
 
     nexttile
@@ -185,7 +185,7 @@ for i = 1:3
     axis.XGrid = 'on';
     axis.XAxis.TickLabelInterpreter = 'latex';
     axis.YAxis.TickLabelInterpreter = 'latex';
-    ylabel("RMSE$_t$", 'Interpreter', 'latex')
+    ylabel("RMSE$_t$ [pks/h]", 'Interpreter', 'latex')
     xlabel("Day", 'Interpreter', 'latex')
     yline(mean(winter_RMSE), '--', 'Color', "#D95319", 'Interpreter', 'latex', 'LineWidth', 1)
     yline(mean(lockdown_RMSE), '--', 'Color', "#77AC30", 'LineWidth', 1, 'Interpreter', 'latex')
@@ -209,31 +209,38 @@ end
 
 t = tiledlayout(2, 1, 'TileSpacing', 'Compact', 'Padding', 'Compact');
 nexttile
-plot(0:1:23, f_HDG_results.model_L.model_val.h_domain.RMSE_h)
+plot(0:1:23, f_HDG_results.model_L.model_val.h_domain.RMSE_h, 'Color', "#0000FF")
 xlim([0 23])
 hold on
-plot(0:1:23, f_HDG_results.model_M.model_val.h_domain.RMSE_h)
-plot(0:1:23, f_HDG_results.model_S.model_val.h_domain.RMSE_h)
+plot(0:1:23, f_HDG_results.model_M.model_val.h_domain.RMSE_h, 'Color', "#00FFFF")
+plot(0:1:23, f_HDG_results.model_S.model_val.h_domain.RMSE_h, 'Color', "#4DBEEE",...
+    'LineStyle', '-.', 'LineWidth', 1.5)
 axis = gca;
 axis.XGrid = 'on';
 axis.XAxis.TickLabelInterpreter = 'latex';
 axis.YAxis.TickLabelInterpreter = 'latex';
-ylabel("RMSE$_h$", 'Interpreter', 'latex')
+ylabel("RMSE$_h$ [pks/h]", 'Interpreter', 'latex')
 xlabel("Hour", 'Interpreter', 'latex')
 legend("Large model", "Medium model", "Small model", 'Interpreter', 'latex', 'Location', 'northwest')
 
 nexttile
-plot(daily_data.datetime_calendar, f_HDG_results.model_L.model_val.t_domain.RMSE_t)
+plot(daily_data.datetime_calendar, f_HDG_results.model_L.model_val.t_domain.RMSE_t,...
+    'Color', "#4DBEEE")
 hold on
-plot(daily_data.datetime_calendar, f_HDG_results.model_M.model_val.t_domain.RMSE_t)
-plot(daily_data.datetime_calendar, f_HDG_results.model_S.model_val.t_domain.RMSE_t)
+plot(daily_data.datetime_calendar, f_HDG_results.model_M.model_val.t_domain.RMSE_t,...
+    'Color', "#00FFFF")
+plot(daily_data.datetime_calendar, f_HDG_results.model_S.model_val.t_domain.RMSE_t,...
+    'Color', "#4DBEEE", 'LineStyle', '-.', 'LineWidth', 1)
+xlim([daily_data.datetime_calendar(1,1) daily_data.datetime_calendar(1,366)])
+ylim([0 2.05])
 axis = gca;
 axis.XGrid = 'on';
 axis.XAxis.TickLabelInterpreter = 'latex';
 axis.YAxis.TickLabelInterpreter = 'latex';
-ylabel("RMSE$_t$", 'Interpreter', 'latex')
+ylabel("RMSE$_t$ [pks/h]", 'Interpreter', 'latex')
 xlabel("Day", 'Interpreter', 'latex')
-legend("Large model", "Medium model", "Small model", 'Interpreter', 'latex', 'Location', 'northwest')
+legend("Large model", "Medium model", "Small model", 'Interpreter', 'latex', 'Location', 'south',...
+    'NumColumns', 3)
 
 path = "..\..\Paper\Images\Data analysis\f-HDGM\Chosen\";
 file_name = "RMSE_comp.pdf";

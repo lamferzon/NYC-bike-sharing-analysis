@@ -8,9 +8,9 @@ To reach our aims, i.e. explaining the mean number of rentals (univariate case) 
 After having selected the most significant covariates employing a backward approach based on the p-values of t-test (except for the f-HDGM) and estimated models through the EM algorithm, we have cross-validated them using \num{36} fixed pickup stations for training and \num{15} fixed rental stations for testing chosen casually, i.e. we have decided to use a \num{70}-\num{30} validation approach. In order to evaluate the performances of the estimated models we have taken into account three statistical indices:
 \begin{itemize}
 	\item \textbf{RMSE}$\boldsymbol{_h}$ (and \textbf{MSE}$\boldsymbol{_h}$) (only for f-HDG model): fixed an hour \textit{h}, it expresses the mean hourly non-square validation error obtained iterating on days \textit{t} and space points $\boldsymbol{s}$, i.e. on rental stations;  
-	\item \textbf{RMSE}$\boldsymbol{_t}$ (and \textbf{MSE}$\boldsymbol{_t}$): fixed a day \textit{t}, it describes the mean daily (hourly for f-HDG) non-square validation error obtained iterating on space points $\boldsymbol{s}$ (and hour $h$ for f-HDG);
-	\item \textbf{RMSE}$\boldsymbol{_s}$ (and \textbf{MSE}$\boldsymbol{_s}$): fixed a space points $\boldsymbol{s}$, it expresses the mean daily (hourly for f-HDG) non-square validation error obtained iterating on days $t$ (and hour $h$ for f-HDG).
-\end{itemize}For doing each of these operations, i.e. model selection, estimation and validation, we have employed \textbf{D-STEM} v\num{2}, a software for MATLAB developed for modelling functional spatio-temporal data.
+	\item \textbf{RMSE}$\boldsymbol{_t}$ (and \textbf{MSE}$\boldsymbol{_t}$): fixed a day \textit{t}, it describes the mean daily (hourly for f-HDGM) non-square validation error obtained iterating on space points $\boldsymbol{s}$ (and hour $h$ for f-HDGM);
+	\item \textbf{RMSE}$\boldsymbol{_s}$ (and \textbf{MSE}$\boldsymbol{_s}$): fixed a space points $\boldsymbol{s}$, it expresses the mean daily (hourly for f-HDGM) non-square validation error obtained iterating on days $t$ (and hour $h$ for \mbox{f-HDGM}).
+\end{itemize}For doing each of these operations, i.e. model selection, estimation and validation, we have employed \textbf{D-STEM} v\num{2}, a software for MATLAB developed for modelling spatio-temporal data.
 
 \import{Sections/Subsections}{Met. DCM.tex}
 \import{Sections/Subsections}{Met. HDGM.tex}
