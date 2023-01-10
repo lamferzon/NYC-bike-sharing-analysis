@@ -268,18 +268,22 @@ RMSE_s_p_MIN=round(min(RMSE_s_p));
 RMSE_s_p_MAX=round(max(RMSE_s_p));
 RMSE_s_p_MEAN=round(mean(RMSE_s_p));
 RMSE_s_p_MEDIAN=round(median(RMSE_s_p));
+RMSE_s_p_STD=round(std(RMSE_s_p));
 
 RMSE_s_d_MIN=round(min(RMSE_s_d));
 RMSE_s_d_MAX=round(max(RMSE_s_d));
 RMSE_s_d_MEAN=round(mean(RMSE_s_d));
 RMSE_s_d_MEDIAN=round(median(RMSE_s_d));
+RMSE_s_d_STD=round(std(RMSE_s_d));
 
 RMSE_t_p_MIN=round(min(RMSE_t_p));
 RMSE_t_p_MAX=round(max(RMSE_t_p));
 RMSE_t_p_MEAN=round(mean(RMSE_t_p));
 RMSE_t_p_MEDIAN=round(median(RMSE_t_p));
+RMSE_t_p_STD=round(std(RMSE_t_p));
 
 RMSE_t_d_MIN=round(min(RMSE_t_d));
 RMSE_t_d_MAX=round(max(RMSE_t_d));
 RMSE_t_d_MEAN=round(mean(RMSE_t_d));
 RMSE_t_d_MEDIAN=round(median(RMSE_t_d));
+RMSE_t_d_STD=round(std(RMSE_t_d));
