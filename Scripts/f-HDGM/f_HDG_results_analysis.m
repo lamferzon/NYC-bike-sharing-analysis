@@ -83,8 +83,8 @@ for i = 1:3
     y_back = model.stem_validation_result.y_back;
     y_back_hat = model.stem_validation_result.y_hat_back;
     % t
-    [MSE_t, RMSE_t, MAPE_t] = idxCalculator(y_back, y_back_hat, "t", 0);
-    [MSE_t_round, RMSE_t_round, MAPE_t_round] = idxCalculator(y_back, y_back_hat, "t", 1);
+    [MSE_t, RMSE_t, MAPE_t] = idxCalculatorHourly(y_back, y_back_hat, "t", 0);
+    [MSE_t_round, RMSE_t_round, MAPE_t_round] = idxCalculatorHourly(y_back, y_back_hat, "t", 1);
     mod.model_val.t_domain.MSE_t = MSE_t;
     mod.model_val.t_domain.MSE_t_round = MSE_t_round;
     mod.model_val.t_domain.RMSE_t = RMSE_t;
@@ -94,8 +94,8 @@ for i = 1:3
     mod.model_val.t_domain.R2_t = model.stem_validation_result.cv_R2_t;
     mod.model_val.t_domain.summary_t = resTableCreator(mod.model_val.t_domain, "t");
     % h
-    [MSE_h, RMSE_h, MAPE_h] = idxCalculator(y_back, y_back_hat, "h", 0);
-    [MSE_h_round, RMSE_h_round, MAPE_h_round] = idxCalculator(y_back, y_back_hat, "h", 1);
+    [MSE_h, RMSE_h, MAPE_h] = idxCalculatorHourly(y_back, y_back_hat, "h", 0);
+    [MSE_h_round, RMSE_h_round, MAPE_h_round] = idxCalculatorHourly(y_back, y_back_hat, "h", 1);
     mod.model_val.h_domain.MSE_h = MSE_h;
     mod.model_val.h_domain.MSE_h_round = MSE_h_round;
     mod.model_val.h_domain.RMSE_h = RMSE_h;
@@ -105,8 +105,8 @@ for i = 1:3
     mod.model_val.h_domain.R2_h = model.stem_validation_result.cv_R2_h;
     mod.model_val.h_domain.summary_h = resTableCreator(mod.model_val.h_domain, "h");
     % s
-    [MSE_s, RMSE_s, MAPE_s] = idxCalculator(y_back, y_back_hat, "s", 0);
-    [MSE_s_round, RMSE_s_round, MAPE_s_round] = idxCalculator(y_back, y_back_hat, "s", 1);
+    [MSE_s, RMSE_s, MAPE_s] = idxCalculatorHourly(y_back, y_back_hat, "s", 0);
+    [MSE_s_round, RMSE_s_round, MAPE_s_round] = idxCalculatorHourly(y_back, y_back_hat, "s", 1);
     mod.model_val.s_domain.MSE_s = MSE_s;
     mod.model_val.s_domain.MSE_s_round = MSE_s_round;
     mod.model_val.s_domain.RMSE_s = RMSE_s;
@@ -115,6 +115,28 @@ for i = 1:3
     mod.model_val.s_domain.MAPE_s_round = MAPE_s_round;
     mod.model_val.s_domain.R2_s = model.stem_validation_result.cv_R2_s;
     mod.model_val.s_domain.summary_s = resTableCreator(mod.model_val.s_domain, "s");
+    
+    % daily data, t
+    [MSE_t_daily, RMSE_t_daily, MAPE_t_daily] = idxCalculatorDaily(y_back, y_back_hat, "t", 0);
+    [MSE_t_daily_round, RMSE_t_daily_round, MAPE_t_daily_round] = idxCalculatorDaily(y_back, y_back_hat, "t", 1);
+    mod.model_val.daily_data.t_domain.MSE_t = MSE_t_daily;
+    mod.model_val.daily_data.t_domain.MSE_t_round = MSE_t_daily_round;
+    mod.model_val.daily_data.t_domain.RMSE_t = RMSE_t_daily;
+    mod.model_val.daily_data.t_domain.RMSE_t_round = RMSE_t_daily_round;
+    mod.model_val.daily_data.t_domain.MAPE_t = MAPE_t_daily;
+    mod.model_val.daily_data.t_domain.MAPE_t_round = MAPE_t_daily_round;
+    mod.model_val.daily_data.t_domain.summary_t = resTableCreator(mod.model_val.daily_data.t_domain, "t");
+
+    % daily data, s
+    [MSE_s_daily, RMSE_s_daily, MAPE_s_daily] = idxCalculatorDaily(y_back, y_back_hat, "s", 0);
+    [MSE_s_daily_round, RMSE_s_daily_round, MAPE_s_daily_round] = idxCalculatorDaily(y_back, y_back_hat, "s", 1);
+    mod.model_val.daily_data.s_domain.MSE_s = MSE_s_daily;
+    mod.model_val.daily_data.s_domain.MSE_s_round = MSE_s_daily_round;
+    mod.model_val.daily_data.s_domain.RMSE_s = RMSE_s_daily;
+    mod.model_val.daily_data.s_domain.RMSE_s_round = RMSE_s_daily_round;
+    mod.model_val.daily_data.s_domain.MAPE_s = MAPE_s_daily;
+    mod.model_val.daily_data.s_domain.MAPE_s_round = MAPE_s_daily_round;
+    mod.model_val.daily_data.s_domain.summary_s = resTableCreator(mod.model_val.daily_data.s_domain, "s");
 
     switch i
         case 1
@@ -254,9 +276,12 @@ t_start = day(datetime(2020, 7, 1),"dayofyear");
 t_end = day(datetime(2020, 7, 30),"dayofyear");
 stem_model_M.plot_profile(lat0, lon0, t_start, t_end);
 
+%%
+[MSE, RMSE, MAPE] = idxCalculatorDaily(y_back, y_back_hat, "s", 0);
+
 %% Functions
 
-function [MSE, RMSE, MAPE] = idxCalculator(y, y_hat, domain, roundYoN)
+function [MSE, RMSE, MAPE] = idxCalculatorHourly(y, y_hat, domain, roundYoN)
     T = size(y{1,1}, 2);
     H = size(y, 1);
     S = size(y{1,1}, 1);
@@ -328,6 +353,69 @@ function [MSE, RMSE, MAPE] = idxCalculator(y, y_hat, domain, roundYoN)
                 MSE(s, 1) = sum1/(T*H);
                 RMSE(s, 1) = sqrt(sum1/(T*H));
                 MAPE(s, 1) = (sum2/(T*H))*100;
+            end
+    end
+end
+
+function [MSE, RMSE, MAPE] = idxCalculatorDaily(y, y_hat, domain, roundYoN)
+    T = size(y{1,1}, 2);
+    H = size(y, 1);
+    S = size(y{1,1}, 1);
+    if roundYoN == 1
+        for i = 1:H
+            y_hat{i,1} = round(y_hat{i,1});
+        end
+    end
+    switch domain
+        case "t"
+            MSE = zeros(T, 1);
+            RMSE = zeros(T, 1);
+            MAPE = zeros(T, 1);
+            for t = 1:T
+                sum1 = 0;
+                sum2 = 0;
+                for s = 1:S
+                    daily_y = 0;
+                    daily_y_hat = 0; 
+                    for h = 1:H
+                        daily_y = daily_y + y{h,1}(s,t);
+                        daily_y_hat = daily_y_hat + y_hat{h,1}(s,t);
+                    end
+                        sum1 = sum1 + (daily_y - daily_y_hat)^2;
+                    if daily_y == 0
+                        sum2 = sum2 + abs((daily_y - daily_y_hat)/1);
+                    else
+                        sum2 = sum2 + abs((daily_y - daily_y_hat)/daily_y);
+                    end
+                end
+                MSE(t, 1) = sum1/(S);
+                RMSE(t, 1) = sqrt(sum1/(S));
+                MAPE(t, 1) = (sum2/(S))*100;
+            end
+        case "s"
+            MSE = zeros(S, 1);
+            RMSE = zeros(S, 1);
+            MAPE = zeros(S, 1);
+            for s = 1:S
+                sum1 = 0;
+                sum2 = 0;
+                for t = 1:T
+                    daily_y = 0;
+                    daily_y_hat = 0; 
+                    for h = 1:H
+                        daily_y = daily_y + y{h,1}(s,t);
+                        daily_y_hat = daily_y_hat + y_hat{h,1}(s,t);
+                    end
+                        sum1 = sum1 + (daily_y - daily_y_hat)^2;
+                    if daily_y == 0
+                        sum2 = sum2 + abs((daily_y - daily_y_hat)/1);
+                    else
+                        sum2 = sum2 + abs((daily_y - daily_y_hat)/daily_y);
+                    end
+                end
+                MSE(s, 1) = sum1/(T);
+                RMSE(s, 1) = sqrt(sum1/(T));
+                MAPE(s, 1) = (sum2/(T))*100;
             end
     end
 end

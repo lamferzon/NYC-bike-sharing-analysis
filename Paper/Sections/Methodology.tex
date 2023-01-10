@@ -2,7 +2,7 @@
 To reach our aims, i.e. explaining the mean number of rentals (univariate case) and the mean trip duration (bivariate case) for each pickup station using the covariates previously described, we have decided to employ the following spatio-temporal models:
 \begin{itemize}
 	\item the \textbf{Dynamic Coregionalization Model (DCM)} for daily data (\cite{dcm});
-	\item the \textbf{Hidden Dynamic Geostatistical Model (HDGM)} for daily data(\cite{hdgm});
+	\item the \textbf{Hidden Dynamic Geostatistical Model (HDGM)} for daily data (\cite{Calculli2014MultivariateHD});
 	\item the \textbf{Functional Hidden Dynamic Geostatistical Model (f-HDGM)} for hourly data (\cite{dstem}).
 \end{itemize}
 After having selected the most significant covariates employing a backward approach based on the p-values of t-test (except for the f-HDGM) and estimated models through the EM algorithm, we have cross-validated them using \num{36} fixed pickup stations for training and \num{15} fixed rental stations for testing chosen casually, i.e. we have decided to use a \num{70}-\num{30} validation approach. In order to evaluate the performances of the estimated models we have taken into account three statistical indices:

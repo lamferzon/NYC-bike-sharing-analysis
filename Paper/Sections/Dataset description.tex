@@ -18,7 +18,7 @@ This partition contains all the information relating to the bike rental:
 \end{itemize}
 All these variables are both space-variant and time-variant, except for the distance that is a time-invariant covariate which we have obtained by carrying out an in-depth analysis of public transport network in Jersey City. In table \ref{Bike_sharing_stats} we have summarized some statistics regarding the bike sharing variables which we have decided to take into account in our analysis.
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	\subfigure[]{\label{Distances_map}\includegraphics[height=172px]{Images/Dataset description/Chosen/Distances_map}}\quad
 	\subfigure[]{\label{Train_map}\includegraphics[height=172px]{Images/Dataset description/Chosen/Train_map}}\quad
@@ -26,7 +26,7 @@ All these variables are both space-variant and time-variant, except for the dist
 	\label{Maps}
 \end{figure}
  
-\begin{table}[h!]
+\begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{c|c|c|c|c|c|c|c}
@@ -59,7 +59,7 @@ The weather frequency variables that Visual Crossing provides to users with dail
 \end{itemize}
 Weather variables are time-variant, but space-invariant because the \num{51} rental stations belong to the same geographical are. In table \ref{Weather_stats} we have summarized some of the most important statistics indicators to describe the distribution of each weather variable.
 
-\begin{table}[h!]
+\begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{c|c|c|c|c|c|c|c|c}
@@ -89,14 +89,14 @@ Weather variables are time-variant, but space-invariant because the \num{51} ren
 	\label{Weather_stats}
 \end{table}
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	\subfigure[]{\label{T_plot}\includegraphics[height=172px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_plot}}\quad
 	\subfigure[]{\label{Rain_plot}\includegraphics[height=172px]{Images/Dataset description/Chosen/Rainfall_plot}}\quad
 	\caption{comparison between the trend of the mean number of daily pickups calculated on the entire bike sharing network and two weather variables, i.e. the mean daily feels-like temperature (a) and the daily rainfall (b). Through these plots we can see that temperature has a positive effects on rentals, instead rainfall a negative impact.}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	\subfigure[]{\label{Humidity_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Humidity_box}}\quad
 	\subfigure[]{\label{Wind_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Wind_speed_box}}\quad
@@ -113,7 +113,7 @@ We have hypothesized that not only weather may influence the demand of bicycle r
 \end{itemize}
 Dummy variables are time-variant, but space-invariant.
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	\centering
 	\subfigure[]{\label{Trend_ld}\includegraphics[height=172px]{Images/Dataset description/Chosen/Trend_ld}}\quad

@@ -9,7 +9,7 @@
 \end{itemize}
  In each of them we have also introduced a constant in order to allow \textbf{D-STEM} to estimate through the EM algorithm the mean number of hourly bike rentals. The aim of this study is to determinate how the relevance of the latent component $\boldsymbol{z}(\boldsymbol{s}, t)$ changes as the number of covariates, i.e. the dimension of $\boldsymbol{\beta}(h)$, varies. In table \ref{V_z_values} are shown the $n_z$ values of the variance of latent component; we can see that variability increases as the model complexity decreases. The reason is the following: if we decide to use a less number of covariates to describe the bike sharing phenomenon, then the descriptive power of $\boldsymbol{z}(\boldsymbol{s}, t)$ increases in order to cope with what the global component $\boldsymbol{x}(\boldsymbol{s}, t, h)' \cdot \boldsymbol{\beta}(h)$ is not able to explain due to reduction of the model complexity.
  
- \begin{table}[h!]
+ \begin{table}
  	\centering
  	\renewcommand\arraystretch{1.3}
  	\begin{tabular}{c|c|c|c|c|c|c|c|c}
@@ -32,7 +32,7 @@ We have decided to describe in detail the \textit{medium model}, a fair compromi
 \subsubsection{Model parameters}
 After having estimated the parameters of the medium model, we have performed the $\chi^2$-test to evaluate the significance of the regressors. Results are shown in table \ref{Chi2_p_values}: all p-values are less than \SI{5}{\percent}, therefore we can conclude all functions $\boldsymbol{\beta}(h)$ related to the chosen covariates are significantly different from zero and consequently give their contribute to explain $\mathit{y}(\boldsymbol{s}, \textit{t}, \textit{h})$, i.e. the number of hourly pickups at a rental station.
 
-\begin{table}[h!]
+\begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{c|c|c}
@@ -57,7 +57,7 @@ After having estimated the parameters of the medium model, we have performed the
 \noindent
 In the figure \ref{Trend_beta_M}, instead, we have reported the daily trend of the estimated functions $\boldsymbol{\beta}(h)$ and the variance of $\epsilon$, i.e. $\sigma_{\epsilon}(h)$. It is interesting the trend of $\beta_{const}(h)$ which expresses the mean number of daily pickups during the day; there are two peaks that probably are related with start and end work times. All others variables contribute positively in explaining $y(\boldsymbol{s}, t, h)$, except for the distance and the dummy lockdown; the negative trend of the former is correlated to the fact that as the distance from the nearest subway/train station increases an individual is less incentivized to use bike, that of the latter, instead, is caused to the impossibility to leave own home during the Pause Program in NYC. Moreover, $\beta_{lockdown}$ is also highly uncertain because it's different from zero for only few days. Finally, analysing the behaviour of $\sigma_{\epsilon}(h)$ we can note the estimated model performs worse around 20 o'clock.
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	\includegraphics[height=222px]{Images/Data analysis/f-HDGM/Chosen/Trend_beta_M.pdf}
 	\caption[Estimated $\beta_{const}(h)$, $\beta_T(h)$, $\beta_{distance}(h)$, $\beta_{holidays}(h)$ and $\beta_{lockdown}(h)$ (f-HDGM)]{estimated $\beta_{const}(h)$, $\beta_T(h)$, $\beta_{distance}(h)$, $\beta_{holidays}(h)$, $\beta_{lockdown}(h)$ and $\sigma_{\epsilon}^2(h)$ with \SI{90}{\percent}, \SI{95}{\percent} and \SI{99}{\percent} confidence bands, respectively, shown through the different shades, f-HDGM.}
@@ -67,14 +67,14 @@ In the figure \ref{Trend_beta_M}, instead, we have reported the daily trend of t
 \subsubsection{Model validation}
 In figure \ref{RMSE_M}, first plot, is shown the trend of RMSE$_h$ and RMS$_h$; thanks to the latter differences are accentuated, therefore we can note as the medium model in validation performs worse in peak hours. Dotted line describes the case in which we round $\hat{y}(\boldsymbol{s}, t, h)$ to the nearest integer. In the second plot, instead, is shown the behaviour of RMSE$_t$ during \num{2020}; we can notice the period in which the estimated model performs worse is in summer, however the range of values assumed by this statistical index is not wide, therefore differences between means in each period are not particularly marked. Finally, in figure \ref{RMSE_comp} is reported a comparison between the behaviours in validation of the three estimated models; albeit slightly we can note that the small model is the best because probably, thanks to his reduced complexity, doesn't go into overfitting. We please you to read table \ref{RMSE_f-HDGM_stats} for more information concerning RMSE$_h$, RMSE$_t$ and RMSE$_s$.
 
-\begin{figure}[h!]
+\begin{figure}
 	\centering
 	\subfigure[]{\label{RMSE_M}\includegraphics[height=177px]{Images/Data analysis/f-HDGM/Chosen/RMSE_M}}\quad
 	\subfigure[]{\label{RMSE_comp}\includegraphics[height=177px]{Images/Data analysis/f-HDGM/Chosen/RMSE_comp}}\quad
 	\caption[Trends of RMSE$_h$ and RMSE$_t$ concerning medium model (a) and comparison between the behaviours in validation of the three estimated models (f-HDGM)]{trends of RMSE$_h$ and RMSE$_t$ concerning medium model (a) and comparison between the behaviours in validation of the three estimated models, f-HDGM.}
 \end{figure}
 
-\begin{table}[h!]
+\begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
 	\begin{tabular}{c|c|c|c|c|c}
