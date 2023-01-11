@@ -25,6 +25,7 @@ After obtaining the various models, we want to evaluate their performance in com
 \end{table}
 
 The  table \ref{Log-likelihoods DCM} compares the likelihood models and we can see the pickups selective univariate model have the lowest log-likelihoods while the bivariate selected model have the highest.
+
 \begin{table}
 	\centering
 	\renewcommand\arraystretch{1.3}
@@ -43,8 +44,6 @@ The  table \ref{Log-likelihoods DCM} compares the likelihood models and we can s
 	\label{Log-likelihoods DCM}
 \end{table}
 
-
-
 \subsubsection{Model analysis}
 
 In the figure \ref{Trend_zeta_latente univariato} shows the trend of the latent z interacting with the covariates:
@@ -55,7 +54,7 @@ In the figure \ref{Trend_zeta_latente univariato} shows the trend of the latent 
 \end{itemize}
 \begin{figure}
 	\centering
-	\includegraphics[height=200px]{Images/pickupsfull.png}
+	\includegraphics[height=200px]{Images/Data analysis/DCM/Trend_z_pickups.pdf}
 	\caption[Estimated of latent z]{estimated $z_{1}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by kalman smoother in the univariate model for pickups}
 	\label{Trend_zeta_latente univariato}
 	
@@ -69,7 +68,7 @@ In the figure \ref{Trend_zeta_latente} shows the trend of the latent z interacti
 \end{itemize}
 \begin{figure}
 	\centering
-	\includegraphics[height=250px]{Images/biv_sel.png}
+	\includegraphics[height=250px]{Images/Data analysis/DCM/Trend_z_biv.pdf}
 	\caption[Estimated of latent z]{estimated $z_{1}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by kalman smoother in the univariate model for pickups}
 	\label{Trend_zeta_latente}
 \end{figure}
