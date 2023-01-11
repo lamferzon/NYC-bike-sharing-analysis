@@ -1,9 +1,9 @@
 # Statistical analysis of Jersey City bike sharing data using spatio-temporal models #
 
-## Contributors ##
-+ Alessandro CHAAR, postgraduate in Computer Engineering at University of Bergamo.
-+ Lorenzo LEONI, postgraduate in Computer Engineering at University of Bergamo.
-+ Nicola ZAMBELLI, postgraduate in Computer Engineering at University of Bergamo.
+## Authors ##
++ **Alessandro CHAAR**, postgraduate in Computer Engineering at University of Bergamo.
++ **Lorenzo LEONI**, postgraduate in Computer Engineering at University of Bergamo.
++ **Nicola ZAMBELLI**, postgraduate in Computer Engineering at University of Bergamo.
 
 ![Image 1](Paper/Images/For_README/Image_1.svg)
 - [x] *Map of bike sharing and subway/train stations in Jersey City*.
