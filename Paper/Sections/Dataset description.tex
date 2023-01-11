@@ -14,7 +14,6 @@ This partition contains all the information relating to the bike rental:
 	\item \textbf{subscribers counter}: number of customers who pick-up a bike at a rental station having an annual subscription;
 	\item \textbf{customers counter}: number of customers who pick-up a bike at a rental station having a \num{4}-hour pass or a \num{3}-day pass;
 	\item \textbf{distance}: indicates the distance between a rental station and the nearest train or subway station (figure \ref{Distances_map}).
-	
 \end{itemize}
 All these variables are both space-variant and time-variant, except for the distance that is a time-invariant covariate which we have obtained by carrying out an in-depth analysis of public transport network in Jersey City. In table \ref{Bike_sharing_stats} we have summarized some statistics regarding the bike sharing variables which we have decided to take into account in our analysis.
 
@@ -22,7 +21,7 @@ All these variables are both space-variant and time-variant, except for the dist
 	\centering
 	\subfigure[]{\label{Distances_map}\includegraphics[height=172px]{Images/Dataset description/Chosen/Distances_map}}\quad
 	\subfigure[]{\label{Train_map}\includegraphics[height=172px]{Images/Dataset description/Chosen/Train_map}}\quad
-	\caption[]{map of the bike rental stations and of the nearest subway/train stations (a) and map of the public transport network in Jersey City (b); in particular the blue line indicates the path of the public transport service which reaches Manhattan, instead the yellow line those which extends over the entire Jersey area.}
+	\caption[Map of bike rental stations and of the nearest subway/train stations and map of the public transport network in Jersey City]{map of bike rental stations and of the nearest subway/train stations (a) and map of the public transport network in Jersey City (b); in particular the blue line indicates the path of the public transport service which reaches Manhattan, instead the yellow line those which extends over the entire Jersey area.}
 	\label{Maps}
 \end{figure}
  
@@ -93,7 +92,7 @@ Weather variables are time-variant, but space-invariant because the \num{51} ren
 	\centering
 	\subfigure[]{\label{T_plot}\includegraphics[height=172px]{Images/Dataset description/Chosen/Mean_feels_like_temperature_plot}}\quad
 	\subfigure[]{\label{Rain_plot}\includegraphics[height=172px]{Images/Dataset description/Chosen/Rainfall_plot}}\quad
-	\caption{comparison between the trend of the mean number of daily pickups calculated on the entire bike sharing network and two weather variables, i.e. the mean daily feels-like temperature (a) and the daily rainfall (b). Through these plots we can see that temperature has a positive effects on rentals, instead rainfall a negative impact.}
+	\caption[Comparison between the trend of the mean number of daily rentals and some weather variables]{comparison between the trend of the mean number of daily pickups calculated on the entire bike sharing network and two weather variables, i.e. the mean daily feels-like temperature (a) and the daily rainfall (b). Through these plots we can see that temperature has a positive effects on rentals, instead rainfall a negative impact.}
 \end{figure}
 
 \begin{figure}
@@ -102,7 +101,7 @@ Weather variables are time-variant, but space-invariant because the \num{51} ren
 	\subfigure[]{\label{Wind_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Wind_speed_box}}\quad
 	\subfigure[]{\label{Cloud_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/Cloud_cover_box}}\quad
 	\subfigure[]{\label{UV_box}\includegraphics[height=172px]{Images/Dataset description/Chosen/UV_index_box}}\quad
-	\caption{box-plots of some weather variables.}
+	\caption[Box-plots of some weather variables]{box-plots of some weather variables.}
 \end{figure}
 
 \subsection{Dummy variables}
@@ -118,5 +117,5 @@ Dummy variables are time-variant, but space-invariant.
 	\centering
 	\subfigure[]{\label{Trend_ld}\includegraphics[height=172px]{Images/Dataset description/Chosen/Trend_ld}}\quad
 	\subfigure[]{\label{Trend_sundays}\includegraphics[height=172px]{Images/Dataset description/Chosen/Trend_sundays}}\quad
-	\caption{in both graphs we can note as events influence the mean number of daily rentals. During the lockdown, in fact, there was not the possible to leave own home, instead in the weekends or during holidays a pickups' peak, either positive or negative, occurs.}
+	\caption[Behaviour of the mean number of daily rentals during the \num{2020} events]{in both graphs we can note as events influence the mean number of daily rentals. During the lockdown, in fact, there was not the possible to leave own home, instead in the weekends or during holidays a pickups' peak, either positive or negative, occurs.}
 \end{figure}
