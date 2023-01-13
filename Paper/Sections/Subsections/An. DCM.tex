@@ -1,96 +1,134 @@
 \subsection{Analysis of the DCM}
 
 \subsubsection{Model selection}
-In order to choose  parsimonious models with good performance, two different types of models are considered, namely, Full models, which contain all the available covariates (weather, distances, lockdown, holiday), and Selected models, which include only those covariates that are significant. The model selection was carried out on the univariate spatio-temporal process related to pickups, on the univariate spatio-process process related to trip duration and on the bivariate spatio-temporal process (pickup, trip duration). After obtaining the various models, we want to evaluate their performance in comparison to the full models and their predictive ability through the Cross Validation (table \ref{Cross-validation mean squared errors DCM}).
+In order to choose  parsimonious models with good performance, two different types of models are considered, namely, Full models, which contain all \num{12} covariates (weather, distances, lockdown, holiday) assigned to $x_{\beta}$, whereas initially only the constant was assigned to $x_{z}$, and Selected models, which include only those covariates that are significant.
+The model selection was carried out on the univariate spatio-temporal process related to pickups, on the univariate spatio-process process related to the average trip duration and on the bivariate spatio-temporal process (pickup, trip duration). 
+The model selection for each model consists in evaluating at each iteration, in removing the coviariate least significance until the model reaches a significance level of \num{5}\%. 
+In the selected model, after model selection on $x_{\beta}$, it was also done on $x_{z}$ by using a forward approach (on spatial and dummy covariates), and choosing the model with the lowest $rmse_{s}$ among those tested.
+After obtaining the various models, have been evaluated their performance in comparison to the full models and their predictive ability through the Cross Validation (table \ref{Cross-validation rmse_s DCM}). 
+The table \ref{Model_selection_pickups} shows the model selection related to the univariate process of the pickups,  after being performed on the $x_{\beta}$, it was performed on the coefficients of the latent variable $x_{z}$ and it resulted that with only the constant the lowest  $rmse_{s}$  is obtained.
 
-\begin{table}
+
+
+
+ \begin{table}[h!]
 	\centering
 	\renewcommand\arraystretch{1.3}
-	\begin{tabular}{c|cc|cc}
+	\begin{tabular}{c|c|c|c}
 		\hline
-		\multicolumn{1}{l|}{} & \multicolumn{2}{c|}{\textit{CV MSE, full model}} & \multicolumn{2}{c}{\textit{CV MSE, selected model} }\\ 
+		\textit{} & \textit{Number of}  &  &    \\
+		\textit{Step} & \textit{regressor in the}  & Least significant & p-value \\
+		\textit{Model} & \textit{model}  & regressor &  \\
 		\hline
-		\textit{Model} & \multicolumn{1}{c|}{\textit{Pickups}} & \textit{Trip duration} & \multicolumn{1}{c|}{\textit{Pickups}} & \textit{Trip duration} \\ 
+		\textbf{1} & \num{12} & visibility & \num{48.40}\%  \\
 		\hline
-		\textbf{2-variate } & \multicolumn{1}{c|}{0.9870}  & 0.9624   & \multicolumn{1}{c|}{0.6584}  & 0.8221   \\ 
+		\textbf{2} & \num{11} & holiday \num{48.05}\%  \\
 		\hline
-		\textbf{1-variate } & \multicolumn{1}{c|}{0.4654}  & 0.7825   & \multicolumn{1}{c|}{0.6685}  & 0.7868   \\ 
+		\textbf{3} & \num{10} & snowfall & \num{45.11}\%  \\
+		\hline
+		\textbf{4} & \num{9} & humidity & \num{38.17}\%  \\
+		\hline
+		\textbf{5} & \num{8} & windspeed & \num{6.11}\% \\
+		\hline
+		\textbf{6} & \num{7} & cloud cover & \num{10.37}\%  \\
+		\hline
+		\textbf{7} & \num{6} & /  &  / \\
 		\hline
 	\end{tabular}
-	\caption[MSE concerning cross-validation in log-standardized scale for response variables (DCM)]{MSE concerning cross-validation in log-standardized scale for response variables, DCM.}
-	\label{Cross-validation mean squared errors DCM}
+	\caption[Model selection on the univariate process related to pickups]{Model selection on the univariate process related to pickups.}
+	\label{Model_selection_pickups}
 \end{table}
-
 \noindent
-In table \ref{Log-likelihoods DCM} we compares the models' likelihood and we can see the pickups selective univariate model have the lowest log-likelihoods while the bivariate selected model have the highest.
 
-\begin{table}
-	\centering
-	\renewcommand\arraystretch{1.3}
-	\begin{tabular}{c|c|c}
-		\hline
-		\textit{Model} &\textit{Full} & \textit{Selected} \\ 
-		\hline
-		\textbf{2-variate } & -6106.405  & -7491.195    \\ 
-		\hline
-		\textbf{1-variate pickups } & -3512.167  & -3122.354    \\ 
-		\hline
-		\textbf{1-variate trip duration} & -4536.846  & -4309.739   \\ 
-		\hline
-	\end{tabular}
-	\caption[Log-likelihoods of the six models (DCM)]{Log-likelihoods of the six models, DCM.}
-	\label{Log-likelihoods DCM}
-\end{table}
+
+The same procedure was performed on the average trip duration and on the bivariate case, the best model for the trip duration that has been achieved has \num{6} covariates assigned to $x_{\beta}$ and \num{3} covariates (constant,distance,lockdown) assigned to $x_{z}$,
+while for the bivariate case \num{12} covariates were assigned to $x_{\beta}$  and \num{4} (constant,distance for both process) to $x_{z}$. 
+The table \ref{beta coefficients} shows the values of the estimated $\beta$ coefficients and their assignments.
+
+
+
+
+
 
 \subsubsection{Model analysis}
 
-Figure \ref{Trend_zeta_latente univariato} shows the trend of the latent z interacting with the covariates:
-\begin{itemize}
-	\item $z_{1}$, which indicates the trend of the pickups is a significant variable that has a positive effect both on the number of rentals and on the average daily rental duration.
-	\item $z_{2}$, which indicates the distance. The trend is always positive therefore it brings a decrease in the number of pickups
-	\item $z_{3}$ , which indicates the holidays and not affect the increase of pickups.
-\end{itemize}
-
-\begin{figure}
+The table \ref{beta coefficients} shows the beta coefficients estimated after performing the model selection, and it can be osserve that the most significant covariate for each process is the temperature. The only difference between the pickups and trip duration processes is that the covariate holiday is not considered in the pickups processes, while for the average trip duration the lockdown is not considered.
+ \begin{table}[h!]
 	\centering
-	\includegraphics[height=222px]{Images/Data analysis/DCM/Trend_z_pickups.pdf}
-	\caption[Estimated $z_{1}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by Kalman smoother in the univariate model for pickups (DCM)]{estimated $z_{1}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by Kalman smoother in the univariate model for pickups.}
+	\renewcommand\arraystretch{1.3}
+	\begin{tabular}{c|c|c|c|c|c|c|c}
+		\hline
+		\textit{} & $\boldsymbol{\hat{\beta}_{const}}$  & $\boldsymbol{\hat{\beta}_{temp}}$ & $\boldsymbol{\hat{\beta}_{rain}}$ & $\boldsymbol{\hat{\beta}_{dist}}$ & $\boldsymbol{\hat{\beta}_{Holiday}}$ & $\boldsymbol{\hat{\beta}_{Lock}}$ & $\boldsymbol{\hat{\beta}_{UV}}$ \\
+		\hline
+		\textbf{2-variate} & {\fontsize{3mm}{4mm}$+0.017_{(0.118)}$} & {\fontsize{3mm}{4mm}$+0.293_{(0.149)}$}  & {\fontsize{3mm}{4mm}$-0.060_{(0.021)}$} &	 {\fontsize{3mm}{4mm}$-0.137_{(0.009)}$} &  & {\fontsize{3mm}{4mm}$-0.586_{(0.148)}$} & {\fontsize{3mm}{4mm}$+0.172_{(0.029)}$}  \\
+		\textbf{Pickups} & &  &  & & & &  \\
+		\hline
+		\textbf{2-variate} & {\fontsize{3mm}{4mm}$-0.041_{(0.186)}$} & {\fontsize{3mm}{4mm}$+0.272_{(0.040)}$}  & {\fontsize{3mm}{4mm}$-0.031_{(0.040)}$} &	 {\fontsize{3mm}{4mm}$-0.099_{(0.009)}$} & {\fontsize{3mm}{4mm}$+229_{(0.039)}$} &  & {\fontsize{3mm}{4mm}$+0.138_{(0.02)}$}  \\
+		\textbf{Duration} &  & & & & & &  \\
+		\hline
+		\textbf{1-variate}  &{\fontsize{3mm}{4mm}$+0.065_{(0.153)}$} & {\fontsize{3mm}{4mm}$+0.274_{(0.052)}$}  & {\fontsize{3mm}{4mm}$-0.056_{(0.030)}$} &	 {\fontsize{3mm}{4mm}$-0.136_{(0.009)}$} &  & {\fontsize{3mm}{4mm}$-0.690_{(0.156)}$} & {\fontsize{3mm}{4mm}$+0.123_{(0.039)}$}  \\
+		\textbf{Pickups} & & & & & & &  \\
+		\hline
+		\textbf{1-variate} & {\fontsize{3mm}{4mm}$-0.050_{(0.173)}$} & {\fontsize{3mm}{4mm}$+0.282_{(0.036)}$}  & {\fontsize{3mm}{4mm}$-0.030_{(0.013)}$} &	 {\fontsize{3mm}{4mm}$-0.104_{(0.010)}$} & {\fontsize{3mm}{4mm}$+0.229_{(0.037)}$}  &  & {\fontsize{3mm}{4mm}$+0.139_{(0.018)}$}  \\
+		\textbf{Duration} &  &  &  & & & &  \\
+		\hline
+
+	\end{tabular}
+	\caption[Estimated $\boldsymbol{\beta}$ for the bivariate model and 1-variate models (DCM).]{Estimated $\boldsymbol{\beta}$ for the bivariate model and 1-variate models (DCM).}
+	\label{beta coefficients}
+\end{table}
+\noindent
+
+Figure \ref{Trend_zeta_latente univariato} explain the trend of the latent z(t) of the average trip duration interacting with the covariates:
+\begin{itemize}
+	\item $z_{1,constant}$, which indicates the trend of the average trip duration, during the first months of the year, the average duration of trips is below average, while with the arrival of the lockdown there is a significant increase in the average duration of trips until the end of the year.
+	\item $z_{2,distance}$, which indicates the distance. the trend for the whole year does not have much influence
+	\item $z_{3,Holidays}$ , which related to the holidays, and not affect the increase of trip duration.
+\end{itemize}
+\noindent
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=250px]{Images/Data analysis/DCM/trend_z_selected_trip_model.png}
+	\caption[Estimated $z_{1}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by Kalman smoother in the univariate model for pickups (DCM)]{Estimated $z_{1,constant}(t)$,  $z_{2,distance}(t)$ and $z_{3,Holidays}(t)$ by Kalman smoother in the univariate model for the average trip duration.}
 	\label{Trend_zeta_latente univariato}
 	
 \end{figure}
 
 \noindent
-Figure \ref{Trend_zeta_latente} shows the trend of the latent z interacting with the covariates:
+Figure \ref{Trend_zeta_latente_biv} shows the trend of the latent z interacting with the covariates:
 \begin{itemize}
-	\item $z_{1}$, which indicates the trend of the pickups.
-	\item $z_{2}$, is refers to the distance. in comparison to the univariate case it can be noted  an decrease in pickups.
-	\item $z_{3}$ , which indicates the trend of the average of trip duration
-	\item $z_{4}$ , which indicates the distance and not affect the increase of the average trip duration.
+	\item $z_{1,constant,pick}$, which indicates the trend of the pickups, and it is noted that the trend of pickups is below the average except for the first three months of the year and for some days at the end of October where there is a small one which could be due to the closure of the metro
+	\item $z_{2,distance,pick}$, is refers to the distance. it is noted that throughout the year it brings a decrease in pickups
+	\item $z_{3,constant,duration}$ , which indicates the trend of the average of trip duration, it's very similar to the univariate case.
+	\item $z_{4,constant,pick}$ , which is relatite to the distance, and not affect the increase of the average trip duration.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[h!]
 	\centering
-	\includegraphics[height=222px]{Images/Data analysis/DCM/Trend_z_biv.pdf}
-	\caption[Estimated $z_{1}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by Kalman smoother in the bivariate model (DCM)]{estimated $z_{1}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by kalman smoother in the bivariate model.}
-	\label{Trend_zeta_latente}
+	\includegraphics[height=300px]{Images/Data analysis/DCM/trend_z_bivariate_selected_DCM.png}
+	\caption[Estimated $z_{1,constant,pick}(t)$,  $z_{2,distance,pick}(t)$ , $z_{3,constant,duration}(t)$ and $z_{4,distance,duration}(t)$ by Kalman smoother in the bivariate model (DCM)]{Estimated $z_{1,constant,pickups}(t)$,  $z_{2}(t)$ and $z_{3}(t)$ by Kalman smoother in the bivariate model (DCM)}
+	\label{Trend_zeta_latente_biv}
 \end{figure}
-
 \noindent
-The most significant coefficients $\boldsymbol{\hat{\beta}}$ are shown in the  table \ref{z_latent trend}, it can be seen that both models the most significant coefficients are $\boldsymbol{\hat{\beta}_{temp}}$ and $\boldsymbol{\hat{\beta}_{UV}}$
- \begin{table}
+
+The table \ref{Cross-validation rmse_s DCM} illustrate the different $rmse_{s}$ obtained from the models, and it is noted that there is a lot of difference both between the univariate cases and the bivariate case and between the complete models and the selected ones. For the daily rental duration, the selected univariate model is the best.
+
+\begin{table}[h!]
 	\centering
 	\renewcommand\arraystretch{1.3}
-	\begin{tabular}{c|c|c|c|c|c|c|c}
+	\begin{tabular}{c|cc|cc}
 		\hline
-		\textit{} & $\boldsymbol{\hat{\beta}_{const}}$ & $\boldsymbol{\hat{\beta}_{temp}}$ & $\boldsymbol{\hat{\beta}_{rain}}$ & $\boldsymbol{\hat{\beta}_{dist}}$ & $\boldsymbol{\hat{\beta}_{Holiday}}$ & $\boldsymbol{\hat{\beta}_{Lock}}$ & $\boldsymbol{\hat{\beta}_{UV}}$   \\
+		\multicolumn{1}{l|}{} & \multicolumn{2}{c|}{\textit{CV $RMSE_{s}$, full model}} & \multicolumn{2}{c}{\textit{CV MSE, selected model} }\\ 
 		\hline
-		\textbf{2-variate pickups} & \num{-0.109} & \num{+0.264} & \num{-0.054} & \num{+0.089} & \num{+0.222} &  & \num{+0.154}  \\
+		\textit{Model} & \multicolumn{1}{c|}{\textit{Pickups}} & \textit{Trip duration} & \multicolumn{1}{c|}{\textit{Pickups}} & \textit{Trip duration} \\ 
 		\hline
-		\textbf{2-variate trip duration} & \num{-0.071} & \num{+0.310} &  & \num{-0.064} & \num{-0.048} & \num{-0.171} & \num{+0.145}  \\
+		\textbf{2-variate } & \multicolumn{1}{c|}{0.6045}  & 0.8403   & \multicolumn{1}{c|}{0.6042}  & 0.8403   \\ 
 		\hline
-		\textbf{1-variate pickups} & \num{+0.079} & \num{+0.269} & \num{-0.053} & \num{-0.206} & \num{+0.001} & \num{-0.693} & \num{+0.104}\\
+		\textbf{1-variate } & \multicolumn{1}{c|}{0.6032}  & 0.8403   & \multicolumn{1}{c|}{0.6033}  & 0.8400   \\ 
 		\hline
 	\end{tabular}
-	\caption[Estimated $\boldsymbol{\beta}$ for the bivariate model and 1-variate pickups (DCM)]{estimated $\boldsymbol{\beta}$ for the bivariate model and \num{1}-variate pickups.}
-	\label{z_latent trend}
+	\caption[RMSE concerning cross-validation in log-standardized scale for response variables, (DCM))]{RMSE concerning cross-validation in log-standardized scale for response variables, (DCM).}
+	\label{Cross-validation rmse_s DCM}
 \end{table}
